@@ -1,0 +1,156 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
+
+type NavItem = {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+];
+
+export function SidebarShell({
+  userEmail,
+  children,
+}: {
+  userEmail: string;
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  async function handleSignOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  }
+
+  function isActive(href: string) {
+    if (href === "/dashboard") return pathname === "/dashboard";
+    return pathname.startsWith(href);
+  }
+
+  const sidebarContent = (
+    <div className="flex h-full flex-col">
+      {/* Logo */}
+      <div className="flex h-14 items-center gap-2.5 px-5">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-friction-blue">
+          <span className="text-sm font-bold text-white">FL</span>
+        </div>
+        <span className="text-[15px] font-semibold tracking-tight text-slate-900">
+          FrictionLens
+        </span>
+      </div>
+
+      <Separator className="mx-4 w-auto" />
+
+      {/* Navigation */}
+      <nav className="mt-3 flex-1 space-y-0.5 px-3">
+        {NAV_ITEMS.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className={cn(
+                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                active
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              )}
+            >
+              <item.icon
+                className={cn(
+                  "h-4 w-4 shrink-0",
+                  active ? "text-blue-600" : "text-slate-400"
+                )}
+              />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* User section */}
+      <div className="border-t border-slate-200 px-4 py-3">
+        <p className="truncate text-xs text-slate-500" title={userEmail}>
+          {userEmail}
+        </p>
+        <button
+          onClick={handleSignOut}
+          className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+          Sign out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex min-h-screen bg-slate-50/60">
+      {/* Desktop sidebar */}
+      <aside className="hidden w-[220px] shrink-0 border-r border-slate-200 bg-white md:block">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile top bar */}
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-slate-200 bg-white px-4 md:hidden">
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="rounded-lg p-2 text-slate-600 hover:bg-slate-50"
+        >
+          {mobileOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+        </button>
+        <div className="ml-3 flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-friction-blue">
+            <span className="text-xs font-bold text-white">FL</span>
+          </div>
+          <span className="text-sm font-semibold text-slate-900">
+            FrictionLens
+          </span>
+        </div>
+      </div>
+
+      {/* Mobile sidebar overlay */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+            onClick={() => setMobileOpen(false)}
+          />
+          <aside className="fixed inset-y-0 left-0 z-50 w-[260px] border-r border-slate-200 bg-white pt-14 md:hidden">
+            {sidebarContent}
+          </aside>
+        </>
+      )}
+
+      {/* Main content */}
+      <main className="flex-1 overflow-auto pt-14 md:pt-0">
+        {children}
+      </main>
+    </div>
+  );
+}

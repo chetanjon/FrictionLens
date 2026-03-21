@@ -15,7 +15,7 @@ FrictionLens is an AI-powered app review intelligence tool that synthesizes hund
 | Styling | Tailwind CSS 4 + shadcn/ui | Accessible component library |
 | Database | Supabase (PostgreSQL + Auth + RLS) | Apps, reviews, analyses, user accounts |
 | AI | Google Gemini via `@ai-sdk/google` (Vercel AI SDK) | Sentiment analysis, structured output |
-| Default Model | `gemini-2.0-flash` | Fast and cost-effective |
+| Default Model | `gemini-2.5-flash` | Best price-performance, 10 RPM free tier |
 | CSV Parsing | Papaparse | Client-side review ingestion |
 | Background Jobs | Inngest (Phase 3) | Review scraping, batch analysis |
 | Caching | Upstash Redis (Phase 3) | Rate limiting, result caching |
@@ -60,12 +60,12 @@ src/
       analysis/[id]/page.tsx
     (marketing)/layout.tsx, page.tsx
     vibe/[slug]/page.tsx
-    api/analyze/route.ts, apps/search/route.ts, inngest/route.ts
+    api/analyze/route.ts (SSE streaming + competitor analysis), api/apps/search/route.ts, api/apps/reviews/route.ts, inngest/route.ts
     layout.tsx, globals.css
   components/
     ui/                    — shadcn/ui components
     report/                — Vibe Report components (glass-card, radar-chart, friction-bar, sections/*)
-    analysis/              — CSV upload, paste input
+    analysis/              — CSV upload, paste input, app-store-search, competitor-select
     layout/                — Nav, sidebar
     marketing/             — Landing page sections
   lib/
@@ -95,10 +95,26 @@ NEXT_PUBLIC_APP_URL=               # App URL (http://localhost:3000 in dev)
 
 | Phase | Description | Status |
 |-------|------------|--------|
-| 1 | Foundation (auth, settings, CSV upload, basic analysis, results) | **In Progress** |
-| 2 | Full Vibe Report (all 8 sections, public sharing, OG images) | Planned |
-| 3 | Auto-Pull & Background Jobs (scrapers, Inngest, progress streaming) | Planned |
-| 4 | Differentiators (competitor battles, landing page, analytics, polish) | Planned |
+| 1 | Foundation (auth, settings, CSV upload, basic analysis, results) | **Complete** |
+| 2 | Full Vibe Report (all 8 sections, public sharing) | **Complete** |
+| 3A | App Store Auto-Pull (search + pull reviews from iOS/Android) | **Complete** |
+| 3B | Progress Streaming (SSE-based real-time analysis progress) | **Complete** |
+| 3C | Background Jobs (Inngest orchestration, step-based retry) | Planned |
+| 3D | Caching (Upstash Redis for rate limiting + result caching) | Planned |
+| 4A | Competitor Vibe Battles (head-to-head comparison, up to 3 competitors) | **Complete** |
+| 4B | Dynamic OG Images (auto-generated social cards for shared reports) | **Complete** |
+| 4C | Analytics + Polish (PostHog, Slack alerts, landing page) | Planned |
+
+## Available Gemini Models (Free Tier)
+
+| Model | RPM | RPD | TPM | Use Case |
+|-------|-----|-----|-----|----------|
+| `gemini-2.5-flash` (default) | 10 | 250 | 250K | Best balance of speed and quality |
+| `gemini-2.5-flash-lite` | 15 | 1000 | 250K | Fastest, highest throughput |
+| `gemini-2.5-pro` | 5 | 100 | 250K | Most advanced reasoning |
+| `gemini-2.0-flash` | 15 | 1500 | 1M | Previous gen, highest free limits |
+
+Rate limiting is enforced in-memory in `src/lib/ai/gemini.ts`.
 
 ## Reference Files
 

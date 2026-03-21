@@ -28,4 +28,11 @@ Each entry follows:
 
 ## Entries
 
+### [2026-03-18] [Phase 1] ARCH
+**Context:** Route group `(dashboard)` conflicted with root `page.tsx` and landing page needs
+**Problem:** Using `(dashboard)` route group meant dashboard served at `/`, conflicting with the landing page. Also caused 404s when redirecting to `/dashboard`.
+**Root Cause:** Route groups don't create URL segments. Having both `app/page.tsx` and `app/(dashboard)/page.tsx` caused the boilerplate to win.
+**Resolution:** Moved dashboard to explicit `app/dashboard/` directory. Landing page at `app/page.tsx`. All routes now explicit: `/dashboard`, `/dashboard/settings`, `/dashboard/analysis/[id]`.
+**Lesson:** For apps with both public pages and an authenticated dashboard, use explicit route paths (`/dashboard/*`) not route groups. Route groups are only useful when you don't need a landing page at `/`.
+
 (Entries added as work progresses, newest first)
