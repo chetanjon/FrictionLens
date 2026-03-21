@@ -428,6 +428,7 @@ export async function POST(request: NextRequest) {
           const fullPayload: Record<string, unknown> = {
             status: "completed",
             vibe_score: result.vibe_score,
+            dimension_scores: result.dimension_scores,
             results: result,
             completed_at: new Date().toISOString(),
           };
@@ -456,12 +457,17 @@ export async function POST(request: NextRequest) {
             const minimalPayload: Record<string, unknown> = {
               status: "completed",
               vibe_score: result.vibe_score,
+              dimension_scores: result.dimension_scores,
+              friction_scores: result.friction_scores.map((f) => ({
+                feature: f.feature,
+                score: f.score,
+                mentions: f.mention_count,
+                trend: f.trend,
+                delta: f.delta,
+              })),
+              churn_drivers: result.churn_drivers,
+              action_items: result.action_items,
             };
-            if (vibeReport) {
-              minimalPayload.friction_scores = vibeReport.friction_scores;
-              minimalPayload.churn_drivers = vibeReport.churn_drivers;
-              minimalPayload.action_items = vibeReport.action_items;
-            }
             const { error: minError } = await supabase
               .from("analyses")
               .update(minimalPayload)
