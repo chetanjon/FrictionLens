@@ -19,7 +19,7 @@ export function SectionWrapper({
   return (
     <section
       id={id}
-      className={cn("py-13", alt && "bg-slate-100/50")}
+      className={cn("py-13 relative", alt && "bg-slate-100/40")}
     >
       <div className="mx-auto max-w-[920px] px-7">
         {title && (

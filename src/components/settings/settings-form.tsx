@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { Eye, EyeOff, ExternalLink, Loader2, Trash2, Zap, Save } from "lucide-react";
 import { toast } from "sonner";
 import { saveApiKey, testApiKey, deleteApiKey } from "@/app/dashboard/settings/actions";
+import { trackApiKeySaved } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,6 +43,7 @@ export function SettingsForm({ hasKey, currentModel }: Props) {
     startSaving(async () => {
       const result = await saveApiKey(formData);
       if ("success" in result) {
+        trackApiKeySaved();
         toast.success("API key saved successfully.");
         setKeyExists(true);
         if (formRef.current) {

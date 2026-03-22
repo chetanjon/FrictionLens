@@ -25,6 +25,7 @@ import { AppStoreSearch as AppStoreSearchImport } from "@/components/analysis/ap
 import { CompetitorSelect } from "@/components/analysis/competitor-select";
 import type { CompetitorApp } from "@/components/analysis/competitor-select";
 import type { ParsedReview } from "@/lib/types/review";
+import { trackAnalysisStarted, trackAnalysisCompleted, trackAnalysisError } from "@/lib/analytics";
 
 type SerializedAnalysis = {
   id: string;
@@ -79,6 +80,14 @@ export function DashboardClient({
     setProgressText("Starting analysis...");
     setProgressPct(5);
 
+    const analysisStartTime = Date.now();
+    trackAnalysisStarted({
+      appName: appName.trim(),
+      reviewCount: reviews.length,
+      source: "app_store",
+      competitorCount: competitors.length,
+    });
+
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -97,6 +106,7 @@ export function DashboardClient({
 
       if (!res.ok) {
         const data = await res.json();
+        trackAnalysisError({ appName: appName.trim(), error: data.error ?? "Analysis failed.", stage: "request" });
         setError(data.error ?? "Analysis failed.");
         setIsAnalyzing(false);
         setProgressPct(0);
@@ -135,6 +145,13 @@ export function DashboardClient({
               setProgressText(data.step);
               setProgressPct(data.progress);
             } else if (eventType === "complete") {
+              trackAnalysisCompleted({
+                appName: appName.trim(),
+                vibeScore: data.vibeScore ?? 0,
+                reviewCount: data.reviewCount ?? reviews.length,
+                competitorCount: data.competitorCount ?? competitors.length,
+                durationMs: Date.now() - analysisStartTime,
+              });
               setProgressText("Analysis complete! Redirecting...");
               setProgressPct(100);
               setTimeout(() => {
@@ -142,6 +159,7 @@ export function DashboardClient({
               }, 600);
               return;
             } else if (eventType === "error") {
+              trackAnalysisError({ appName: appName.trim(), error: data.error, stage: "streaming" });
               setError(data.error);
               setIsAnalyzing(false);
               setProgressPct(0);
@@ -152,6 +170,7 @@ export function DashboardClient({
         }
       }
     } catch {
+      trackAnalysisError({ appName: appName.trim(), error: "Network error", stage: "network" });
       setError("Network error. Please try again.");
       setIsAnalyzing(false);
       setProgressPct(0);
@@ -296,14 +315,32 @@ export function DashboardClient({
         </div>
 
         {recentAnalyses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-200 bg-white/40 px-6 py-12 text-center">
-            <FileText className="mx-auto h-10 w-10 text-slate-300" />
-            <p className="mt-3 text-sm font-medium text-slate-500">
-              No analyses yet
+          <div className="rounded-2xl border border-dashed border-slate-200 bg-gradient-to-b from-white/60 to-slate-50/40 px-6 py-16 text-center backdrop-blur-sm">
+            {/* Illustrated empty state */}
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100/80 ring-1 ring-slate-200/60">
+              <FileText className="h-7 w-7 text-slate-400" />
+            </div>
+            <h3 className="text-base font-semibold text-slate-700">
+              No reports yet
+            </h3>
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
+              Search for an app or upload a CSV above to generate your first
+              Vibe Report with sentiment scores and churn signals.
             </p>
-            <p className="mt-1 text-xs text-slate-400">
-              Upload reviews above to create your first Vibe Report.
-            </p>
+            <div className="mt-6 flex items-center justify-center gap-4 text-xs text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-friction-blue/40" />
+                App Store search
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-friction-amber/40" />
+                CSV upload
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-friction-red/40" />
+                Paste reviews
+              </span>
+            </div>
           </div>
         ) : (
           <div className="space-y-2">
@@ -311,7 +348,8 @@ export function DashboardClient({
               <Link
                 key={a.id}
                 href={`/dashboard/analysis/${a.id}`}
-                className="group flex items-center gap-4 rounded-xl border border-slate-200/60 bg-white/65 px-4 py-3.5 backdrop-blur-xl transition-all hover:border-slate-300 hover:shadow-sm"
+                className="group flex items-center gap-4 rounded-xl border border-slate-200/60 bg-white/65 px-4 py-3.5 backdrop-blur-xl transition-all duration-200 hover:border-slate-300 hover:shadow-md hover:shadow-slate-200/30 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2"
+                aria-label={`View ${a.app_name} report${a.vibe_score != null ? `, vibe score ${Math.round(a.vibe_score)}` : ""}`}
               >
                 {/* Vibe score circle */}
                 <div

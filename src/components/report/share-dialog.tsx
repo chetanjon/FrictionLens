@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Copy, Globe, Lock } from "lucide-react";
 import { togglePublic, generateSlug } from "@/app/dashboard/analysis/[id]/share-action";
+import { trackReportShared, trackShareLinkCopied } from "@/lib/analytics";
 
 type ShareDialogProps = {
   open: boolean;
@@ -50,6 +51,9 @@ export function ShareDialog({
             setSlug(slugResult.slug);
           }
         }
+        if (newValue) {
+          trackReportShared({ analysisId, appName });
+        }
       }
     });
   };
@@ -57,6 +61,7 @@ export function ShareDialog({
   const handleCopy = async () => {
     if (publicUrl) {
       await navigator.clipboard.writeText(publicUrl);
+      trackShareLinkCopied(analysisId);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

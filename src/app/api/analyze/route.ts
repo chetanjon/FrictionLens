@@ -12,6 +12,7 @@ import type {
   AnalysisResult,
   VibeReport,
 } from "@/lib/types/review";
+import { notifySlackAnalysisComplete } from "@/lib/slack";
 
 /**
  * POST /api/analyze
@@ -485,6 +486,16 @@ export async function POST(request: NextRequest) {
             competitorCount: competitorResults.length,
             progress: 100,
           });
+
+          // 12. Slack notification (fire-and-forget)
+          notifySlackAnalysisComplete({
+            appName,
+            vibeScore: roundedVibeScore,
+            reviewCount: n,
+            competitorCount: competitorResults.length,
+            analysisId,
+            userEmail: user.email,
+          }).catch(() => {/* swallow */});
         } catch (err) {
           console.error("Analysis pipeline error:", err);
 

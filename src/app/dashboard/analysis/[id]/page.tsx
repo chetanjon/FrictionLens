@@ -11,9 +11,25 @@ import { GlassCard } from "@/components/report/glass-card";
 
 function sectionFallback(label: string) {
   return () => (
-    <GlassCard className="p-8 text-center">
-      <p className="text-sm text-slate-400">{label} section is loading...</p>
-    </GlassCard>
+    <div className="mx-auto max-w-[920px] px-7 py-13">
+      <div className="animate-pulse space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="h-2 w-16 rounded bg-slate-200" />
+          <div className="h-2 w-2 rounded-full bg-slate-200" />
+          <div className="h-3 w-32 rounded bg-slate-200" />
+        </div>
+        <div className="rounded-2xl border border-slate-200/60 bg-white/65 p-8">
+          <div className="space-y-3">
+            <div className="h-3 w-3/4 rounded bg-slate-100" />
+            <div className="h-3 w-1/2 rounded bg-slate-100" />
+            <div className="h-3 w-2/3 rounded bg-slate-100" />
+          </div>
+        </div>
+      </div>
+      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-slate-300">
+        Loading {label}
+      </p>
+    </div>
   );
 }
 
