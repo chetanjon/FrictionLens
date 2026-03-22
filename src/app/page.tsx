@@ -485,6 +485,7 @@ export default async function LandingPage() {
                 "3 reports per day",
               ],
               cta: "Start Free",
+              comingSoon: false,
             },
             {
               name: "Pro",
@@ -500,7 +501,8 @@ export default async function LandingPage() {
                 "Slack alerts",
                 "PDF export",
               ],
-              cta: "Start Pro Trial",
+              cta: "Coming Soon",
+              comingSoon: true,
             },
             {
               name: "Team",
@@ -516,7 +518,8 @@ export default async function LandingPage() {
                 "API access",
                 "Priority support",
               ],
-              cta: "Contact Us",
+              cta: "Coming Soon",
+              comingSoon: true,
             },
           ].map((tier, i) => (
             <AnimateOnScroll key={tier.name} delay={i * 100}>
@@ -555,16 +558,28 @@ export default async function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={ctaHref}
-                  className={`block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors ${
-                    tier.dark
-                      ? "bg-friction-blue text-white hover:bg-friction-blue/90"
-                      : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                  }`}
-                >
-                  {tier.cta}
-                </Link>
+                {tier.comingSoon ? (
+                  <span
+                    className={`block w-full rounded-xl py-3 text-center text-sm font-semibold cursor-default ${
+                      tier.dark
+                        ? "bg-white/10 text-slate-400"
+                        : "border border-slate-200 bg-slate-50 text-slate-400"
+                    }`}
+                  >
+                    {tier.cta}
+                  </span>
+                ) : (
+                  <Link
+                    href={ctaHref}
+                    className={`block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors ${
+                      tier.dark
+                        ? "bg-friction-blue text-white hover:bg-friction-blue/90"
+                        : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    {tier.cta}
+                  </Link>
+                )}
               </div>
             </AnimateOnScroll>
           ))}
