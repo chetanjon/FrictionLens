@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchApps } from "@/lib/scrapers";
+import { cacheGetOrSet } from "@/lib/cache/redis";
+import { searchCacheKey } from "@/lib/cache/keys";
 
 export async function GET(request: NextRequest) {
   const term = request.nextUrl.searchParams.get("q");
@@ -11,8 +13,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const normalizedTerm = term.trim().toLowerCase();
+
   try {
-    const results = await searchApps(term.trim(), 5);
+    const results = await cacheGetOrSet(
+      searchCacheKey(normalizedTerm),
+      1800,
+      () => searchApps(normalizedTerm, 5)
+    );
     return NextResponse.json({ results });
   } catch (err) {
     console.error("App search failed:", err);

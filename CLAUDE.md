@@ -11,14 +11,15 @@ FrictionLens is an AI-powered app review intelligence tool that synthesizes hund
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| Framework | Next.js 15 (App Router) + React 19 + TypeScript | Server components, streaming UI |
+| Framework | Next.js 16 (App Router) + React 19 + TypeScript | Server components, streaming UI |
 | Styling | Tailwind CSS 4 + shadcn/ui | Accessible component library |
 | Database | Supabase (PostgreSQL + Auth + RLS) | Apps, reviews, analyses, user accounts |
 | AI | Google Gemini via `@ai-sdk/google` (Vercel AI SDK) | Sentiment analysis, structured output |
 | Default Model | `gemini-2.5-flash` | Best price-performance, 10 RPM free tier |
 | CSV Parsing | Papaparse | Client-side review ingestion |
-| Background Jobs | Inngest (Phase 3) | Review scraping, batch analysis |
-| Caching | Upstash Redis (Phase 3) | Rate limiting, result caching |
+| Background Jobs | Inngest v4 | Review analysis orchestration, step-based retry |
+| Caching | Upstash Redis + @upstash/ratelimit | Rate limiting, search/review caching |
+| Testing | Vitest | Unit + integration tests |
 | Analytics | PostHog (Phase 4) | Usage tracking, funnel metrics |
 | Email | Resend (Phase 4) | Report notifications |
 | Hosting | Vercel | Edge deployment, serverless |
@@ -30,7 +31,10 @@ FrictionLens is an AI-powered app review intelligence tool that synthesizes hund
 - **Server Actions for mutations** — no API routes unless needed for webhooks/external services
 - **Supabase client setup:** `@supabase/ssr` for server, `@supabase/supabase-js` for browser
 - **API keys stored encrypted** in `user_settings` table (AES-256-GCM via `ENCRYPTION_KEY` env var)
-- **All AI calls** go through `src/lib/ai/gemini.ts` abstraction
+- **All AI calls** go through `src/lib/ai/gemini.ts` abstraction (uses `generateText` + `Output.object()` from AI SDK v6)
+- **Analysis pipeline** extracted to `src/lib/analysis/run-pipeline.ts` — shared by direct SSE mode and Inngest background mode
+- **Inngest optional** — falls back to direct execution when `INNGEST_EVENT_KEY` is not set
+- **Redis optional** — falls back to in-memory rate limiting when `UPSTASH_REDIS_REST_URL` is not set
 - **Users bring their own Gemini API key** from Google AI Studio (aistudio.google.com)
 - **Review classification tiers:** Tier 1 (trivial, no AI), Tier 2 (short, rule-based), Tier 3 (detailed, Gemini)
 
@@ -60,7 +64,11 @@ src/
       analysis/[id]/page.tsx
     (marketing)/layout.tsx, page.tsx
     vibe/[slug]/page.tsx
-    api/analyze/route.ts (SSE streaming + competitor analysis), api/apps/search/route.ts, api/apps/reviews/route.ts, inngest/route.ts
+    api/analyze/route.ts (SSE streaming, Inngest dispatch or direct pipeline)
+    api/analyze/status/route.ts (polling endpoint for background analysis progress)
+    api/apps/search/route.ts (cached app store search)
+    api/apps/reviews/route.ts (cached review pulling)
+    api/inngest/route.ts (Inngest serve handler)
     layout.tsx, globals.css
   components/
     ui/                    — shadcn/ui components
@@ -70,7 +78,10 @@ src/
     marketing/             — Landing page sections
   lib/
     supabase/              — client.ts, server.ts
-    ai/                    — gemini.ts, prompts.ts, schemas.ts
+    ai/                    — gemini.ts, prompts.ts, schemas.ts, classify.ts, generate-report.ts, analyze-competitor.ts
+    analysis/              — run-pipeline.ts (extracted pipeline logic, shared by SSE + Inngest)
+    cache/                 — redis.ts (Upstash client), keys.ts (key builders), rate-limiter.ts (Redis + in-memory fallback)
+    inngest/               — client.ts, is-enabled.ts, progress.ts, functions/run-analysis.ts
     crypto.ts              — API key encryption/decryption
     utils.ts               — cn() and general utilities
     constants.ts           — Color mappings, tier definitions
@@ -89,6 +100,15 @@ SUPABASE_SERVICE_ROLE_KEY=         # Supabase service role key (server only)
 ENCRYPTION_KEY=                    # 32-byte hex for API key encryption (openssl rand -hex 32)
 GOOGLE_GENERATIVE_AI_API_KEY=      # Optional fallback Gemini key for demo
 NEXT_PUBLIC_APP_URL=               # App URL (http://localhost:3000 in dev)
+
+# Optional: Upstash Redis (caching + distributed rate limiting)
+UPSTASH_REDIS_REST_URL=            # Upstash Redis REST URL
+UPSTASH_REDIS_REST_TOKEN=          # Upstash Redis REST token
+
+# Optional: Inngest (background jobs — falls back to direct execution if not set)
+INNGEST_EVENT_KEY=                 # Inngest event key (production)
+INNGEST_SIGNING_KEY=               # Inngest signing key (production)
+# INNGEST_DEV=1                    # Enable Inngest dev mode without keys
 ```
 
 ## Phase Tracking
@@ -99,8 +119,8 @@ NEXT_PUBLIC_APP_URL=               # App URL (http://localhost:3000 in dev)
 | 2 | Full Vibe Report (all 8 sections, public sharing) | **Complete** |
 | 3A | App Store Auto-Pull (search + pull reviews from iOS/Android) | **Complete** |
 | 3B | Progress Streaming (SSE-based real-time analysis progress) | **Complete** |
-| 3C | Background Jobs (Inngest orchestration, step-based retry) | Planned |
-| 3D | Caching (Upstash Redis for rate limiting + result caching) | Planned |
+| 3C | Background Jobs (Inngest orchestration, step-based retry) | **Complete** |
+| 3D | Caching (Upstash Redis for rate limiting + result caching) | **Complete** |
 | 4A | Competitor Vibe Battles (head-to-head comparison, up to 3 competitors) | **Complete** |
 | 4B | Dynamic OG Images (auto-generated social cards for shared reports) | **Complete** |
 | 4C | Analytics + Polish (PostHog, Slack alerts, landing page) | **Complete** |
@@ -114,7 +134,7 @@ NEXT_PUBLIC_APP_URL=               # App URL (http://localhost:3000 in dev)
 | `gemini-2.5-pro` | 5 | 100 | 250K | Most advanced reasoning |
 | `gemini-2.0-flash` | 15 | 1500 | 1M | Previous gen, highest free limits |
 
-Rate limiting is enforced in-memory in `src/lib/ai/gemini.ts`.
+Rate limiting is enforced via `src/lib/cache/rate-limiter.ts` — uses Upstash Redis sliding window when available, falls back to in-memory buckets.
 
 ## Reference Files
 
@@ -135,4 +155,7 @@ Result is 0-100 scale. Colors: >= 75 blue, >= 50 amber, < 50 red.
 npm run dev          # Start dev server (Turbopack)
 npm run build        # Production build
 npm run lint         # ESLint
+npm run test         # Run Vitest test suite
+npm run test:watch   # Run Vitest in watch mode
+npx inngest-cli@latest dev  # Start Inngest Dev Server (for local background jobs)
 ```

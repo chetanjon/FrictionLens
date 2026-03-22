@@ -25,6 +25,7 @@ import { AppStoreSearch as AppStoreSearchImport } from "@/components/analysis/ap
 import { CompetitorSelect } from "@/components/analysis/competitor-select";
 import type { CompetitorApp } from "@/components/analysis/competitor-select";
 import type { ParsedReview } from "@/lib/types/review";
+import { runChunkedAnalysis } from "@/lib/analysis/client-orchestrator";
 import { trackAnalysisStarted, trackAnalysisCompleted, trackAnalysisError } from "@/lib/analytics";
 
 type SerializedAnalysis = {
@@ -89,10 +90,8 @@ export function DashboardClient({
     });
 
     try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const result = await runChunkedAnalysis(
+        {
           appName: appName.trim(),
           reviews,
           competitors: competitors.map((c) => ({
@@ -101,77 +100,33 @@ export function DashboardClient({
             platform: c.platform,
             storeId: c.storeId,
           })),
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        trackAnalysisError({ appName: appName.trim(), error: data.error ?? "Analysis failed.", stage: "request" });
-        setError(data.error ?? "Analysis failed.");
-        setIsAnalyzing(false);
-        setProgressPct(0);
-        setProgressText("");
-        return;
-      }
-
-      const reader = res.body?.getReader();
-      if (!reader) {
-        setError("Streaming not supported.");
-        setIsAnalyzing(false);
-        return;
-      }
-
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        // Parse SSE events from buffer
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        let eventType = "";
-        for (const line of lines) {
-          if (line.startsWith("event: ")) {
-            eventType = line.slice(7).trim();
-          } else if (line.startsWith("data: ")) {
-            const data = JSON.parse(line.slice(6));
-
-            if (eventType === "progress") {
-              setProgressText(data.step);
-              setProgressPct(data.progress);
-            } else if (eventType === "complete") {
-              trackAnalysisCompleted({
-                appName: appName.trim(),
-                vibeScore: data.vibeScore ?? 0,
-                reviewCount: data.reviewCount ?? reviews.length,
-                competitorCount: data.competitorCount ?? competitors.length,
-                durationMs: Date.now() - analysisStartTime,
-              });
-              setProgressText("Analysis complete! Redirecting...");
-              setProgressPct(100);
-              setTimeout(() => {
-                router.push(`/dashboard/analysis/${data.analysisId}`);
-              }, 600);
-              return;
-            } else if (eventType === "error") {
-              trackAnalysisError({ appName: appName.trim(), error: data.error, stage: "streaming" });
-              setError(data.error);
-              setIsAnalyzing(false);
-              setProgressPct(0);
-              setProgressText("");
-              return;
-            }
+        },
+        (step, progress) => {
+          setProgressText(step);
+          // Only update progress if not a retry notification (progress = -1)
+          if (progress >= 0) {
+            setProgressPct(progress);
           }
         }
-      }
-    } catch {
-      trackAnalysisError({ appName: appName.trim(), error: "Network error", stage: "network" });
-      setError("Network error. Please try again.");
+      );
+
+      trackAnalysisCompleted({
+        appName: appName.trim(),
+        vibeScore: result.vibeScore,
+        reviewCount: result.reviewCount,
+        competitorCount: result.competitorCount,
+        durationMs: Date.now() - analysisStartTime,
+      });
+      setProgressText("Analysis complete! Redirecting...");
+      setProgressPct(100);
+      setTimeout(() => {
+        router.push(`/dashboard/analysis/${result.analysisId}`);
+      }, 600);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Analysis failed.";
+      trackAnalysisError({ appName: appName.trim(), error: message, stage: "chunked" });
+      setError(message);
       setIsAnalyzing(false);
       setProgressPct(0);
       setProgressText("");

@@ -71,11 +71,16 @@ export async function analyzeCompetitor(
     }
   }
 
-  // Batch analyze Tier 3 (smaller batches for competitors)
-  const BATCH_SIZE = 10;
+  // Batch analyze Tier 3 (BATCH_SIZE=50 to minimize API calls and rate limit hits)
+  const BATCH_SIZE = 50;
   const geminiResults: Array<{ review: ParsedReview; analysis: ReviewAnalysis }> = [];
 
   for (let i = 0; i < tier3Reviews.length; i += BATCH_SIZE) {
+    // Rate limit delay between batches (skip first)
+    if (i > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 6500));
+    }
+
     const batch = tier3Reviews.slice(i, i + BATCH_SIZE);
     const batchAnalyses = await analyzeReviewBatch(batch, apiKey, model);
 

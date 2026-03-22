@@ -3,7 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export function MobileNav() {
+type MobileNavProps = {
+  isLoggedIn?: boolean;
+};
+
+export function MobileNav({ isLoggedIn = false }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -49,20 +53,32 @@ export function MobileNav() {
               Pricing
             </a>
             <div className="h-px bg-slate-200/60 my-1" />
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="text-sm text-slate-600 hover:text-slate-900 transition-colors py-1"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              onClick={() => setOpen(false)}
-              className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
-            >
-              Get Started
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setOpen(false)}
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-slate-600 hover:text-slate-900 transition-colors py-1"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

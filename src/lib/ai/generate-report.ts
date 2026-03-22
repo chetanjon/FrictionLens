@@ -4,7 +4,7 @@
  * to produce friction scores, churn drivers, action items, and more.
  */
 
-import { generateObject } from "ai";
+import { generateText, Output } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 import type {
@@ -81,14 +81,14 @@ export async function generateVibeReport(
 
   const google = createGoogleGenerativeAI({ apiKey });
 
-  const result = await generateObject({
+  const result = await generateText({
     model: google(resolvedModel),
-    schema: vibeReportSchema,
+    output: Output.object({ schema: vibeReportSchema }),
     system: REPORT_SYSTEM_PROMPT,
     prompt: buildReportPrompt(appName, reviewSummaries, dimensionAverages),
   });
 
-  const output = result.object;
+  const output = result.output!;
 
   // Assemble the full VibeReport
   const vibeReport: VibeReport = {

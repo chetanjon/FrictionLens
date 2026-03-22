@@ -1,6 +1,6 @@
 /**
  * Zod schemas for structured AI output.
- * Used with Vercel AI SDK's generateObject().
+ * Used with Vercel AI SDK's generateText() + Output.object().
  */
 
 import { z } from "zod";

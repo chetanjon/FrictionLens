@@ -1,0 +1,181 @@
+"use client";
+
+import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import { CheckCircle2, Clock, XCircle, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { GlassCard } from "@/components/report/glass-card";
+import { VibeScoreCircle } from "@/components/report/vibe-score-circle";
+import { Badge } from "@/components/ui/badge";
+
+type DimensionScores = {
+  love: number;
+  frustration: number;
+  loyalty: number;
+  momentum: number;
+  wom: number;
+};
+
+type AnalysisCardProps = {
+  id: string;
+  appName: string;
+  platform: string | null;
+  status: string;
+  vibeScore: number | null;
+  vibeColorHex: string | null;
+  reviewCount: number;
+  createdAt: string;
+  frictionItems?: string[];
+  dimensionScores?: DimensionScores | null;
+};
+
+function StatusBadge({ status }: { status: string }) {
+  switch (status) {
+    case "completed":
+      return (
+        <Badge
+          className="gap-1 bg-emerald-50 text-emerald-700 border-emerald-200/60"
+          variant="outline"
+        >
+          <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+          Done
+        </Badge>
+      );
+    case "processing":
+      return (
+        <Badge
+          className="gap-1 bg-amber-50 text-amber-700 border-amber-200/60"
+          variant="outline"
+        >
+          <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+          Processing
+        </Badge>
+      );
+    case "failed":
+      return (
+        <Badge
+          className="gap-1 bg-red-50 text-red-600 border-red-200/60"
+          variant="outline"
+        >
+          <XCircle className="h-3 w-3" aria-hidden="true" />
+          Failed
+        </Badge>
+      );
+    default:
+      return (
+        <Badge
+          className="gap-1 bg-slate-50 text-slate-500 border-slate-200/60"
+          variant="outline"
+        >
+          <Clock className="h-3 w-3" aria-hidden="true" />
+          Pending
+        </Badge>
+      );
+  }
+}
+
+function PlatformBadge({ platform }: { platform: string | null }) {
+  if (!platform) return null;
+
+  const label = platform.toLowerCase().includes("android") ? "Android" : "iOS";
+  const colorClass =
+    label === "Android"
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
+      : "bg-blue-50 text-blue-700 border-blue-200/60";
+
+  return (
+    <Badge className={cn("text-[10px]", colorClass)} variant="outline">
+      {label}
+    </Badge>
+  );
+}
+
+function relativeTime(dateStr: string): string {
+  try {
+    return formatDistanceToNow(new Date(dateStr), { addSuffix: true });
+  } catch {
+    return dateStr;
+  }
+}
+
+export function AnalysisCard({
+  id,
+  appName,
+  platform,
+  status,
+  vibeScore,
+  vibeColorHex,
+  reviewCount,
+  createdAt,
+  frictionItems,
+}: AnalysisCardProps) {
+  const topFriction = frictionItems?.slice(0, 2) ?? [];
+  const isCompleted = status === "completed" && vibeScore !== null;
+
+  return (
+    <Link
+      href={`/dashboard/analysis/${id}`}
+      aria-label={`View ${appName} analysis${vibeScore != null ? `, vibe score ${Math.round(vibeScore)}` : ""}`}
+      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 rounded-2xl"
+    >
+      <GlassCard hover className="flex flex-col gap-3 p-4">
+        {/* Header: status badge */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-semibold text-slate-900">
+              {appName}
+            </span>
+            <PlatformBadge platform={platform} />
+          </div>
+          <StatusBadge status={status} />
+        </div>
+
+        {/* Score + friction */}
+        <div className="flex items-center gap-3">
+          <div
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold text-white"
+            style={{
+              backgroundColor: isCompleted && vibeColorHex
+                ? vibeColorHex
+                : "#CBD5E1",
+            }}
+          >
+            {isCompleted ? Math.round(vibeScore!) : "--"}
+          </div>
+          {topFriction.length > 0 ? (
+            <ul className="min-w-0 space-y-0.5" aria-label="Top friction areas">
+              {topFriction.map((item) => (
+                <li
+                  key={item}
+                  className="truncate text-xs text-slate-500"
+                >
+                  <span className="mr-1.5 inline-block h-1 w-1 rounded-full bg-friction-red/50 align-middle" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <span className="text-xs text-slate-400">
+              {isCompleted ? "No friction data" : "Awaiting results"}
+            </span>
+          )}
+        </div>
+
+        {/* Bottom: review count + relative date */}
+        <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5">
+          <span className="font-mono text-[10px] text-slate-400">
+            {reviewCount.toLocaleString()} reviews
+          </span>
+          <time
+            dateTime={createdAt}
+            className="font-mono text-[10px] text-slate-400"
+          >
+            {relativeTime(createdAt)}
+          </time>
+        </div>
+      </GlassCard>
+    </Link>
+  );
+}
+
+export type { AnalysisCardProps };

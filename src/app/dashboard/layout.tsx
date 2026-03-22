@@ -42,8 +42,31 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  // Fetch profile and settings for sidebar
+  const [profileResult, settingsResult] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("display_name, avatar_url")
+      .eq("id", user.id)
+      .single(),
+    supabase
+      .from("user_settings")
+      .select("gemini_api_key_encrypted")
+      .eq("user_id", user.id)
+      .single(),
+  ]);
+
+  const displayName = profileResult.data?.display_name ?? undefined;
+  const avatarUrl = profileResult.data?.avatar_url ?? null;
+  const hasApiKey = !!settingsResult.data?.gemini_api_key_encrypted;
+
   return (
-    <SidebarShell userEmail={user.email ?? "user"}>
+    <SidebarShell
+      userEmail={user.email ?? "user"}
+      displayName={displayName}
+      avatarUrl={avatarUrl}
+      hasApiKey={hasApiKey}
+    >
       {children}
     </SidebarShell>
   );

@@ -5,10 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  FileBarChart,
+  TrendingUp,
   Settings,
   LogOut,
   Menu,
   X,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -22,17 +25,29 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Command Center", href: "/dashboard", icon: LayoutDashboard },
+  { label: "All Analyses", href: "/dashboard/analyses", icon: FileBarChart },
+  { label: "Trends", href: "/dashboard/trends", icon: TrendingUp },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
+type SidebarShellProps = {
+  userEmail: string;
+  displayName?: string;
+  avatarUrl?: string | null;
+  hasApiKey?: boolean;
+  onNewAnalysis?: () => void;
+  children: React.ReactNode;
+};
+
 export function SidebarShell({
   userEmail,
+  displayName,
+  avatarUrl,
+  hasApiKey,
+  onNewAnalysis,
   children,
-}: {
-  userEmail: string;
-  children: React.ReactNode;
-}) {
+}: SidebarShellProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -46,6 +61,8 @@ export function SidebarShell({
     if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   }
+
+  const initial = (displayName ?? userEmail).charAt(0).toUpperCase();
 
   const sidebarContent = (
     <div className="flex h-full flex-col">
@@ -63,6 +80,21 @@ export function SidebarShell({
       </div>
 
       <Separator className="mx-4 w-auto" />
+
+      {/* Quick action */}
+      <div className="px-3 pt-3">
+        <Button
+          size="sm"
+          className="w-full justify-start gap-2 bg-friction-blue text-white hover:bg-friction-blue/90"
+          onClick={() => {
+            setMobileOpen(false);
+            onNewAnalysis?.();
+          }}
+        >
+          <Plus className="h-3.5 w-3.5" />
+          New Analysis
+        </Button>
+      </div>
 
       {/* Navigation */}
       <nav className="mt-3 flex-1 space-y-0.5 px-3" aria-label="Main navigation">
@@ -95,9 +127,38 @@ export function SidebarShell({
 
       {/* User section */}
       <div className="border-t border-slate-200 px-4 py-3">
-        <p className="truncate text-xs text-slate-500" title={userEmail}>
-          {userEmail}
-        </p>
+        <div className="flex items-center gap-2.5">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt=""
+              className="h-7 w-7 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-friction-blue/10 text-xs font-semibold text-friction-blue">
+              {initial}
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-medium text-slate-700" title={displayName ?? userEmail}>
+              {displayName ?? userEmail.split("@")[0]}
+            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="truncate text-[10px] text-slate-400" title={userEmail}>
+                {userEmail}
+              </p>
+              {hasApiKey !== undefined && (
+                <span
+                  className={cn(
+                    "inline-block h-1.5 w-1.5 shrink-0 rounded-full",
+                    hasApiKey ? "bg-green-400" : "bg-amber-400"
+                  )}
+                  title={hasApiKey ? "API key configured" : "No API key set"}
+                />
+              )}
+            </div>
+          </div>
+        </div>
         <button
           onClick={handleSignOut}
           className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"

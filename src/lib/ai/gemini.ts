@@ -3,12 +3,16 @@
  * Includes per-model rate limiting for the free tier.
  */
 
-import { generateObject } from "ai";
+import { generateText, Output } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 import type { ReviewAnalysis, ParsedReview } from "@/lib/types/review";
 import { reviewAnalysisSchema, batchReviewAnalysisSchema } from "./schemas";
 import { SYSTEM_PROMPT, buildReviewPrompt, buildBatchPrompt } from "./prompts";
+import {
+  checkAndRecordRequest,
+  waitForRateLimit,
+} from "@/lib/cache/rate-limiter";
 
 // ── Model definitions with free-tier rate limits ──
 
@@ -56,80 +60,6 @@ export const MODEL_OPTIONS = Object.entries(GEMINI_MODELS).map(
     rpd: info.rpd,
   })
 );
-
-// ── In-memory rate limiter (per model) ──
-
-type RateLimitBucket = {
-  minuteRequests: number[];
-  dayRequests: number[];
-};
-
-const rateLimitBuckets = new Map<string, RateLimitBucket>();
-
-function getRateLimitBucket(model: string): RateLimitBucket {
-  if (!rateLimitBuckets.has(model)) {
-    rateLimitBuckets.set(model, { minuteRequests: [], dayRequests: [] });
-  }
-  return rateLimitBuckets.get(model)!;
-}
-
-function checkRateLimit(model: string): void {
-  const modelId = model as GeminiModelId;
-  const limits = GEMINI_MODELS[modelId];
-  if (!limits) return; // unknown model, skip limiting
-
-  const bucket = getRateLimitBucket(model);
-  const now = Date.now();
-  const oneMinuteAgo = now - 60_000;
-  const oneDayAgo = now - 86_400_000;
-
-  // Clean old entries
-  bucket.minuteRequests = bucket.minuteRequests.filter((t) => t > oneMinuteAgo);
-  bucket.dayRequests = bucket.dayRequests.filter((t) => t > oneDayAgo);
-
-  if (bucket.minuteRequests.length >= limits.rpm) {
-    const waitMs =
-      bucket.minuteRequests[0] + 60_000 - now;
-    throw new GeminiAnalysisError(
-      `Rate limit: ${limits.rpm} requests/min for ${limits.label}. Wait ${Math.ceil(waitMs / 1000)}s.`,
-      "RATE_LIMIT"
-    );
-  }
-
-  if (bucket.dayRequests.length >= limits.rpd) {
-    throw new GeminiAnalysisError(
-      `Daily limit reached: ${limits.rpd} requests/day for ${limits.label}. Try again tomorrow or switch to a model with higher limits.`,
-      "RATE_LIMIT"
-    );
-  }
-}
-
-function recordRequest(model: string): void {
-  const bucket = getRateLimitBucket(model);
-  const now = Date.now();
-  bucket.minuteRequests.push(now);
-  bucket.dayRequests.push(now);
-}
-
-// ── Delay helper for respecting RPM ──
-
-async function waitForRateLimit(model: string): Promise<void> {
-  const modelId = model as GeminiModelId;
-  const limits = GEMINI_MODELS[modelId];
-  if (!limits) return;
-
-  const bucket = getRateLimitBucket(model);
-  const now = Date.now();
-  const oneMinuteAgo = now - 60_000;
-  bucket.minuteRequests = bucket.minuteRequests.filter((t) => t > oneMinuteAgo);
-
-  if (bucket.minuteRequests.length >= limits.rpm) {
-    const waitMs = bucket.minuteRequests[0] + 60_000 - now + 100;
-    if (waitMs > 0) {
-      await new Promise((resolve) => setTimeout(resolve, waitMs));
-    }
-  }
-}
 
 // ── Error classification ──
 
@@ -196,6 +126,34 @@ function classifyError(error: unknown): GeminiAnalysisError {
   );
 }
 
+// ── Retry helper for rate limit errors ──
+
+const RATE_LIMIT_RETRY_DELAY_MS = 15_000;
+const MAX_RATE_LIMIT_RETRIES = 2;
+
+async function withRateLimitRetry<T>(
+  fn: () => Promise<T>
+): Promise<T> {
+  for (let attempt = 0; attempt <= MAX_RATE_LIMIT_RETRIES; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      const classified = classifyError(error);
+      if (classified.code === "RATE_LIMIT" && attempt < MAX_RATE_LIMIT_RETRIES) {
+        const delay = RATE_LIMIT_RETRY_DELAY_MS * (attempt + 1);
+        console.warn(
+          `Rate limit hit, retrying in ${delay / 1000}s (attempt ${attempt + 1}/${MAX_RATE_LIMIT_RETRIES})...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        continue;
+      }
+      throw classified;
+    }
+  }
+  // Unreachable, but TypeScript needs it
+  throw new GeminiAnalysisError("Retry exhausted", "RATE_LIMIT");
+}
+
 // ── Public API ──
 
 export async function analyzeReview(
@@ -205,24 +163,21 @@ export async function analyzeReview(
 ): Promise<ReviewAnalysis> {
   const resolvedModel = model ?? DEFAULT_MODEL;
 
-  try {
+  return withRateLimitRetry(async () => {
     await waitForRateLimit(resolvedModel);
-    checkRateLimit(resolvedModel);
+    await checkAndRecordRequest(resolvedModel);
 
     const google = createGoogleGenerativeAI({ apiKey });
 
-    const result = await generateObject({
+    const result = await generateText({
       model: google(resolvedModel),
-      schema: reviewAnalysisSchema,
+      output: Output.object({ schema: reviewAnalysisSchema }),
       system: SYSTEM_PROMPT,
       prompt: buildReviewPrompt(review),
     });
 
-    recordRequest(resolvedModel);
-    return result.object as ReviewAnalysis;
-  } catch (error) {
-    throw classifyError(error);
-  }
+    return result.output as ReviewAnalysis;
+  });
 }
 
 export async function analyzeReviewBatch(
@@ -240,21 +195,20 @@ export async function analyzeReviewBatch(
     return [analysis];
   }
 
-  try {
+  return withRateLimitRetry(async () => {
     await waitForRateLimit(resolvedModel);
-    checkRateLimit(resolvedModel);
+    await checkAndRecordRequest(resolvedModel);
 
     const google = createGoogleGenerativeAI({ apiKey });
 
-    const result = await generateObject({
+    const result = await generateText({
       model: google(resolvedModel),
-      schema: batchReviewAnalysisSchema,
+      output: Output.object({ schema: batchReviewAnalysisSchema }),
       system: SYSTEM_PROMPT,
       prompt: buildBatchPrompt(reviews),
     });
 
-    recordRequest(resolvedModel);
-    const analyses = result.object.analyses as ReviewAnalysis[];
+    const analyses = result.output!.analyses as ReviewAnalysis[];
 
     if (analyses.length !== reviews.length) {
       console.warn(
@@ -263,7 +217,5 @@ export async function analyzeReviewBatch(
     }
 
     return analyses;
-  } catch (error) {
-    throw classifyError(error);
-  }
+  });
 }

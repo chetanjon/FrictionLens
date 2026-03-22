@@ -8,6 +8,7 @@ import { trackSignup } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { GoogleOAuthButton } from "@/components/auth/google-oauth-button";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -84,6 +85,17 @@ export default function SignupPage() {
           </div>
         )}
 
+        <GoogleOAuthButton mode="signup" />
+
+        <div className="relative my-5">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200/60" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-white px-2 text-slate-400">or</span>
+          </div>
+        </div>
+
         <form onSubmit={handleSignup} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="email">Email</Label>
@@ -134,17 +146,17 @@ export default function SignupPage() {
           </Button>
         </form>
 
-        <div className="my-5 h-px bg-slate-200/60" />
-
-        <p className="text-center text-sm text-slate-400">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-friction-blue hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
+        <div className="mt-5 border-t border-slate-200/60 pt-5">
+          <p className="text-center text-sm text-slate-400">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-friction-blue hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pullReviews } from "@/lib/scrapers";
+import { cacheGetOrSet } from "@/lib/cache/redis";
+import { reviewsCacheKey } from "@/lib/cache/keys";
 
 export async function GET(request: NextRequest) {
   const appId = request.nextUrl.searchParams.get("appId");
@@ -31,13 +33,20 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const reviewCount = count ? Math.min(Number(count), 500) : 200;
+
   try {
-    const reviews = await pullReviews({
-      appId,
-      platform,
-      storeId: storeId ? Number(storeId) : undefined,
-      count: count ? Math.min(Number(count), 500) : 200,
-    });
+    const reviews = await cacheGetOrSet(
+      reviewsCacheKey(appId, platform),
+      3600,
+      () =>
+        pullReviews({
+          appId,
+          platform,
+          storeId: storeId ? Number(storeId) : undefined,
+          count: reviewCount,
+        })
+    );
 
     return NextResponse.json({
       reviews,
