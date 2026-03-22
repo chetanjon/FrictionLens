@@ -81,16 +81,16 @@ export default async function OGImage({
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: "#4A90D9",
+              background: "#0e0d0b",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "white",
-              fontSize: 22,
-              fontWeight: 800,
             }}
           >
-            F
+            <svg width="26" height="26" viewBox="0 0 500 500" fill="none">
+              <path d="M102 82 C118 98,138 126,155 150 C168 170,182 190,198 210 C210 226,222 237,236 244 C244 248,252 249,260 252 C272 257,284 268,300 290 C318 316,340 348,360 376 C374 396,390 414,410 436 C406 440,400 442,394 444 C374 422,358 400,340 374 C322 348,304 322,288 298 C276 280,266 268,256 260 C248 254,240 252,232 250 C222 248,212 238,198 222 C180 200,165 178,150 156 C136 134,122 112,110 94Z" fill="white" opacity="0.92"/>
+              <ellipse cx="250" cy="251" rx="5.5" ry="5" fill="#4A90D9"/>
+            </svg>
           </div>
           <span
             style={{
