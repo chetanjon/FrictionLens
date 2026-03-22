@@ -76,22 +76,11 @@ export default async function OGImage({
       >
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
-              background: "#0e0d0b",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <svg width="26" height="26" viewBox="0 0 500 500" fill="none">
-              <path d="M78 430 C82 426,88 418,90 412 C96 394,108 370,124 346 C142 318,162 294,184 272 C200 256,216 246,234 240 C242 238,248 238,256 236 C268 232,280 224,296 208 C316 184,338 156,356 130 C370 112,382 96,394 80 C398 74,402 70,404 66 C400 64,396 64,392 66 C382 78,370 94,356 114 C340 142,320 168,300 196 C284 214,272 226,260 234 C252 238,244 240,236 242 C224 246,210 254,192 268 C170 288,150 310,132 336 C116 360,104 382,96 400 C90 414,88 420,84 428 C80 436,76 438,72 440Z" fill="white" opacity="0.94"/>
-              <ellipse cx="249" cy="238" rx="6" ry="5.5" fill="#4A90D9"/>
-            </svg>
-          </div>
+          <svg width="44" height="44" viewBox="-32 -32 64 64" fill="none">
+            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="white" stroke-width="1.4"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="white"/>
+            <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f0f0f"/>
+          </svg>
           <span
             style={{
               fontSize: 22,
