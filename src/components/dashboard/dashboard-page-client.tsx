@@ -25,6 +25,7 @@ type TrendPoint = {
 type DashboardPageClientProps = {
   displayName: string;
   hasApiKey: boolean;
+  freeTrialRemaining?: number;
   avgVibeScore: number | null;
   totalReviews: number;
   analysisCount: number;
@@ -46,12 +47,14 @@ export function DashboardPageClient(props: DashboardPageClientProps) {
       <>
         <EmptyStateGuide
           hasApiKey={props.hasApiKey}
+          freeTrialRemaining={props.freeTrialRemaining}
           onNewAnalysis={() => setDialogOpen(true)}
         />
         <NewAnalysisDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           hasApiKey={props.hasApiKey}
+          freeTrialRemaining={props.freeTrialRemaining}
         />
       </>
     );

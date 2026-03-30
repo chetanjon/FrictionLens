@@ -34,13 +34,16 @@ type NewAnalysisDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   hasApiKey: boolean;
+  freeTrialRemaining?: number;
 };
 
 export function NewAnalysisDialog({
   open,
   onOpenChange,
   hasApiKey,
+  freeTrialRemaining = 0,
 }: NewAnalysisDialogProps) {
+  const canAnalyze = hasApiKey || freeTrialRemaining > 0;
   const router = useRouter();
   const [appName, setAppName] = useState("");
   const [reviews, setReviews] = useState<ParsedReview[]>([]);
@@ -64,9 +67,9 @@ export function NewAnalysisDialog({
       setError("Please add some reviews first.");
       return;
     }
-    if (!hasApiKey) {
+    if (!canAnalyze) {
       setError(
-        "No API key configured. Go to Settings and add your Gemini API key first."
+        "You've used all your free analyses. Go to Settings and add your Gemini API key to continue."
       );
       return;
     }
@@ -224,10 +227,24 @@ export function NewAnalysisDialog({
             </div>
           )}
 
+          {/* Free trial notice */}
+          {!hasApiKey && freeTrialRemaining > 0 && !isAnalyzing && (
+            <div className="flex items-center gap-2 rounded-lg border border-friction-blue/20 bg-friction-blue/5 px-4 py-3 text-sm text-friction-blue">
+              <Sparkles className="h-4 w-4 shrink-0" />
+              <span>
+                <strong>{freeTrialRemaining}</strong> free {freeTrialRemaining === 1 ? "analysis" : "analyses"} remaining.{" "}
+                <a href="/dashboard/settings" className="underline hover:no-underline">
+                  Add your API key
+                </a>{" "}
+                for unlimited access.
+              </span>
+            </div>
+          )}
+
           {/* Analyze button */}
           <Button
             onClick={handleAnalyze}
-            disabled={isAnalyzing || reviews.length === 0}
+            disabled={isAnalyzing || reviews.length === 0 || !canAnalyze}
             className="w-full bg-friction-blue text-white hover:bg-friction-blue/90"
             size="lg"
           >

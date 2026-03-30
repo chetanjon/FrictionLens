@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { Eye, EyeOff, ExternalLink, Loader2, Trash2, Zap, Save } from "lucide-react";
 import { toast } from "sonner";
 import { saveApiKey, testApiKey, deleteApiKey } from "@/app/dashboard/settings/actions";
+import { cn } from "@/lib/utils";
 import { trackApiKeySaved } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +25,17 @@ const MODELS = [
   { value: "gemini-2.0-flash", label: "Gemini 2.0 Flash", desc: "Previous gen — 15 RPM, 1500 RPD" },
 ] as const;
 
+/** Must match the value in @/lib/free-trial.ts (can't import server module in client component). */
+const FREE_TRIAL_LIMIT = 2;
+
 type Props = {
   hasKey: boolean;
   currentModel: string;
+  freeAnalysesUsed?: number;
 };
 
-export function SettingsForm({ hasKey, currentModel }: Props) {
+export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Props) {
+  const freeTrialRemaining = Math.max(0, FREE_TRIAL_LIMIT - freeAnalysesUsed);
   const formRef = useRef<HTMLFormElement>(null);
   const [showKey, setShowKey] = useState(false);
   const [keyExists, setKeyExists] = useState(hasKey);
@@ -92,7 +98,7 @@ export function SettingsForm({ hasKey, currentModel }: Props) {
                 Gemini API Key
               </CardTitle>
               <CardDescription className="mt-0.5">
-                Required for AI-powered review analysis.
+                Add your own key for unlimited AI-powered analysis.
               </CardDescription>
             </div>
             <span className="flex items-center gap-1.5 text-xs font-medium">
@@ -207,6 +213,35 @@ export function SettingsForm({ hasKey, currentModel }: Props) {
           </form>
         </CardContent>
       </Card>
+
+      {/* Free Trial Status */}
+      {!keyExists && (
+        <Card className="bg-white/65 backdrop-blur-xl border-slate-200/60 rounded-2xl">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Free Trial</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {freeTrialRemaining > 0
+                    ? `You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"} remaining. Add your own API key for unlimited access.`
+                    : "You've used all your free analyses. Add a Gemini API key above to continue."}
+                </p>
+              </div>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: FREE_TRIAL_LIMIT }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={cn(
+                      "inline-block h-2.5 w-2.5 rounded-full",
+                      i < freeAnalysesUsed ? "bg-slate-300" : "bg-friction-blue"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Help Card */}
       <Card className="bg-white/65 backdrop-blur-xl border-slate-200/60 rounded-2xl">

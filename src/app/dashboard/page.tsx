@@ -1,6 +1,7 @@
 import { DashboardCommandCenter } from "@/components/dashboard/dashboard-command-center";
 import { DashboardPageClient } from "@/components/dashboard/dashboard-page-client";
 import { vibeColor } from "@/lib/constants";
+import { FREE_TRIAL_LIMIT } from "@/lib/free-trial";
 
 export const metadata = {
   title: "Dashboard — FrictionLens",
@@ -66,6 +67,7 @@ export default async function DashboardPage() {
 
   let allAnalyses: AnalysisRow[] = [];
   let hasApiKey = false;
+  let freeTrialRemaining = 0;
   let displayName = "";
 
   try {
@@ -77,7 +79,7 @@ export default async function DashboardPage() {
       const [settingsRes, analysesRes, profileRes] = await Promise.all([
         supabase
           .from("user_settings")
-          .select("gemini_api_key_encrypted")
+          .select("gemini_api_key_encrypted, free_analyses_used")
           .eq("user_id", user.id)
           .single(),
         supabase
@@ -96,6 +98,8 @@ export default async function DashboardPage() {
       ]);
 
       hasApiKey = !!settingsRes.data?.gemini_api_key_encrypted;
+      const used = settingsRes.data?.free_analyses_used ?? 0;
+      freeTrialRemaining = Math.max(0, FREE_TRIAL_LIMIT - used);
       allAnalyses = (analysesRes.data as AnalysisRow[]) ?? [];
       displayName = profileRes.data?.display_name ?? user.email?.split("@")[0] ?? "there";
     }
@@ -228,6 +232,7 @@ export default async function DashboardPage() {
     <DashboardPageClient
       displayName={displayName}
       hasApiKey={hasApiKey}
+      freeTrialRemaining={freeTrialRemaining}
       avgVibeScore={avgVibeScore}
       totalReviews={totalReviews}
       analysisCount={completed.length}

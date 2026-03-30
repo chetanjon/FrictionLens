@@ -32,6 +32,7 @@ export default async function SettingsPage() {
 
   let hasKey = false;
   let currentModel = "gemini-2.5-flash";
+  let freeAnalysesUsed = 0;
 
   try {
     const supabase = await createClient();
@@ -42,13 +43,14 @@ export default async function SettingsPage() {
     if (user) {
       const { data: settings } = await supabase
         .from("user_settings")
-        .select("gemini_api_key_encrypted, default_model")
+        .select("gemini_api_key_encrypted, default_model, free_analyses_used")
         .eq("user_id", user.id)
         .single();
 
       if (settings) {
         hasKey = !!settings.gemini_api_key_encrypted;
         currentModel = settings.default_model ?? "gemini-2.5-flash";
+        freeAnalysesUsed = settings.free_analyses_used ?? 0;
       }
     }
   } catch (err) {
@@ -66,7 +68,7 @@ export default async function SettingsPage() {
         </p>
       </div>
 
-      <SettingsForm hasKey={hasKey} currentModel={currentModel} />
+      <SettingsForm hasKey={hasKey} currentModel={currentModel} freeAnalysesUsed={freeAnalysesUsed} />
     </div>
   );
 }

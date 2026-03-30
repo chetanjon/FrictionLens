@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { decrypt } from "@/lib/crypto";
+import { consumeFreeTrial, FREE_TRIAL_MODEL, FREE_TRIAL_MAX_REVIEWS } from "@/lib/free-trial";
 import { isInngestEnabled } from "@/lib/inngest/is-enabled";
 import { inngest } from "@/lib/inngest/client";
 import { getAnalysisProgress } from "@/lib/inngest/progress";
@@ -20,12 +21,13 @@ import type { ParsedReview } from "@/lib/types/review";
  */
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { appName, platform, reviews, competitors: competitorInputs } = body as {
+  const { appName, platform, reviews: rawReviews, competitors: competitorInputs } = body as {
     appName: string;
     platform?: string;
     reviews: ParsedReview[];
     competitors?: CompetitorInput[];
   };
+  let reviews = rawReviews;
 
   if (!appName?.trim()) {
     return new Response(
@@ -99,8 +101,21 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // If user has no key, try free trial with the platform key
         if (!apiKey) {
+          const trialResult = await consumeFreeTrial(user.id);
+          if (!trialResult.allowed) {
+            send("error", { error: trialResult.reason });
+            controller.close();
+            return;
+          }
           apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY ?? null;
+          model = FREE_TRIAL_MODEL;
+
+          // Cap review count for free trial analyses
+          if (reviews.length > FREE_TRIAL_MAX_REVIEWS) {
+            reviews = reviews.slice(0, FREE_TRIAL_MAX_REVIEWS);
+          }
         }
 
         if (!apiKey) {

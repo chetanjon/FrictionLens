@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 type EmptyStateGuideProps = {
   hasApiKey: boolean;
+  freeTrialRemaining?: number;
   onNewAnalysis: () => void;
 };
 
@@ -14,7 +15,7 @@ const STEPS = [
   {
     icon: Key,
     title: "Add API Key",
-    description: "Get a free Gemini API key from Google AI Studio and add it in Settings.",
+    description: "Get a free Gemini API key from Google AI Studio, or try your first analysis free!",
     href: "/dashboard/settings",
     color: "text-friction-blue",
     bgColor: "bg-friction-blue/10",
@@ -35,8 +36,14 @@ const STEPS = [
   },
 ] as const;
 
-export function EmptyStateGuide({ hasApiKey, onNewAnalysis }: EmptyStateGuideProps) {
-  const currentStep = hasApiKey ? 1 : 0;
+export function EmptyStateGuide({
+  hasApiKey,
+  freeTrialRemaining = 0,
+  onNewAnalysis,
+}: EmptyStateGuideProps) {
+  // If free trial is available, skip the API key step entirely
+  const canAnalyze = hasApiKey || freeTrialRemaining > 0;
+  const currentStep = canAnalyze ? 1 : 0;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
@@ -102,7 +109,7 @@ export function EmptyStateGuide({ hasApiKey, onNewAnalysis }: EmptyStateGuidePro
               </p>
 
               {/* Action for current step */}
-              {isCurrentStep && i === 0 && (
+              {isCurrentStep && i === 0 && !canAnalyze && (
                 <Link href="/dashboard/settings" className="mt-4 block">
                   <Button size="sm" variant="outline" className="w-full text-xs">
                     Go to Settings
@@ -122,6 +129,21 @@ export function EmptyStateGuide({ hasApiKey, onNewAnalysis }: EmptyStateGuidePro
           );
         })}
       </div>
+
+      {/* Free trial CTA */}
+      {!hasApiKey && freeTrialRemaining > 0 && (
+        <div className="mt-8 text-center">
+          <Button
+            className="bg-friction-blue text-white hover:bg-friction-blue/90"
+            onClick={onNewAnalysis}
+          >
+            Try Your First Analysis Free
+          </Button>
+          <p className="mt-2 text-xs text-slate-400">
+            {freeTrialRemaining} free {freeTrialRemaining === 1 ? "analysis" : "analyses"} included — no API key needed
+          </p>
+        </div>
+      )}
 
       <div className="mt-8 flex items-center justify-center gap-4 text-xs text-slate-400">
         <span className="flex items-center gap-1.5">

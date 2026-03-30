@@ -5,6 +5,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { decrypt } from "@/lib/crypto";
+import { consumeFreeTrial, FREE_TRIAL_MODEL } from "@/lib/free-trial";
 import type { ParsedReview, ReviewAnalysis } from "@/lib/types/review";
 
 export type AuthResult = {
@@ -12,6 +13,8 @@ export type AuthResult = {
   userEmail: string | undefined;
   apiKey: string;
   model: string;
+  /** True when the analysis is running on the platform key (free trial). */
+  isFreeTrial: boolean;
   supabase: Awaited<ReturnType<typeof createClient>>;
 };
 
@@ -73,8 +76,14 @@ export async function authenticateAndDecryptKey(
     model = settings.default_model ?? "gemini-2.5-flash";
   }
 
+  // If user has no key, try free trial with the platform key
   if (!apiKey) {
+    const trialResult = await consumeFreeTrial(user.id);
+    if (!trialResult.allowed) {
+      throw new Error(trialResult.reason);
+    }
     apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY ?? null;
+    model = FREE_TRIAL_MODEL;
   }
 
   if (!apiKey) {
@@ -83,11 +92,14 @@ export async function authenticateAndDecryptKey(
     );
   }
 
+  const isFreeTrial = !settings?.gemini_api_key_encrypted;
+
   return {
     userId: user.id,
     userEmail: user.email,
     apiKey,
     model,
+    isFreeTrial,
     supabase,
   };
 }

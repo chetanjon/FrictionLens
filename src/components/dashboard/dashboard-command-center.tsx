@@ -29,6 +29,7 @@ type TrendPoint = {
 type DashboardCommandCenterProps = {
   displayName: string;
   hasApiKey: boolean;
+  freeTrialRemaining?: number;
   avgVibeScore: number | null;
   totalReviews: number;
   analysisCount: number;
@@ -45,6 +46,7 @@ type DashboardCommandCenterProps = {
 export function DashboardCommandCenter({
   displayName,
   hasApiKey,
+  freeTrialRemaining,
   avgVibeScore,
   totalReviews,
   analysisCount,
@@ -128,6 +130,7 @@ export function DashboardCommandCenter({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         hasApiKey={hasApiKey}
+        freeTrialRemaining={freeTrialRemaining}
       />
     </div>
   );
