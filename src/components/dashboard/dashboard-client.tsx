@@ -146,7 +146,7 @@ export function DashboardClient({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
           {/* App name */}
           <div className="mb-5">
             <Label htmlFor="app-name" className="text-sm font-medium text-slate-300">
@@ -270,9 +270,9 @@ export function DashboardClient({
         </div>
 
         {recentAnalyses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/[0.08] bg-[#111111] px-6 py-16 text-center">
+          <div className="rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-6 py-16 text-center">
             {/* Illustrated empty state */}
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#161616] ring-1 ring-white/[0.08]">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/[0.04] ring-1 ring-white/[0.08]">
               <FileText className="h-7 w-7 text-slate-400" />
             </div>
             <h3 className="text-base font-semibold text-slate-300">
@@ -303,7 +303,7 @@ export function DashboardClient({
               <Link
                 key={a.id}
                 href={`/dashboard/analysis/${a.id}`}
-                className="group flex items-center gap-4 rounded-xl border border-white/[0.08] bg-[#111111] px-4 py-3.5 transition-all duration-200 hover:border-white/[0.12] hover:bg-[#1C1C1C] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="group flex items-center gap-4 rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-4 py-3.5 transition-all duration-200 hover:border-white/[0.12] hover:bg-white/[0.06] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label={`View ${a.app_name} report${a.vibe_score != null ? `, vibe score ${Math.round(a.vibe_score)}` : ""}`}
               >
                 {/* Vibe score circle */}
@@ -404,7 +404,7 @@ function CsvUploadSlot({
     return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
   } catch {
     return (
-      <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
+      <div className="rounded-lg border border-dashed border-white/[0.08] bg-white/[0.04] p-8 text-center">
         <p className="text-sm text-slate-400">
           CSV upload component is being built...
         </p>
@@ -460,7 +460,7 @@ function PasteInputFallback({
   return (
     <div className="space-y-3">
       <textarea
-        className="min-h-[120px] w-full rounded-lg border border-white/[0.08] bg-[#161616] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
+        className="min-h-[120px] w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
         placeholder="Paste one review per line..."
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -496,7 +496,7 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-white/[0.08] bg-[#161616] p-4">
+      <div className="rounded-lg border border-white/[0.08] bg-white/[0.04] p-4">
         <p className="text-sm font-medium text-slate-300">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>

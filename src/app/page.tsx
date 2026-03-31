@@ -380,7 +380,7 @@ export default async function LandingPage() {
             },
           ] as const).map((feature, i) => (
             <AnimateOnScroll key={feature.num} delay={i * 100}>
-              <div className="gradient-border-hover group h-full rounded-2xl border border-white/[0.08] bg-[#111111] p-6 hover:bg-[#161616] hover:shadow-xl hover:shadow-black/20 hover:-translate-y-0.5 transition-all duration-200">
+              <div className="gradient-border-hover group h-full rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6 hover:bg-[#161616] hover:shadow-xl hover:shadow-black/20 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${feature.iconBg}`}>
                     <feature.icon className={`h-4.5 w-4.5 ${feature.iconColor}`} />
@@ -476,7 +476,7 @@ export default async function LandingPage() {
 
         <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
           <AnimateOnScroll>
-            <div className="relative rounded-2xl border border-white/[0.08] bg-[#111111] p-7 flex flex-col h-full">
+            <div className="relative rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-7 flex flex-col h-full">
               <div className="mb-5">
                 <h3 className="text-sm font-medium text-slate-400">Try It</h3>
                 <div className="mt-3 flex items-baseline gap-1">

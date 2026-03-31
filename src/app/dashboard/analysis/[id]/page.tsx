@@ -18,7 +18,7 @@ function sectionFallback(label: string) {
           <div className="h-2 w-2 rounded-full bg-white/[0.06]" />
           <div className="h-3 w-32 rounded bg-white/[0.06]" />
         </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-8">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-8">
           <div className="space-y-3">
             <div className="h-3 w-3/4 rounded bg-white/[0.06]" />
             <div className="h-3 w-1/2 rounded bg-white/[0.06]" />
@@ -240,7 +240,7 @@ export default async function AnalysisPage({
   if (a.status === "processing") {
     return (
       <div className="mx-auto max-w-4xl px-4 py-16 text-center">
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-12">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-12">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white/[0.08] border-t-friction-blue" />
           <h2 className="text-lg font-semibold text-white">
             Analysis in Progress

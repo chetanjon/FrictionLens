@@ -209,7 +209,7 @@ export function AnalysisResultsClient({
           <h2 className="mb-4 text-lg font-semibold text-white">
             Sentiment Dimensions
           </h2>
-          <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-5">
+          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
             <div className="space-y-4">
               {DIMENSION_CONFIG.map((dim) => {
                 const score = dimensions[dim.key];
@@ -278,7 +278,7 @@ export function AnalysisResultsClient({
           </Tabs>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111111]">
+        <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md">
           {filteredReviews.length === 0 ? (
             <div className="px-6 py-12 text-center text-sm text-slate-400">
               No reviews match this filter.
@@ -371,7 +371,7 @@ function StatCard({
   color?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-4">
+    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-4">
       <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
         {label}
       </p>

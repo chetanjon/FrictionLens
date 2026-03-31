@@ -84,7 +84,7 @@ export function DashboardCommandCenter({
       {analysisCount > 0 && (
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
-            <div className="h-full rounded-2xl border border-white/[0.08] bg-[#111111] p-6 transition-shadow duration-200 hover:shadow-[0_0_20px_rgba(74,144,217,0.06)]">
+            <div className="h-full rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6 transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12]">
               <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
                 Vibe Score Trend
               </p>
@@ -92,7 +92,7 @@ export function DashboardCommandCenter({
             </div>
           </div>
           <div>
-            <div className="h-full rounded-2xl border border-white/[0.08] bg-[#111111] p-6 transition-shadow duration-200 hover:shadow-[0_0_20px_rgba(74,144,217,0.06)]">
+            <div className="h-full rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6 transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12]">
               <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
                 Sentiment Radar
               </p>

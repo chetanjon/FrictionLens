@@ -74,10 +74,10 @@ export function EmptyStateGuide({
               className={cn(
                 "relative rounded-2xl border p-6 transition-all",
                 isCurrentStep
-                  ? "border-friction-blue/30 bg-[#111111] shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
+                  ? "border-friction-blue/30 bg-white/[0.03] backdrop-blur-md shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
                   : isCompleted
                     ? "border-emerald-500/20 bg-emerald-500/5"
-                    : "border-white/[0.08] bg-[#111111]"
+                    : "border-white/[0.07] bg-white/[0.03] backdrop-blur-md"
               )}
             >
               {/* Step number */}

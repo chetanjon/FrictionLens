@@ -25,9 +25,9 @@ export function GlassCard({
         variant === "light" &&
           "bg-white/72 backdrop-blur-xl border border-slate-200/50 shadow-sm",
         variant === "dark" &&
-          "bg-[#111111] border border-white/[0.08] text-white",
+          "bg-white/[0.03] backdrop-blur-md border border-white/[0.07] text-white",
         hover &&
-          "transition-all duration-200 hover:border-friction-blue/25 hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(74,144,217,0.08)]",
+          "transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
         className
       )}
       style={style}

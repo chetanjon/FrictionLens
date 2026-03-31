@@ -41,7 +41,7 @@ export function TrendsClient({
 }: TrendsClientProps) {
   if (vibeTrendData.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-white/[0.08] bg-[#111111] px-6 py-16 text-center">
+      <div className="rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-6 py-16 text-center">
         <p className="text-sm text-slate-500">
           No completed analyses yet. Run your first analysis to see trends.
         </p>
@@ -59,7 +59,7 @@ export function TrendsClient({
   return (
     <div className="space-y-6">
       {/* Vibe Score Trend */}
-      <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
+      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
         <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
           Vibe Score Over Time
         </p>
@@ -68,7 +68,7 @@ export function TrendsClient({
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Latest Dimensions */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
           <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
             Latest Dimension Scores
           </p>
@@ -90,7 +90,7 @@ export function TrendsClient({
         </div>
 
         {/* Friction Feature Frequency */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
           <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
             Top Friction Features
           </p>

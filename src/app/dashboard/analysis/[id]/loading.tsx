@@ -37,7 +37,7 @@ export default function AnalysisLoading() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-white/[0.06] bg-[#111111] p-4 space-y-2"
+                className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-4 space-y-2"
               >
                 <div className="h-3 w-16 rounded bg-white/[0.08] mx-auto" />
                 <div className="h-8 w-12 rounded-lg bg-white/[0.10] mx-auto" />
@@ -48,11 +48,11 @@ export default function AnalysisLoading() {
 
           {/* Charts row */}
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="rounded-xl border border-white/[0.06] bg-[#111111] p-5">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
               <div className="h-3 w-24 rounded bg-white/[0.08] mb-4" />
               <div className="mx-auto h-48 w-48 rounded-full bg-white/[0.06]" />
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-[#111111] p-5">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
               <div className="h-3 w-28 rounded bg-white/[0.08] mb-4" />
               <div className="space-y-4">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -72,7 +72,7 @@ export default function AnalysisLoading() {
           <section key={i} className="space-y-4">
             <div className="h-3 w-16 rounded bg-white/[0.08]" />
             <div className="h-6 w-48 rounded-lg bg-white/[0.10]" />
-            <div className="rounded-xl border border-white/[0.06] bg-[#111111] p-6">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
               <div className="space-y-3">
                 {Array.from({ length: 4 }).map((_, j) => (
                   <div key={j} className="h-4 rounded bg-white/[0.06]" style={{ width: `${85 - j * 12}%` }} />

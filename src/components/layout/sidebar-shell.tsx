@@ -226,8 +226,15 @@ export function SidebarShell({
       )}
 
       {/* Main content */}
-      <main id="main-content" className="flex-1 overflow-auto pt-14 md:pt-0" role="main">
-        {children}
+      <main id="main-content" className="relative flex-1 overflow-auto pt-14 md:pt-0" role="main">
+        {/* Ambient blurs for glass effect */}
+        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+          <div className="aurora-blob-1 absolute top-[10%] right-[10%] h-[400px] w-[400px] rounded-full bg-friction-blue/[0.04] blur-[120px]" />
+          <div className="aurora-blob-2 absolute bottom-[20%] left-[20%] h-[350px] w-[350px] rounded-full bg-[#7C3AED]/[0.03] blur-[100px]" />
+        </div>
+        <div className="relative z-10">
+          {children}
+        </div>
       </main>
     </div>
   );

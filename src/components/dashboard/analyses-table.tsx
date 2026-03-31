@@ -74,7 +74,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                 statusFilter === status
                   ? "bg-friction-blue/10 text-friction-blue"
-                  : "text-slate-500 hover:bg-[#1C1C1C]"
+                  : "text-slate-500 hover:bg-white/[0.06]"
               }`}
             >
               {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -85,7 +85,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-white/[0.08] bg-[#111111]">
+      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md">
         <Table>
           <TableHeader>
             <TableRow>

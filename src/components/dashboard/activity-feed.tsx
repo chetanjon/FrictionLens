@@ -79,7 +79,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
   const visible = events.slice(0, MAX_EVENTS);
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-5">
+    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
       {/* Section label */}
       <span className="mb-3 block font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
         Activity

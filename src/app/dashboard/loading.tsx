@@ -8,7 +8,7 @@ export default function DashboardLoading() {
       </div>
 
       {/* New Analysis card skeleton */}
-      <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
+      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
         {/* App name input */}
         <div className="mb-5">
           <div className="h-4 w-20 rounded bg-white/[0.08] mb-2" />
@@ -23,7 +23,7 @@ export default function DashboardLoading() {
         </div>
 
         {/* Content area */}
-        <div className="h-32 rounded-lg bg-[#161616] border border-dashed border-white/[0.08]" />
+        <div className="h-32 rounded-lg bg-white/[0.04] border border-dashed border-white/[0.08]" />
 
         {/* Button */}
         <div className="mt-5 h-11 w-40 rounded-lg bg-white/[0.10]" />
@@ -43,7 +43,7 @@ export default function DashboardLoading() {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-4 rounded-xl border border-white/[0.08] bg-[#111111] px-4 py-3.5"
+            className="flex items-center gap-4 rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-4 py-3.5"
           >
             {/* Score circle */}
             <div className="h-10 w-10 shrink-0 rounded-full bg-white/[0.10]" />

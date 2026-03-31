@@ -90,7 +90,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
   return (
     <div className="flex flex-col gap-6">
       {/* API Key Card */}
-      <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
+      <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -216,7 +216,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
 
       {/* Free Trial Status */}
       {!keyExists && (
-        <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
+        <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -244,7 +244,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
       )}
 
       {/* Help Card */}
-      <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
+      <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
         <CardHeader>
           <CardTitle className="text-base font-semibold">
             Getting an API Key
