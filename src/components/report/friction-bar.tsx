@@ -21,13 +21,13 @@ export function FrictionBar({
   return (
     <div
       className={cn(
-        "grid items-center gap-3.5 rounded-2xl border border-slate-200/60 bg-white/65 px-[18px] py-[13px] backdrop-blur-xl",
+        "grid items-center gap-3.5 rounded-2xl border border-white/[0.06] bg-white/[0.03] px-[18px] py-[13px] backdrop-blur-md",
         "grid-cols-[160px_1fr_60px_50px_56px]"
       )}
     >
-      <span className="text-[13px] font-semibold text-slate-900">{name}</span>
+      <span className="text-[13px] font-semibold text-white">{name}</span>
 
-      <div className="h-[5px] rounded-[3px] bg-slate-100">
+      <div className="h-[5px] rounded-[3px] bg-white/[0.06]">
         <div
           className="h-full rounded-[3px] transition-[width] duration-600 ease-out"
           style={{

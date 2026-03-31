@@ -10,9 +10,9 @@ type ActionsSectionProps = {
 function impactColor(impact: string): string {
   switch (impact) {
     case "Critical":
-      return "#D94F4F";
+      return "#C47070";
     case "High":
-      return "#D4A843";
+      return "#C9B06A";
     case "Medium":
       return "#94A3B8";
     case "Low":
@@ -36,17 +36,17 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
               <div className="flex-1">
                 <div className="mb-1.5 flex items-center gap-2">
                   <PriorityBadge priority={action.priority} />
-                  <span className="text-sm font-bold text-slate-900">
+                  <span className="text-sm font-bold text-white">
                     {action.title}
                   </span>
                 </div>
-                <p className="m-0 text-[12.5px] leading-relaxed text-slate-500">
+                <p className="m-0 text-[12.5px] leading-relaxed text-slate-400">
                   {action.description}
                 </p>
               </div>
 
               <div className="flex flex-shrink-0 gap-1.5">
-                <div className="rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-1.5 text-center">
+                <div className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2.5 py-1.5 text-center">
                   <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-slate-400">
                     Impact
                   </div>
@@ -57,11 +57,11 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
                     {action.impact}
                   </div>
                 </div>
-                <div className="rounded-lg border border-slate-100 bg-slate-50 px-2.5 py-1.5 text-center">
+                <div className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2.5 py-1.5 text-center">
                   <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-slate-400">
                     Effort
                   </div>
-                  <div className="text-[11px] font-semibold text-slate-500">
+                  <div className="text-[11px] font-semibold text-slate-400">
                     {action.effort}
                   </div>
                 </div>

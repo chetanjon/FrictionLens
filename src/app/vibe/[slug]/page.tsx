@@ -15,15 +15,15 @@ function sectionFallback(label: string) {
     <div className="mx-auto max-w-[920px] px-7 py-13">
       <div className="animate-pulse space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-2 w-16 rounded bg-slate-200" />
-          <div className="h-2 w-2 rounded-full bg-slate-200" />
-          <div className="h-3 w-32 rounded bg-slate-200" />
+          <div className="h-2 w-16 rounded bg-white/[0.06]" />
+          <div className="h-2 w-2 rounded-full bg-white/[0.06]" />
+          <div className="h-3 w-32 rounded bg-white/[0.06]" />
         </div>
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 p-8">
+        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-8">
           <div className="space-y-3">
-            <div className="h-3 w-3/4 rounded bg-slate-100" />
-            <div className="h-3 w-1/2 rounded bg-slate-100" />
-            <div className="h-3 w-2/3 rounded bg-slate-100" />
+            <div className="h-3 w-3/4 rounded bg-white/[0.06]" />
+            <div className="h-3 w-1/2 rounded bg-white/[0.06]" />
+            <div className="h-3 w-2/3 rounded bg-white/[0.06]" />
           </div>
         </div>
       </div>
@@ -315,26 +315,26 @@ export default async function PublicVibePage({
   }));
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] relative">
-      {/* Ambient background — matches landing page */}
+    <div className="min-h-screen bg-black relative">
+      {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-friction-blue/[0.04] blur-3xl" />
-        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-slate-400/[0.04] blur-3xl" />
+        <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-[#6B9FD4]/[0.05] blur-3xl" />
+        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-white/[0.02] blur-3xl" />
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)",
+              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
           }}
         />
       </div>
 
       {/* Branding header */}
-      <header className="relative z-10 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl">
+      <header className="relative z-10 border-b border-white/[0.06] bg-black/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[920px] items-center justify-between px-7 py-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08] border border-white/[0.10] text-white">
               <svg
                 width="12"
                 height="12"
@@ -348,7 +348,7 @@ export default async function PublicVibePage({
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
             </div>
-            <span className="text-[15px] font-bold tracking-tight text-slate-900">
+            <span className="text-[15px] font-bold tracking-tight text-white">
               FrictionLens
             </span>
           </Link>
@@ -416,7 +416,7 @@ export default async function PublicVibePage({
       <ExplorerSection reviews={explorerReviews} />
 
       {/* Footer with CTA */}
-      <footer className="border-t border-slate-200/60 print:hidden">
+      <footer className="border-t border-white/[0.06] print:hidden">
         <div className="mx-auto max-w-[920px] px-7 py-14">
           <div className="relative overflow-hidden rounded-2xl bg-slate-900 px-8 py-12 text-center md:px-14">
             {/* Ambient glow */}

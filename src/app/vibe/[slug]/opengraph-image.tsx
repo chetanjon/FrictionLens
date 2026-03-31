@@ -6,9 +6,9 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 function vibeColor(score: number): string {
-  if (score >= 75) return "#4A90D9";
-  if (score >= 50) return "#D4A843";
-  return "#D94F4F";
+  if (score >= 75) return "#6B9FD4";
+  if (score >= 50) return "#C9B06A";
+  return "#C47070";
 }
 
 export default async function OGImage({
@@ -215,7 +215,7 @@ export default async function OGImage({
                     style={{
                       fontSize: 28,
                       fontWeight: 700,
-                      color: "#D94F4F",
+                      color: "#C47070",
                     }}
                   >
                     {topFriction}

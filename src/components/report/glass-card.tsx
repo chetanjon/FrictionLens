@@ -23,7 +23,7 @@ export function GlassCard({
       className={cn(
         "rounded-2xl",
         variant === "light" &&
-          "bg-white/72 backdrop-blur-xl border border-slate-200/50 shadow-sm",
+          "bg-white/[0.03] backdrop-blur-md border border-white/[0.06]",
         variant === "dark" &&
           "bg-white/[0.03] backdrop-blur-md border border-white/[0.06] text-white",
         hover &&

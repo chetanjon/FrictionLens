@@ -21,9 +21,9 @@ const TABS = ["all", "1", "2", "3", "4", "5"] as const;
 const PAGE_SIZE = 20;
 
 function ratingColor(rating: number): string {
-  if (rating <= 2) return "#D94F4F";
-  if (rating <= 3) return "#D4A843";
-  return "#4A90D9";
+  if (rating <= 2) return "#C47070";
+  if (rating <= 3) return "#C9B06A";
+  return "#6B9FD4";
 }
 
 function starDisplay(rating: number): string {
@@ -60,12 +60,12 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
               className="cursor-pointer rounded-lg border px-3.5 py-[5px] font-mono text-xs font-medium transition-colors"
               style={{
                 borderColor: isActive
-                  ? "rgba(74,144,217,0.3)"
-                  : "#E2E8F0",
+                  ? "rgba(107,159,212,0.3)"
+                  : "rgba(255,255,255,0.06)",
                 background: isActive
-                  ? "rgba(74,144,217,0.06)"
-                  : "white",
-                color: isActive ? "#4A90D9" : "#94A3B8",
+                  ? "rgba(107,159,212,0.08)"
+                  : "rgba(255,255,255,0.03)",
+                color: isActive ? "#6B9FD4" : "#94A3B8",
               }}
             >
               {label}
@@ -78,11 +78,11 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
       <GlassCard hover={false} className="overflow-hidden p-0">
         <table className="w-full border-collapse text-[12.5px]">
           <thead>
-            <tr className="bg-slate-50">
+            <tr className="bg-white/[0.04]">
               {["Rating", "Review", "Love", "Frust.", "Risk"].map((h) => (
                 <th
                   key={h}
-                  className="border-b border-slate-100 px-3.5 py-[11px] text-left font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-slate-400"
+                  className="border-b border-white/[0.06] px-3.5 py-[11px] text-left font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-slate-400"
                 >
                   {h}
                 </th>
@@ -109,7 +109,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                 return (
                   <tr
                     key={i}
-                    className="border-b border-slate-100 last:border-b-0"
+                    className="border-b border-white/[0.06] last:border-b-0"
                   >
                     <td
                       className="whitespace-nowrap px-3.5 py-[11px] font-mono font-semibold"
@@ -117,14 +117,14 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                     >
                       {starDisplay(rating)}
                     </td>
-                    <td className="max-w-[340px] px-3.5 py-[11px] leading-snug text-slate-500">
+                    <td className="max-w-[340px] px-3.5 py-[11px] leading-snug text-slate-400">
                       {rv.content}
                     </td>
                     <td
                       className="px-3.5 py-[11px] font-mono"
                       style={{
                         color:
-                          (rv.love_score ?? 0) > 5 ? "#4A90D9" : "#D4A843",
+                          (rv.love_score ?? 0) > 5 ? "#6B9FD4" : "#C9B06A",
                       }}
                     >
                       {rv.love_score?.toFixed(1) ?? "-"}
@@ -134,8 +134,8 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                       style={{
                         color:
                           (rv.frustration_score ?? 0) > 5
-                            ? "#D94F4F"
-                            : "#4A90D9",
+                            ? "#C47070"
+                            : "#6B9FD4",
                       }}
                     >
                       {rv.frustration_score?.toFixed(1) ?? "-"}

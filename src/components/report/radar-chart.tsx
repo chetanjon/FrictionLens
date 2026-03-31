@@ -49,7 +49,7 @@ export function RadarChart({ dims }: RadarChartProps) {
             key={level}
             points={gridPts.map((p) => p.join(",")).join(" ")}
             fill="none"
-            stroke="#E2E8F0"
+            stroke="rgba(255,255,255,0.08)"
             strokeWidth="0.7"
           />
         );
@@ -65,7 +65,7 @@ export function RadarChart({ dims }: RadarChartProps) {
             y1={cy}
             x2={ex}
             y2={ey}
-            stroke="#E2E8F0"
+            stroke="rgba(255,255,255,0.08)"
             strokeWidth="0.5"
           />
         );
@@ -74,8 +74,8 @@ export function RadarChart({ dims }: RadarChartProps) {
       {/* Gradient fill definition */}
       <defs>
         <linearGradient id="radar-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#4A90D9" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="#4A90D9" stopOpacity="0.02" />
+          <stop offset="0%" stopColor="#6B9FD4" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#6B9FD4" stopOpacity="0.03" />
         </linearGradient>
       </defs>
 
@@ -83,7 +83,7 @@ export function RadarChart({ dims }: RadarChartProps) {
       <polygon
         points={pts.map((p) => p.join(",")).join(" ")}
         fill="url(#radar-fill)"
-        stroke="#4A90D9"
+        stroke="#6B9FD4"
         strokeWidth="1.5"
       />
 
@@ -94,8 +94,8 @@ export function RadarChart({ dims }: RadarChartProps) {
           cx={x}
           cy={y}
           r="4"
-          fill="#4A90D9"
-          stroke="white"
+          fill="#6B9FD4"
+          stroke="rgba(0,0,0,0.4)"
           strokeWidth="2"
         />
       ))}
@@ -135,7 +135,7 @@ export function RadarChart({ dims }: RadarChartProps) {
             className="font-mono"
             style={{
               fontSize: 11,
-              fill: "#4A90D9",
+              fill: "#6B9FD4",
               fontWeight: 600,
             }}
           >

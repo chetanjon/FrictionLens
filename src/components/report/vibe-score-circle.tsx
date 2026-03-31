@@ -34,7 +34,7 @@ export function VibeScoreCircle({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-full border-2 border-slate-200 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)]",
+        "flex flex-col items-center justify-center rounded-full border-2 border-white/[0.10] bg-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-md",
         s.container
       )}
     >

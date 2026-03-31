@@ -11,7 +11,7 @@ export function StatCard({ value, label, subtitle, color }: StatCardProps) {
   return (
     <div
       className={cn(
-        "rounded-2xl border border-slate-200/60 bg-white/65 px-4 py-[18px] text-center backdrop-blur-xl"
+        "rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-[18px] text-center backdrop-blur-md"
       )}
     >
       <div

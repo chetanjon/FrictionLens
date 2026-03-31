@@ -19,7 +19,7 @@ export function SectionWrapper({
   return (
     <section
       id={id}
-      className={cn("py-13 relative", alt && "bg-slate-100/40")}
+      className={cn("py-13 relative", alt && "bg-white/[0.02]")}
     >
       <div className="mx-auto max-w-[920px] px-7">
         {title && (
@@ -29,7 +29,7 @@ export function SectionWrapper({
                 {label}
               </div>
             )}
-            <h2 className="font-sans text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-sans text-2xl font-bold tracking-tight text-white">
               {title}
             </h2>
           </div>

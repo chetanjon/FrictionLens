@@ -7,10 +7,10 @@ type ReleaseSectionProps = {
 };
 
 function gradeColor(grade: string): string {
-  if (grade.startsWith("A")) return "#4A90D9";
-  if (grade.startsWith("B")) return "#4A90D9";
-  if (grade.startsWith("C")) return "#D4A843";
-  return "#D94F4F";
+  if (grade.startsWith("A")) return "#6B9FD4";
+  if (grade.startsWith("B")) return "#6B9FD4";
+  if (grade.startsWith("C")) return "#C9B06A";
+  return "#C47070";
 }
 
 export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
@@ -33,7 +33,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
 
   const bgColor = gradeColor(releaseImpact.grade);
   const sentimentColor =
-    releaseImpact.sentiment_delta < 0 ? "#D94F4F" : "#4A90D9";
+    releaseImpact.sentiment_delta < 0 ? "#C47070" : "#6B9FD4";
   const sentimentPrefix = releaseImpact.sentiment_delta > 0 ? "+" : "";
 
   return (
@@ -47,10 +47,10 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
         <div className="mb-7 flex items-start justify-between">
           <div>
             <div className="text-xs text-slate-400">Latest Release</div>
-            <div className="font-mono text-[22px] font-extrabold text-slate-900">
+            <div className="font-mono text-[22px] font-extrabold text-white">
               v{releaseImpact.version}
             </div>
-            <div className="mt-0.5 text-[11px] text-slate-300">
+            <div className="mt-0.5 text-[11px] text-slate-500">
               Released {releaseImpact.date}
             </div>
           </div>
@@ -67,10 +67,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
 
         {/* 3 stat cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div
-            className="rounded-[14px] p-[18px] text-center"
-            style={{ background: "#FEF2F2" }}
-          >
+          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
             <div
               className="font-mono text-[26px] font-extrabold"
               style={{ color: sentimentColor }}
@@ -82,22 +79,16 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
               Sentiment Change
             </div>
           </div>
-          <div
-            className="rounded-[14px] p-[18px] text-center"
-            style={{ background: "#FFFBEB" }}
-          >
-            <div className="font-mono text-[26px] font-extrabold text-[#D4A843]">
+          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
+            <div className="font-mono text-[26px] font-extrabold text-[#C9B06A]">
               {releaseImpact.new_themes.length}
             </div>
             <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-slate-400">
               New Themes
             </div>
           </div>
-          <div
-            className="rounded-[14px] p-[18px] text-center"
-            style={{ background: "#EFF6FF" }}
-          >
-            <div className="font-mono text-[26px] font-extrabold text-[#4A90D9]">
+          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
+            <div className="font-mono text-[26px] font-extrabold text-[#6B9FD4]">
               {releaseImpact.review_velocity}
             </div>
             <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-slate-400">
@@ -112,7 +103,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
             {releaseImpact.new_themes.map((theme) => (
               <span
                 key={theme}
-                className="rounded-[10px] border border-red-200 bg-red-50 px-3 py-1 font-mono text-[11px] text-[#D94F4F]"
+                className="rounded-[10px] border border-[#C47070]/20 bg-[#C47070]/10 px-3 py-1 font-mono text-[11px] text-[#C47070]"
               >
                 New: {theme}
               </span>

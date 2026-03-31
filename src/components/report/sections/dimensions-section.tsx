@@ -115,19 +115,19 @@ export function DimensionsSection({ dimensionScores }: DimensionsSectionProps) {
           {dimensions.map((d) => {
             const color = d.inverted
               ? d.value > 5
-                ? "#D94F4F"
-                : "#4A90D9"
+                ? "#C47070"
+                : "#6B9FD4"
               : d.value > 5
-                ? "#4A90D9"
-                : "#D4A843";
+                ? "#6B9FD4"
+                : "#C9B06A";
 
             return (
               <div
                 key={d.key}
-                className="mb-[18px] border-b border-slate-100 pb-[18px] last:mb-0 last:border-b-0 last:pb-0"
+                className="mb-[18px] border-b border-white/[0.06] pb-[18px] last:mb-0 last:border-b-0 last:pb-0"
               >
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-900">
+                  <span className="text-sm font-semibold text-white">
                     {d.label}
                   </span>
                   <span
@@ -137,7 +137,7 @@ export function DimensionsSection({ dimensionScores }: DimensionsSectionProps) {
                     {d.value.toFixed(1)}
                   </span>
                 </div>
-                <div className="mb-2 h-[3px] rounded-sm bg-slate-100">
+                <div className="mb-2 h-[3px] rounded-sm bg-white/[0.06]">
                   <div
                     className="h-full rounded-sm transition-[width] duration-600 ease-out"
                     style={{

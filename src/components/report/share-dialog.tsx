@@ -79,7 +79,7 @@ export function ShareDialog({
 
         <div className="space-y-4 pt-2">
           {/* Toggle */}
-          <div className="flex items-center justify-between rounded-xl border border-slate-200/60 bg-slate-50/50 p-4">
+          <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.04] p-4">
             <div className="flex items-center gap-3">
               {isPublic ? (
                 <Globe className="h-5 w-5 text-friction-blue" />
@@ -87,7 +87,7 @@ export function ShareDialog({
                 <Lock className="h-5 w-5 text-slate-400" />
               )}
               <div>
-                <p className="text-sm font-medium text-slate-900">
+                <p className="text-sm font-medium text-white">
                   {isPublic ? "Public" : "Private"}
                 </p>
                 <p className="text-xs text-slate-500">
@@ -104,7 +104,7 @@ export function ShareDialog({
               disabled={isPending}
               onClick={handleToggle}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-                isPublic ? "bg-friction-blue" : "bg-slate-200"
+                isPublic ? "bg-friction-blue" : "bg-white/[0.10]"
               }`}
             >
               <span
@@ -122,7 +122,7 @@ export function ShareDialog({
                 Public URL
               </label>
               <div className="flex items-center gap-2">
-                <div className="flex-1 truncate rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-xs text-slate-700">
+                <div className="flex-1 truncate rounded-lg border border-white/[0.06] bg-white/[0.04] px-3 py-2 font-mono text-xs text-slate-300">
                   {publicUrl}
                 </div>
                 <Button

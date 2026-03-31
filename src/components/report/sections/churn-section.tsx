@@ -22,19 +22,19 @@ export function ChurnSection({
       {/* Overall churn risk banner */}
       <GlassCard
         hover={false}
-        className="mb-[18px] border-l-[3px] border-l-[#D94F4F] bg-red-50/70 px-5 py-4"
+        className="mb-[18px] border-l-[3px] border-l-[#C47070] bg-white/[0.03] px-5 py-4"
       >
         <div className="flex items-center justify-between">
           <div>
-            <div className="mb-[3px] font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-[#D94F4F]">
+            <div className="mb-[3px] font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-[#C47070]">
               Overall Churn Risk
             </div>
-            <div className="text-[13px] text-slate-500">
+            <div className="text-[13px] text-slate-400">
               {churnRiskPercent}% of analyzed reviewers show high or critical
               churn signals
             </div>
           </div>
-          <div className="font-serif text-4xl font-extrabold text-[#D94F4F]">
+          <div className="font-serif text-4xl font-extrabold text-[#C47070]">
             {churnRiskPercent}%
           </div>
         </div>
@@ -46,7 +46,7 @@ export function ChurnSection({
           <GlassCard key={driver.theme} className="p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <span className="text-[15px] font-bold text-slate-900">
+                <span className="text-[15px] font-bold text-white">
                   {driver.theme}
                 </span>
                 <SeverityBadge severity={driver.severity} />
@@ -60,7 +60,7 @@ export function ChurnSection({
               {driver.quotes.map((quote, j) => (
                 <div
                   key={j}
-                  className="rounded-[10px] border-l-2 border-slate-200 bg-slate-50 px-3.5 py-[9px] font-serif text-[12.5px] italic leading-normal text-slate-500"
+                  className="rounded-[10px] border-l-2 border-white/[0.08] bg-white/[0.04] px-3.5 py-[9px] font-serif text-[12.5px] italic leading-normal text-slate-400"
                 >
                   &ldquo;{quote}&rdquo;
                 </div>

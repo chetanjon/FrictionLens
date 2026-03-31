@@ -194,11 +194,11 @@ export default async function AnalysisPage({
   ) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-12">
-        <div className="rounded-2xl border border-amber-200/60 bg-amber-50/50 p-6 text-center">
-          <h2 className="text-lg font-semibold text-amber-900">
+        <div className="rounded-2xl border border-[#C9B06A]/20 bg-[#C9B06A]/[0.06] p-6 text-center">
+          <h2 className="text-lg font-semibold text-[#C9B06A]">
             Supabase Not Configured
           </h2>
-          <p className="mt-2 text-sm text-amber-700">
+          <p className="mt-2 text-sm text-slate-400">
             Set{" "}
             <code className="font-mono text-xs">NEXT_PUBLIC_SUPABASE_URL</code>{" "}
             and{" "}
@@ -262,8 +262,8 @@ export default async function AnalysisPage({
   if (a.status === "failed") {
     return (
       <div className="mx-auto max-w-4xl px-4 py-16 text-center">
-        <div className="rounded-2xl border border-red-200/60 bg-red-50/50 p-12">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+        <div className="rounded-2xl border border-[#C47070]/20 bg-[#C47070]/[0.06] p-12">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#C47070]/10 text-[#C47070]">
             <svg
               className="h-6 w-6"
               fill="none"
@@ -278,14 +278,14 @@ export default async function AnalysisPage({
               />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-red-900">
+          <h2 className="text-lg font-semibold text-[#C47070]">
             Analysis Failed
           </h2>
-          <p className="mt-2 text-sm text-red-700">
+          <p className="mt-2 text-sm text-slate-400">
             Something went wrong while analyzing reviews for{" "}
-            <span className="font-medium">{a.app_name}</span>.
+            <span className="font-medium text-slate-300">{a.app_name}</span>.
           </p>
-          <p className="mt-4 text-xs text-red-500">
+          <p className="mt-4 text-xs text-[#C47070]/70">
             Please check your API key in Settings and try again.
           </p>
         </div>
