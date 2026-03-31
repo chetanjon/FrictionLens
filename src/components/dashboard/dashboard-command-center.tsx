@@ -84,7 +84,7 @@ export function DashboardCommandCenter({
       {analysisCount > 0 && (
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
-            <div className="h-full rounded-2xl border border-slate-200/50 bg-white/72 p-6 shadow-sm backdrop-blur-xl transition-shadow duration-200 hover:shadow-md">
+            <div className="h-full rounded-2xl border border-white/[0.08] bg-[#111111] p-6 transition-shadow duration-200 hover:shadow-[0_0_20px_rgba(74,144,217,0.06)]">
               <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
                 Vibe Score Trend
               </p>
@@ -92,7 +92,7 @@ export function DashboardCommandCenter({
             </div>
           </div>
           <div>
-            <div className="h-full rounded-2xl border border-slate-200/50 bg-white/72 p-6 shadow-sm backdrop-blur-xl transition-shadow duration-200 hover:shadow-md">
+            <div className="h-full rounded-2xl border border-white/[0.08] bg-[#111111] p-6 transition-shadow duration-200 hover:shadow-[0_0_20px_rgba(74,144,217,0.06)]">
               <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
                 Sentiment Radar
               </p>
@@ -100,8 +100,8 @@ export function DashboardCommandCenter({
                 <DimensionHealth dimensions={avgDimensions} />
               ) : (
                 <div className="flex flex-col items-center justify-center py-6">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50">
-                    <svg className="h-5 w-5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06]">
+                    <svg className="h-5 w-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M3 3v18h18" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M7 16l4-8 4 4 5-10" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>

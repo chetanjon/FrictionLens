@@ -169,7 +169,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
               return (
                 <div
                   key={pullId}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/50 px-3 py-2.5 transition-colors hover:bg-white/80"
+                  className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#161616] px-3 py-2.5 transition-colors hover:bg-[#1C1C1C]"
                 >
                   {/* App icon */}
                   <Image
@@ -184,15 +184,15 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
                   {/* App info */}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-medium text-slate-900">
+                      <span className="truncate text-sm font-medium text-white">
                         {app.title}
                       </span>
                       <Badge
                         variant="secondary"
                         className={`shrink-0 text-[10px] ${
                           app.platform === "ios"
-                            ? "bg-slate-100 text-slate-600"
-                            : "bg-green-50 text-green-700"
+                            ? "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                            : "bg-green-500/10 text-green-400 border-green-500/20"
                         }`}
                       >
                         <Smartphone className="mr-0.5 h-2.5 w-2.5" />
@@ -225,7 +225,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
                           setPullProgress("");
                         }}
                         disabled={disabled}
-                        className="text-xs text-slate-400 hover:text-slate-600"
+                        className="text-xs text-slate-400 hover:text-slate-300"
                       >
                         Change
                       </Button>
@@ -260,7 +260,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
 
       {/* Pull progress */}
       {(isPulling || pulledApp) && pullProgress && (
-        <div className="flex items-center gap-2 text-sm text-slate-600">
+        <div className="flex items-center gap-2 text-sm text-slate-400">
           {isPulling ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (

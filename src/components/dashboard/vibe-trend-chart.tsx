@@ -57,7 +57,7 @@ export function VibeScoreTrendChart({
         >
           {data[0].vibeScore}
         </div>
-        <p className="text-sm font-medium text-slate-700">{data[0].appName}</p>
+        <p className="text-sm font-medium text-slate-300">{data[0].appName}</p>
         <p className="mt-1 text-xs text-slate-400">
           Run more analyses to see trends over time
         </p>

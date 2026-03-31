@@ -224,7 +224,7 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
             "relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-all",
             isDragOver
               ? "border-[#4A90D9] bg-[#4A90D9]/5"
-              : "border-slate-300 hover:border-[#4A90D9]/50 hover:bg-slate-50",
+              : "border-white/[0.08] hover:border-[#4A90D9]/50 hover:bg-[#1C1C1C]",
             fileName && !error && "border-emerald-300 bg-emerald-50/50"
           )}
         >

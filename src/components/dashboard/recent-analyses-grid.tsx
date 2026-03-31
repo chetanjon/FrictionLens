@@ -26,7 +26,7 @@ export function RecentAnalysesGrid({ analyses }: RecentAnalysesGridProps) {
             Recent Analyses
           </h2>
           <Badge
-            className="bg-slate-100 text-slate-500 border-slate-200/60 font-mono text-[10px]"
+            className="bg-white/[0.06] text-slate-400 border-white/[0.08] font-mono text-[10px]"
             variant="outline"
           >
             {analyses.length}

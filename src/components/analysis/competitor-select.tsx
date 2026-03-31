@@ -112,7 +112,7 @@ export function CompetitorSelect({
     <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+        <div className="flex items-center gap-2 text-sm font-medium text-slate-300">
           <Swords className="h-4 w-4 text-friction-blue" />
           Competitor Vibe Battle
           <span className="text-xs font-normal text-slate-400">(optional)</span>
@@ -137,7 +137,7 @@ export function CompetitorSelect({
           {competitors.map((comp, i) => (
             <div
               key={`${comp.platform}-${comp.appId}`}
-              className="flex items-center gap-2 rounded-lg border border-slate-200/60 bg-white/50 px-2.5 py-1.5"
+              className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-[#161616] px-2.5 py-1.5"
             >
               <Image
                 src={comp.icon}
@@ -147,15 +147,15 @@ export function CompetitorSelect({
                 className="h-5 w-5 rounded-md"
                 unoptimized
               />
-              <span className="text-xs font-medium text-slate-700">
+              <span className="text-xs font-medium text-slate-300">
                 {comp.name}
               </span>
               <Badge
                 variant="secondary"
                 className={`text-[9px] ${
                   comp.platform === "ios"
-                    ? "bg-slate-100 text-slate-500"
-                    : "bg-green-50 text-green-600"
+                    ? "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                    : "bg-green-500/10 text-green-400 border-green-500/20"
                 }`}
               >
                 {comp.platform === "ios" ? "iOS" : "Android"}
@@ -163,7 +163,7 @@ export function CompetitorSelect({
               {!disabled && (
                 <button
                   onClick={() => removeCompetitor(i)}
-                  className="ml-0.5 rounded-full p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                  className="ml-0.5 rounded-full p-0.5 text-slate-400 hover:bg-white/[0.08] hover:text-slate-300"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -175,7 +175,7 @@ export function CompetitorSelect({
 
       {/* Search panel */}
       {showSearch && (
-        <div className="rounded-lg border border-slate-200/60 bg-white/50 p-3">
+        <div className="rounded-lg border border-white/[0.08] bg-[#161616] p-3">
           <div className="flex gap-2">
             <Input
               placeholder="Search competitor app..."
@@ -222,7 +222,7 @@ export function CompetitorSelect({
                     key={`${app.platform}-${app.appId}`}
                     onClick={() => addCompetitor(app)}
                     disabled={isAdded || disabled}
-                    className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-slate-50 disabled:opacity-50"
+                    className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-[#1C1C1C] disabled:opacity-50"
                   >
                     <Image
                       src={app.icon}
@@ -234,15 +234,15 @@ export function CompetitorSelect({
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="truncate text-xs font-medium text-slate-800">
+                        <span className="truncate text-xs font-medium text-white">
                           {app.title}
                         </span>
                         <Badge
                           variant="secondary"
                           className={`shrink-0 text-[8px] ${
                             app.platform === "ios"
-                              ? "bg-slate-100 text-slate-500"
-                              : "bg-green-50 text-green-600"
+                              ? "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                              : "bg-green-500/10 text-green-400 border-green-500/20"
                           }`}
                         >
                           <Smartphone className="mr-0.5 h-2 w-2" />

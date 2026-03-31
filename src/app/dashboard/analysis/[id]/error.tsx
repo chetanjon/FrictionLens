@@ -13,10 +13,10 @@ export default function AnalysisError({
 }) {
   return (
     <div className="mx-auto max-w-lg px-4 py-24 text-center">
-      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 ring-1 ring-red-100">
+      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10 ring-1 ring-red-500/20">
         <AlertTriangle className="h-7 w-7 text-friction-red" />
       </div>
-      <h2 className="text-lg font-semibold text-slate-900">
+      <h2 className="text-lg font-semibold text-white">
         Failed to load report
       </h2>
       <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-slate-500">

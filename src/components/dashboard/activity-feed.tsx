@@ -63,7 +63,7 @@ function ActivityRow({ event }: { event: ActivityEvent }) {
         aria-hidden="true"
       />
       <div className="min-w-0 flex-1">
-        <p className="text-xs text-slate-700 leading-snug">{text}</p>
+        <p className="text-xs text-slate-300 leading-snug">{text}</p>
         <time
           dateTime={event.timestamp}
           className="mt-0.5 block font-mono text-[10px] text-slate-400"
@@ -79,7 +79,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
   const visible = events.slice(0, MAX_EVENTS);
 
   return (
-    <div className="rounded-2xl border border-slate-200/50 bg-white/72 p-5 shadow-sm backdrop-blur-xl">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-5">
       {/* Section label */}
       <span className="mb-3 block font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
         Activity
@@ -92,7 +92,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
       ) : (
         <div className="max-h-80 overflow-y-auto">
           <ul
-            className="divide-y divide-slate-100"
+            className="divide-y divide-white/[0.06]"
             aria-label="Recent activity"
           >
             {visible.map((event) => (

@@ -54,7 +54,7 @@ export function EmptyStateGuide({
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           Welcome to FrictionLens
         </h1>
         <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
@@ -74,10 +74,10 @@ export function EmptyStateGuide({
               className={cn(
                 "relative rounded-2xl border p-6 transition-all",
                 isCurrentStep
-                  ? "border-friction-blue/40 bg-white shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
+                  ? "border-friction-blue/30 bg-[#111111] shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
                   : isCompleted
-                    ? "border-green-200/60 bg-green-50/30"
-                    : "border-slate-200/60 bg-white/65 backdrop-blur-xl"
+                    ? "border-emerald-500/20 bg-emerald-500/5"
+                    : "border-white/[0.08] bg-[#111111]"
               )}
             >
               {/* Step number */}
@@ -103,7 +103,7 @@ export function EmptyStateGuide({
                 </span>
               </div>
 
-              <h3 className="text-sm font-semibold text-slate-900">{step.title}</h3>
+              <h3 className="text-sm font-semibold text-white">{step.title}</h3>
               <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
                 {step.description}
               </p>

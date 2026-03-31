@@ -90,7 +90,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
   return (
     <div className="flex flex-col gap-6">
       {/* API Key Card */}
-      <Card className="bg-white/65 backdrop-blur-xl border-slate-200/60 rounded-2xl">
+      <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -104,7 +104,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
             <span className="flex items-center gap-1.5 text-xs font-medium">
               <span
                 className={`inline-block size-2 rounded-full ${
-                  keyExists ? "bg-emerald-500" : "bg-slate-300"
+                  keyExists ? "bg-emerald-500" : "bg-slate-600"
                 }`}
               />
               {keyExists ? "Key saved" : "Not set"}
@@ -216,11 +216,11 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
 
       {/* Free Trial Status */}
       {!keyExists && (
-        <Card className="bg-white/65 backdrop-blur-xl border-slate-200/60 rounded-2xl">
+        <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-900">Free Trial</p>
+                <p className="text-sm font-semibold text-white">Free Trial</p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   {freeTrialRemaining > 0
                     ? `You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"} remaining. Add your own API key for unlimited access.`
@@ -233,7 +233,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
                     key={i}
                     className={cn(
                       "inline-block h-2.5 w-2.5 rounded-full",
-                      i < freeAnalysesUsed ? "bg-slate-300" : "bg-friction-blue"
+                      i < freeAnalysesUsed ? "bg-slate-600" : "bg-friction-blue"
                     )}
                   />
                 ))}
@@ -244,7 +244,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
       )}
 
       {/* Help Card */}
-      <Card className="bg-white/65 backdrop-blur-xl border-slate-200/60 rounded-2xl">
+      <Card className="bg-[#111111] border-white/[0.08] rounded-2xl">
         <CardHeader>
           <CardTitle className="text-base font-semibold">
             Getting an API Key

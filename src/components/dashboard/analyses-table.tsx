@@ -74,7 +74,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                 statusFilter === status
                   ? "bg-friction-blue/10 text-friction-blue"
-                  : "text-slate-500 hover:bg-slate-50"
+                  : "text-slate-500 hover:bg-[#1C1C1C]"
               }`}
             >
               {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -85,7 +85,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl">
+      <div className="rounded-2xl border border-white/[0.08] bg-[#111111]">
         <Table>
           <TableHeader>
             <TableRow>
@@ -110,7 +110,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
                   <TableCell>
                     <Link
                       href={`/dashboard/analysis/${a.id}`}
-                      className="font-medium text-slate-900 hover:text-friction-blue"
+                      className="font-medium text-white hover:text-friction-blue"
                     >
                       {a.app_name}
                     </Link>
@@ -133,7 +133,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
                     )}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm text-slate-400">
                       {a.review_count.toLocaleString()}
                     </span>
                   </TableCell>
@@ -163,14 +163,14 @@ function StatusBadge({ status }: { status: string }) {
   switch (status) {
     case "completed":
       return (
-        <Badge variant="secondary" className="gap-1 bg-green-50 text-green-700">
+        <Badge variant="secondary" className="gap-1 bg-green-500/10 text-green-400 border-green-500/20">
           <CheckCircle2 className="h-3 w-3" />
           Done
         </Badge>
       );
     case "processing":
       return (
-        <Badge variant="secondary" className="gap-1 bg-blue-50 text-blue-700">
+        <Badge variant="secondary" className="gap-1 bg-blue-500/10 text-blue-400 border-blue-500/20">
           <Loader2 className="h-3 w-3 animate-spin" />
           Processing
         </Badge>

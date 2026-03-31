@@ -12,12 +12,12 @@ export default async function DashboardLayout({
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   ) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 p-8">
-        <div className="max-w-md rounded-2xl border border-amber-200/60 bg-amber-50/50 p-8 text-center">
-          <h2 className="text-lg font-semibold text-amber-900">
+      <div className="flex min-h-screen items-center justify-center bg-black p-8">
+        <div className="max-w-md rounded-2xl border border-amber-500/20 bg-amber-500/10 p-8 text-center">
+          <h2 className="text-lg font-semibold text-amber-400">
             Supabase Not Configured
           </h2>
-          <p className="mt-3 text-sm text-amber-700">
+          <p className="mt-3 text-sm text-amber-400/80">
             Set{" "}
             <code className="font-mono text-xs">NEXT_PUBLIC_SUPABASE_URL</code>{" "}
             and{" "}

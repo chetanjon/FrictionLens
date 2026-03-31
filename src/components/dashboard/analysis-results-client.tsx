@@ -125,7 +125,7 @@ export function AnalysisResultsClient({
       {/* Back link */}
       <Link
         href="/"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-700"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to Dashboard
@@ -134,7 +134,7 @@ export function AnalysisResultsClient({
       {/* Header */}
       <header className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
             {analysis.appName}
           </h1>
           <div className="mt-1.5 flex flex-wrap items-center gap-3 text-sm text-slate-500">
@@ -169,7 +169,7 @@ export function AnalysisResultsClient({
             <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
               Vibe Score
             </p>
-            <p className="text-sm text-slate-600">out of 100</p>
+            <p className="text-sm text-slate-400">out of 100</p>
           </div>
         </div>
       </header>
@@ -206,10 +206,10 @@ export function AnalysisResultsClient({
       {/* Sentiment Dimensions */}
       {dimensions && (
         <section className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold text-slate-900">
+          <h2 className="mb-4 text-lg font-semibold text-white">
             Sentiment Dimensions
           </h2>
-          <div className="rounded-2xl border border-slate-200/60 bg-white/65 p-5 backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-5">
             <div className="space-y-4">
               {DIMENSION_CONFIG.map((dim) => {
                 const score = dimensions[dim.key];
@@ -220,12 +220,12 @@ export function AnalysisResultsClient({
                         className="h-4 w-4 shrink-0"
                         style={{ color: dim.color }}
                       />
-                      <span className="text-sm font-medium text-slate-700">
+                      <span className="text-sm font-medium text-slate-300">
                         {dim.label}
                       </span>
                     </div>
                     <div className="flex flex-1 items-center gap-3">
-                      <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                      <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-white/[0.08]">
                         <div
                           className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
                           style={{
@@ -245,7 +245,7 @@ export function AnalysisResultsClient({
                 );
               })}
             </div>
-            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-slate-100 pt-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-white/[0.06] pt-4 sm:grid-cols-2 lg:grid-cols-3">
               {DIMENSION_CONFIG.map((dim) => (
                 <p key={dim.key} className="text-xs text-slate-400">
                   <span className="font-medium text-slate-500">
@@ -262,7 +262,7 @@ export function AnalysisResultsClient({
       {/* Reviews Table */}
       <section>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">Reviews</h2>
+          <h2 className="text-lg font-semibold text-white">Reviews</h2>
           <Tabs
             value={starFilter}
             onValueChange={setStarFilter}
@@ -278,7 +278,7 @@ export function AnalysisResultsClient({
           </Tabs>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl">
+        <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111111]">
           {filteredReviews.length === 0 ? (
             <div className="px-6 py-12 text-center text-sm text-slate-400">
               No reviews match this filter.
@@ -287,7 +287,7 @@ export function AnalysisResultsClient({
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-slate-100">
+                  <TableRow className="border-white/[0.06]">
                     <TableHead className="w-20 text-xs">Rating</TableHead>
                     <TableHead className="text-xs">Content</TableHead>
                     <TableHead className="w-16 text-center text-xs">
@@ -303,12 +303,12 @@ export function AnalysisResultsClient({
                 </TableHeader>
                 <TableBody>
                   {filteredReviews.map((review) => (
-                    <TableRow key={review.id} className="border-slate-50">
+                    <TableRow key={review.id} className="border-white/[0.04]">
                       <TableCell className="align-top">
                         <RatingStars rating={review.rating} />
                       </TableCell>
                       <TableCell className="max-w-xs align-top">
-                        <p className="line-clamp-3 text-sm text-slate-700">
+                        <p className="line-clamp-3 text-sm text-slate-300">
                           {review.content}
                         </p>
                       </TableCell>
@@ -371,13 +371,13 @@ function StatCard({
   color?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200/60 bg-white/65 p-4 backdrop-blur-xl">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-4">
       <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
         {label}
       </p>
       <p
         className="mt-1.5 truncate font-mono text-xl font-bold"
-        style={{ color: color ?? "#1e293b" }}
+        style={{ color: color ?? "#f1f5f9" }}
       >
         {value}
       </p>
@@ -400,7 +400,7 @@ function RatingStars({ rating }: { rating: number | null }) {
             "h-3.5 w-3.5",
             i < rating
               ? "fill-amber-400 text-amber-400"
-              : "fill-slate-100 text-slate-200"
+              : "fill-white/[0.08] text-white/[0.12]"
           )}
         />
       ))}

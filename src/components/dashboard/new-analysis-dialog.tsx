@@ -145,7 +145,7 @@ export function NewAnalysisDialog({
         <div className="space-y-5 pt-2">
           {/* App name */}
           <div>
-            <Label htmlFor="dialog-app-name" className="text-sm font-medium text-slate-700">
+            <Label htmlFor="dialog-app-name" className="text-sm font-medium text-slate-300">
               App Name
             </Label>
             <Input
@@ -219,7 +219,7 @@ export function NewAnalysisDialog({
           {/* Progress */}
           {isAnalyzing && (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 {progressText}
               </div>
@@ -281,7 +281,7 @@ function CsvUploadSlot({
     return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
   } catch {
     return (
-      <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
+      <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
         <p className="text-sm text-slate-400">CSV upload loading...</p>
       </div>
     );
@@ -301,7 +301,7 @@ function PasteInputSlot({
     return <PasteInput onReviewsParsed={onReviewsParsed} disabled={disabled} />;
   } catch {
     return (
-      <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
+      <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
         <p className="text-sm text-slate-400">Paste input loading...</p>
       </div>
     );
@@ -315,8 +315,8 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-slate-200/60 bg-slate-50/30 p-4">
-        <p className="text-sm font-medium text-slate-700">
+      <div className="rounded-lg border border-white/[0.08] bg-[#161616] p-4">
+        <p className="text-sm font-medium text-slate-300">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>
       </div>

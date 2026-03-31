@@ -138,7 +138,7 @@ export function DashboardClient({
       {/* New Analysis Section */}
       <section>
         <div className="mb-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
             New Analysis
           </h1>
           <p className="mt-1 text-sm text-slate-500">
@@ -146,10 +146,10 @@ export function DashboardClient({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 p-6 backdrop-blur-xl">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#111111] p-6">
           {/* App name */}
           <div className="mb-5">
-            <Label htmlFor="app-name" className="text-sm font-medium text-slate-700">
+            <Label htmlFor="app-name" className="text-sm font-medium text-slate-300">
               App Name
             </Label>
             <Input
@@ -227,7 +227,7 @@ export function DashboardClient({
           {/* Progress */}
           {isAnalyzing && (
             <div className="mb-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 {progressText}
               </div>
@@ -261,7 +261,7 @@ export function DashboardClient({
       <section className="mt-12">
         <Separator className="mb-8" />
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-white">
             Recent Reports
           </h2>
           <span className="text-xs text-slate-400">
@@ -270,12 +270,12 @@ export function DashboardClient({
         </div>
 
         {recentAnalyses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-200 bg-gradient-to-b from-white/60 to-slate-50/40 px-6 py-16 text-center backdrop-blur-sm">
+          <div className="rounded-2xl border border-dashed border-white/[0.08] bg-[#111111] px-6 py-16 text-center">
             {/* Illustrated empty state */}
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100/80 ring-1 ring-slate-200/60">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#161616] ring-1 ring-white/[0.08]">
               <FileText className="h-7 w-7 text-slate-400" />
             </div>
-            <h3 className="text-base font-semibold text-slate-700">
+            <h3 className="text-base font-semibold text-slate-300">
               No reports yet
             </h3>
             <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
@@ -303,7 +303,7 @@ export function DashboardClient({
               <Link
                 key={a.id}
                 href={`/dashboard/analysis/${a.id}`}
-                className="group flex items-center gap-4 rounded-xl border border-slate-200/60 bg-white/65 px-4 py-3.5 backdrop-blur-xl transition-all duration-200 hover:border-slate-300 hover:shadow-md hover:shadow-slate-200/30 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2"
+                className="group flex items-center gap-4 rounded-xl border border-white/[0.08] bg-[#111111] px-4 py-3.5 transition-all duration-200 hover:border-white/[0.12] hover:bg-[#1C1C1C] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label={`View ${a.app_name} report${a.vibe_score != null ? `, vibe score ${Math.round(a.vibe_score)}` : ""}`}
               >
                 {/* Vibe score circle */}
@@ -324,7 +324,7 @@ export function DashboardClient({
                 {/* Info */}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="truncate text-sm font-medium text-slate-900">
+                    <span className="truncate text-sm font-medium text-white">
                       {a.app_name}
                     </span>
                     <StatusBadge status={a.status} />
@@ -355,14 +355,14 @@ function StatusBadge({ status }: { status: string }) {
   switch (status) {
     case "completed":
       return (
-        <Badge variant="secondary" className="gap-1 bg-green-50 text-green-700">
+        <Badge variant="secondary" className="gap-1 bg-green-500/10 text-green-400 border-green-500/20">
           <CheckCircle2 className="h-3 w-3" />
           Done
         </Badge>
       );
     case "processing":
       return (
-        <Badge variant="secondary" className="gap-1 bg-blue-50 text-blue-700">
+        <Badge variant="secondary" className="gap-1 bg-blue-500/10 text-blue-400 border-blue-500/20">
           <Loader2 className="h-3 w-3 animate-spin" />
           Processing
         </Badge>
@@ -404,7 +404,7 @@ function CsvUploadSlot({
     return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
   } catch {
     return (
-      <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
+      <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
         <p className="text-sm text-slate-400">
           CSV upload component is being built...
         </p>
@@ -460,7 +460,7 @@ function PasteInputFallback({
   return (
     <div className="space-y-3">
       <textarea
-        className="min-h-[120px] w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
+        className="min-h-[120px] w-full rounded-lg border border-white/[0.08] bg-[#161616] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
         placeholder="Paste one review per line..."
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -496,8 +496,8 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-slate-200/60 bg-slate-50/30 p-4">
-        <p className="text-sm font-medium text-slate-700">
+      <div className="rounded-lg border border-white/[0.08] bg-[#161616] p-4">
+        <p className="text-sm font-medium text-slate-300">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>
         <div className="mt-2 max-h-40 space-y-1.5 overflow-y-auto">

@@ -34,7 +34,7 @@ function StatusBadge({ status }: { status: string }) {
     case "completed":
       return (
         <Badge
-          className="gap-1 bg-emerald-50 text-emerald-700 border-emerald-200/60"
+          className="gap-1 bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
           variant="outline"
         >
           <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
@@ -44,7 +44,7 @@ function StatusBadge({ status }: { status: string }) {
     case "processing":
       return (
         <Badge
-          className="gap-1 bg-amber-50 text-amber-700 border-amber-200/60"
+          className="gap-1 bg-amber-500/10 text-amber-400 border-amber-500/20"
           variant="outline"
         >
           <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
@@ -54,7 +54,7 @@ function StatusBadge({ status }: { status: string }) {
     case "failed":
       return (
         <Badge
-          className="gap-1 bg-red-50 text-red-600 border-red-200/60"
+          className="gap-1 bg-red-500/10 text-red-400 border-red-500/20"
           variant="outline"
         >
           <XCircle className="h-3 w-3" aria-hidden="true" />
@@ -64,7 +64,7 @@ function StatusBadge({ status }: { status: string }) {
     default:
       return (
         <Badge
-          className="gap-1 bg-slate-50 text-slate-500 border-slate-200/60"
+          className="gap-1 bg-slate-500/10 text-slate-400 border-slate-500/20"
           variant="outline"
         >
           <Clock className="h-3 w-3" aria-hidden="true" />
@@ -80,8 +80,8 @@ function PlatformBadge({ platform }: { platform: string | null }) {
   const label = platform.toLowerCase().includes("android") ? "Android" : "iOS";
   const colorClass =
     label === "Android"
-      ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
-      : "bg-blue-50 text-blue-700 border-blue-200/60";
+      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+      : "bg-blue-500/10 text-blue-400 border-blue-500/20";
 
   return (
     <Badge className={cn("text-[10px]", colorClass)} variant="outline">
@@ -122,7 +122,7 @@ export function AnalysisCard({
         {/* Header: status badge */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-semibold text-slate-900">
+            <span className="text-sm font-semibold text-white">
               {appName}
             </span>
             <PlatformBadge platform={platform} />
@@ -162,7 +162,7 @@ export function AnalysisCard({
         </div>
 
         {/* Bottom: review count + relative date */}
-        <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5">
+        <div className="flex items-center justify-between gap-2 border-t border-white/[0.06] pt-2.5">
           <span className="font-mono text-[10px] text-slate-400">
             {reviewCount.toLocaleString()} reviews
           </span>
