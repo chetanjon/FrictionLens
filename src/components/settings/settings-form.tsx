@@ -153,7 +153,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
                 id="model"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-foreground shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 dark:text-white dark:[&>option]:bg-[#1a1a1a] dark:[&>option]:text-white"
               >
                 {MODELS.map((m) => (
                   <option key={m.value} value={m.value}>
