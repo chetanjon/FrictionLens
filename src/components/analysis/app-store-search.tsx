@@ -150,14 +150,18 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
         </div>
       )}
 
-      {/* Results */}
+      {/* Results — collapse to selected app after pull */}
       {results.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-slate-500">
-            {results.length} {results.length === 1 ? "app" : "apps"} found
-          </p>
-          <div className="max-h-[320px] space-y-1.5 overflow-y-auto">
-            {results.map((app) => {
+          {!pulledApp && (
+            <p className="text-xs font-medium text-slate-500">
+              {results.length} {results.length === 1 ? "app" : "apps"} found
+            </p>
+          )}
+          <div className={pulledApp ? "" : "max-h-[320px] space-y-1.5 overflow-y-auto"}>
+            {results
+              .filter((app) => !pulledApp || `${app.platform}-${app.appId}` === pulledApp)
+              .map((app) => {
               const pullId = `${app.platform}-${app.appId}`;
               const isThisPulling = isPulling === pullId;
               const isThisPulled = pulledApp === pullId;
@@ -206,31 +210,47 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
                     </div>
                   </div>
 
-                  {/* Pull button */}
-                  <Button
-                    variant={isThisPulled ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => handlePullReviews(app)}
-                    disabled={disabled || !!isPulling}
-                    className="shrink-0"
-                  >
-                    {isThisPulling ? (
-                      <>
-                        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                        Pulling...
-                      </>
-                    ) : isThisPulled ? (
-                      <>
-                        <CheckCircle2 className="mr-1.5 h-3.5 w-3.5 text-green-600" />
+                  {/* Pull button / Change app */}
+                  {isThisPulled ? (
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="flex items-center gap-1.5 text-sm text-green-600">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
                         Pulled
-                      </>
-                    ) : (
-                      <>
-                        <Download className="mr-1.5 h-3.5 w-3.5" />
-                        Pull Reviews
-                      </>
-                    )}
-                  </Button>
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setPulledApp(null);
+                          setPullProgress("");
+                        }}
+                        disabled={disabled}
+                        className="text-xs text-slate-400 hover:text-slate-600"
+                      >
+                        Change
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePullReviews(app)}
+                      disabled={disabled || !!isPulling}
+                      className="shrink-0"
+                    >
+                      {isThisPulling ? (
+                        <>
+                          <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                          Pulling...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="mr-1.5 h-3.5 w-3.5" />
+                          Pull Reviews
+                        </>
+                      )}
+                    </Button>
+                  )}
                 </div>
               );
             })}
