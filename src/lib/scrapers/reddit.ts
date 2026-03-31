@@ -72,7 +72,8 @@ type PullRedditReviewsOptions = {
 
 // ── Constants ──
 
-const REDDIT_BASE = "https://www.reddit.com";
+// Use old.reddit.com — it's more permissive with server-side requests
+const REDDIT_BASE = "https://old.reddit.com";
 const BOT_AUTHORS = new Set([
   "AutoModerator",
   "BotDefense",
@@ -107,7 +108,7 @@ async function redditFetch(url: string, retries = 2): Promise<unknown> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "FrictionLens:v1.0 (by /u/frictionlens)",
+        "User-Agent": "Mozilla/5.0 (compatible; FrictionLens/1.0; +https://frictionlens.net)",
         Accept: "application/json",
       },
     });
