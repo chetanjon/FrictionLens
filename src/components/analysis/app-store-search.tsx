@@ -76,7 +76,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
 
       const pullId = `${app.platform}-${app.appId}`;
       setIsPulling(pullId);
-      setPullProgress("Pulling reviews from store...");
+      setPullProgress("Pulling most recent reviews from store...");
       setError(null);
 
       try {
@@ -105,7 +105,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
         }
 
         setPulledApp(pullId);
-        setPullProgress(`Pulled ${reviews.length} reviews`);
+        setPullProgress(`Pulled ${reviews.length} most recent reviews`);
         onReviewsPulled(reviews, app.title, app.platform);
       } catch {
         setError("Network error while pulling reviews.");
@@ -246,7 +246,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
                       ) : (
                         <>
                           <Download className="mr-1.5 h-3.5 w-3.5" />
-                          Pull Reviews
+                          Pull Recent Reviews
                         </>
                       )}
                     </Button>
