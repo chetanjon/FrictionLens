@@ -41,7 +41,7 @@ export function DashboardHeader({
   return (
     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 sm:p-8">
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-friction-blue/10 blur-3xl" />
+      <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-friction-blue/[0.06] blur-3xl" />
 
       <div className="relative flex items-center justify-between gap-4">
         <div className="min-w-0">
@@ -56,7 +56,7 @@ export function DashboardHeader({
         <Button
           onClick={onNewAnalysis}
           size="lg"
-          className="shrink-0 bg-friction-blue text-white shadow-lg shadow-friction-blue/20 hover:bg-friction-blue/90"
+          className="shrink-0 bg-friction-blue text-white shadow-lg shadow-friction-blue/10 hover:bg-friction-blue/90"
           aria-label="Start a new analysis"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />

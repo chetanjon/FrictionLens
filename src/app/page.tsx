@@ -60,9 +60,9 @@ export default async function LandingPage() {
 
       {/* ── Aurora gradient blobs ── */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className="aurora-blob-1 absolute top-[-15%] left-[10%] h-[500px] w-[500px] rounded-full bg-friction-blue/[0.12] blur-[140px]" />
-        <div className="aurora-blob-2 absolute top-[5%] right-[-5%] h-[450px] w-[450px] rounded-full bg-[#7C3AED]/[0.10] blur-[130px]" />
-        <div className="aurora-blob-3 absolute top-[30%] left-[40%] h-[400px] w-[400px] rounded-full bg-[#06B6D4]/[0.06] blur-[120px]" />
+        <div className="aurora-blob-1 absolute top-[-15%] left-[10%] h-[500px] w-[500px] rounded-full bg-friction-blue/[0.06] blur-[160px]" />
+        <div className="aurora-blob-2 absolute top-[5%] right-[-5%] h-[450px] w-[450px] rounded-full bg-[#7C3AED]/[0.05] blur-[150px]" />
+        <div className="aurora-blob-3 absolute top-[30%] left-[40%] h-[400px] w-[400px] rounded-full bg-[#06B6D4]/[0.03] blur-[140px]" />
       </div>
 
       {/* ══════════════════════════════════════════════
@@ -98,7 +98,7 @@ export default async function LandingPage() {
           </p>
 
           {/* Search input */}
-          <div className="hero-fade-3 mt-10 flex max-w-lg items-center gap-0 rounded-2xl border border-white/[0.10] bg-[#111111] p-1.5 shadow-[0_0_30px_rgba(74,144,217,0.12),0_0_80px_rgba(74,144,217,0.05)]">
+          <div className="hero-fade-3 mt-10 flex max-w-lg items-center gap-0 rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md p-1.5 shadow-[0_0_40px_rgba(107,159,212,0.06)]">
             <div className="flex items-center flex-1 min-w-0">
               <svg className="ml-3 mr-2 h-4 w-4 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="11" cy="11" r="8" />
@@ -504,7 +504,7 @@ export default async function LandingPage() {
           </AnimateOnScroll>
 
           <AnimateOnScroll delay={100}>
-            <div className="relative rounded-2xl border border-friction-blue/30 bg-[#161616] p-7 flex flex-col h-full shadow-[0_0_40px_rgba(74,144,217,0.12),0_0_80px_rgba(74,144,217,0.05)] scale-[1.02]">
+            <div className="relative rounded-2xl border border-friction-blue/30 bg-[#161616] p-7 flex flex-col h-full shadow-[0_0_40px_rgba(107,159,212,0.08)] scale-[1.02]">
               <div className="absolute -top-3 right-5 inline-flex items-center rounded-lg bg-friction-blue px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white font-mono">
                 Unlimited
               </div>
@@ -544,7 +544,7 @@ export default async function LandingPage() {
       ══════════════════════════════════════════════ */}
       <section className="relative z-10 mx-auto max-w-4xl px-6 pb-28">
         <AnimateOnScroll>
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0A0A0A] via-[#111111] to-[#0A0A0A] px-8 py-20 text-center md:px-16 border border-white/[0.06] shadow-[0_0_80px_rgba(74,144,217,0.08)]">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0A0A0A] via-[#111111] to-[#0A0A0A] px-8 py-20 text-center md:px-16 border border-white/[0.06] shadow-[0_0_60px_rgba(107,159,212,0.05)]">
             {/* Ambient glow */}
             <div className="pointer-events-none absolute inset-0">
               <div className="aurora-blob-1 absolute -top-24 -right-24 h-72 w-72 rounded-full bg-friction-blue/20 blur-[100px]" />
@@ -562,7 +562,7 @@ export default async function LandingPage() {
               </p>
               <Link
                 href={ctaHref}
-                className="shimmer-btn mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-white hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(74,144,217,0.25)]"
+                className="shimmer-btn mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-white hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(107,159,212,0.15)]"
               >
                 {isLoggedIn ? "Go to Dashboard \u2192" : "Generate Your Vibe Report \u2192"}
               </Link>

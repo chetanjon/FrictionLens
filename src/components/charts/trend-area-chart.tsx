@@ -25,12 +25,12 @@ type TrendAreaChartProps = {
 };
 
 const APP_COLORS: string[] = [
-  "#4A90D9",
-  "#D94F4F",
-  "#D4A843",
-  "#6B5CE7",
-  "#E8457C",
-  "#22C55E",
+  "#6B9FD4",
+  "#C47070",
+  "#C9B06A",
+  "#8B7FD4",
+  "#C9708A",
+  "#5CB88A",
 ];
 
 function appColor(index: number): string {

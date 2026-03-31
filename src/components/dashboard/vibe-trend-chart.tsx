@@ -17,9 +17,9 @@ type VibeScoreTrendChartProps = {
 };
 
 function vibeColor(score: number): string {
-  if (score >= 75) return "#4A90D9";
-  if (score >= 50) return "#D4A843";
-  return "#D94F4F";
+  if (score >= 75) return "#6B9FD4";
+  if (score >= 50) return "#C9B06A";
+  return "#C47070";
 }
 
 type AppScore = {
