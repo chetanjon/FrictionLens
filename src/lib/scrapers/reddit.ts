@@ -16,18 +16,18 @@ const RedditPostDataSchema = z.object({
   score: z.number(),
   permalink: z.string(),
   url: z.string(),
-});
+}).passthrough();
 
 const RedditListingChildSchema = z.object({
   kind: z.string(),
   data: RedditPostDataSchema,
-});
+}).passthrough();
 
 const RedditListingSchema = z.object({
   kind: z.literal("Listing"),
   data: z.object({
     children: z.array(RedditListingChildSchema),
-  }),
+  }).passthrough(),
 });
 
 const RedditCommentDataSchema = z.object({
@@ -36,18 +36,18 @@ const RedditCommentDataSchema = z.object({
   author: z.string(),
   created_utc: z.number(),
   score: z.number(),
-});
+}).passthrough();
 
 const RedditCommentChildSchema = z.object({
   kind: z.string(),
   data: RedditCommentDataSchema,
-});
+}).passthrough();
 
 const RedditCommentListingSchema = z.object({
   kind: z.literal("Listing"),
   data: z.object({
     children: z.array(RedditCommentChildSchema),
-  }),
+  }).passthrough(),
 });
 
 // ── Types ──
