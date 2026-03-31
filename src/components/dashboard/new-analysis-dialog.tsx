@@ -7,6 +7,7 @@ import {
   Loader2,
   Sparkles,
   Store,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -165,12 +166,26 @@ export function NewAnalysisDialog({
                 <Store className="mr-1.5 h-3.5 w-3.5" />
                 App Store
               </TabsTrigger>
+              <TabsTrigger value="reddit">
+                <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
+                Reddit
+              </TabsTrigger>
               <TabsTrigger value="upload">Upload CSV</TabsTrigger>
               <TabsTrigger value="paste">Paste Reviews</TabsTrigger>
             </TabsList>
 
             <TabsContent value="appstore">
               <AppStoreSearch
+                onReviewsPulled={(pulled, name) => {
+                  handleReviewsParsed(pulled);
+                  if (!appName.trim()) setAppName(name);
+                }}
+                disabled={isAnalyzing}
+              />
+            </TabsContent>
+
+            <TabsContent value="reddit">
+              <RedditSearchSlot
                 onReviewsPulled={(pulled, name) => {
                   handleReviewsParsed(pulled);
                   if (!appName.trim()) setAppName(name);
@@ -303,6 +318,26 @@ function PasteInputSlot({
     return (
       <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
         <p className="text-sm text-slate-400">Paste input loading...</p>
+      </div>
+    );
+  }
+}
+
+function RedditSearchSlot({
+  onReviewsPulled,
+  disabled,
+}: {
+  onReviewsPulled: (reviews: ParsedReview[], appName: string, platform: string) => void;
+  disabled: boolean;
+}) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { RedditSearch } = require("@/components/analysis/reddit-search");
+    return <RedditSearch onReviewsPulled={onReviewsPulled} disabled={disabled} />;
+  } catch {
+    return (
+      <div className="rounded-lg border border-dashed border-white/[0.08] bg-[#161616] p-8 text-center">
+        <p className="text-sm text-slate-400">Reddit search loading...</p>
       </div>
     );
   }

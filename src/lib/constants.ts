@@ -57,6 +57,35 @@ export function trendIcon(trend: string): string {
   }
 }
 
+export const PLATFORMS = ["ios", "android", "reddit"] as const;
+export type Platform = (typeof PLATFORMS)[number];
+
+export function platformLabel(platform: string): string {
+  switch (platform) {
+    case "ios":
+      return "iOS";
+    case "android":
+      return "Android";
+    case "reddit":
+      return "Reddit";
+    default:
+      return platform;
+  }
+}
+
+export function platformBadgeClasses(platform: string): string {
+  switch (platform) {
+    case "ios":
+      return "bg-slate-500/10 text-slate-400 border-slate-500/20";
+    case "android":
+      return "bg-green-500/10 text-green-400 border-green-500/20";
+    case "reddit":
+      return "bg-orange-500/10 text-orange-400 border-orange-500/20";
+    default:
+      return "bg-slate-500/10 text-slate-400 border-slate-500/20";
+  }
+}
+
 export function trendColor(trend: string): string {
   switch (trend) {
     case "rising":

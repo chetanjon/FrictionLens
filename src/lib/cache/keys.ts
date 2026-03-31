@@ -22,3 +22,13 @@ export function analysisProgressKey(analysisId: string): string {
 export function analysisDedupeKey(appName: string, hash: string): string {
   return `fl:dedupe:${hash}`;
 }
+
+export function redditSearchCacheKey(appName: string, subreddit?: string): string {
+  const sub = subreddit ? subreddit.trim().toLowerCase() : "all";
+  return `fl:reddit:search:${sub}:${appName.trim().toLowerCase()}`;
+}
+
+export function redditReviewsCacheKey(appName: string, subreddit?: string): string {
+  const sub = subreddit ? subreddit.trim().toLowerCase() : "all";
+  return `fl:reddit:reviews:${sub}:${appName.trim().toLowerCase()}`;
+}
