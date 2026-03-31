@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendAreaChart } from "@/components/charts/trend-area-chart";
+import { VibeScoreTrendChart } from "@/components/dashboard/vibe-trend-chart";
 import { DimensionHealth } from "@/components/dashboard/dimension-health";
 
 type TrendPoint = {
@@ -63,7 +63,7 @@ export function TrendsClient({
         <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
           Vibe Score Over Time
         </p>
-        <TrendAreaChart data={vibeTrendData} appNames={appNames} height={320} />
+        <VibeScoreTrendChart data={vibeTrendData} appNames={appNames} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
