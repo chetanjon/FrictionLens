@@ -113,8 +113,8 @@ export function TrendAreaChart({
             const color = appColor(idx);
             return (
               <linearGradient key={name} id={`grad-${idx}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={color} stopOpacity={0.25} />
-                <stop offset="95%" stopColor={color} stopOpacity={0} />
+                <stop offset="0%" stopColor={color} stopOpacity={0.4} />
+                <stop offset="100%" stopColor={color} stopOpacity={0.02} />
               </linearGradient>
             );
           })}
@@ -122,7 +122,7 @@ export function TrendAreaChart({
 
         <CartesianGrid
           strokeDasharray="0"
-          stroke="rgba(255,255,255,0.04)"
+          stroke="rgba(255,255,255,0.06)"
           vertical={false}
         />
 
@@ -175,18 +175,19 @@ export function TrendAreaChart({
               stroke={color}
               strokeWidth={2.5}
               fill={`url(#grad-${idx})`}
+              style={{ filter: `drop-shadow(0 0 4px ${color}50)` }}
               dot={{
-                r: 4,
-                fill: "#111111",
-                stroke: color,
+                r: 5,
+                fill: color,
+                stroke: "black",
                 strokeWidth: 2,
               }}
               activeDot={{
-                r: 6,
+                r: 7,
                 fill: color,
-                stroke: "#111111",
+                stroke: "black",
                 strokeWidth: 3,
-                style: { filter: `drop-shadow(0 0 6px ${color}80)` },
+                style: { filter: `drop-shadow(0 0 8px ${color}AA)` },
               }}
               connectNulls={false}
             />
