@@ -22,7 +22,7 @@ export function Sparkline({
           y1={height / 2}
           x2={width}
           y2={height / 2}
-          stroke="#E2E8F0"
+          stroke="rgba(255,255,255,0.08)"
           strokeWidth={1.5}
         />
       </svg>
@@ -105,7 +105,7 @@ export function Sparkline({
             cx={lastDotX}
             cy={lastDotY}
             r={1.5}
-            fill="white"
+            fill="#111111"
           />
         </>
       )}

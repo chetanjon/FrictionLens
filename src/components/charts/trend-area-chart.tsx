@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
@@ -11,7 +11,6 @@ import {
 } from "recharts";
 import type { TooltipContentProps } from "recharts/types/component/Tooltip";
 import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
-import { cn } from "@/lib/utils";
 
 type TrendDataPoint = {
   date: string;
@@ -25,10 +24,6 @@ type TrendAreaChartProps = {
   height?: number;
 };
 
-/**
- * Brand palette for multi-app charting. First entry is friction-blue.
- * Subsequent entries cycle through secondary brand colours.
- */
 const APP_COLORS: string[] = [
   "#4A90D9",
   "#D94F4F",
@@ -57,13 +52,8 @@ function CustomTooltip(props: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div
-      className={cn(
-        "bg-white/65 backdrop-blur-xl border border-slate-200/60 rounded-2xl",
-        "px-4 py-3 shadow-xl shadow-slate-200/40"
-      )}
-    >
-      <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-slate-400">
+    <div className="rounded-xl border border-white/[0.10] bg-[#1A1A1A] px-4 py-3 shadow-xl shadow-black/40">
+      <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-slate-500">
         {label}
       </p>
       <div className="flex flex-col gap-1.5">
@@ -74,9 +64,9 @@ function CustomTooltip(props: CustomTooltipProps) {
             <div key={entry.name} className="flex items-center gap-2">
               <span
                 className="inline-block h-2 w-2 shrink-0 rounded-full"
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}60` }}
               />
-              <span className="text-[12px] font-medium text-slate-700">
+              <span className="text-[12px] font-medium text-slate-300">
                 {entry.name}
               </span>
               <span
@@ -107,20 +97,32 @@ export function TrendAreaChart({
         style={{ height }}
         aria-label="No trend data available"
       >
-        <p className="text-sm text-slate-400">No trend data available</p>
+        <p className="text-sm text-slate-500">No trend data available</p>
       </div>
     );
   }
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <LineChart
+      <AreaChart
         data={data}
         margin={{ top: 8, right: 4, bottom: 0, left: -16 }}
       >
+        <defs>
+          {appNames.map((name, idx) => {
+            const color = appColor(idx);
+            return (
+              <linearGradient key={name} id={`grad-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={color} stopOpacity={0.25} />
+                <stop offset="95%" stopColor={color} stopOpacity={0} />
+              </linearGradient>
+            );
+          })}
+        </defs>
+
         <CartesianGrid
-          strokeDasharray="3 3"
-          stroke="#F1F5F9"
+          strokeDasharray="0"
+          stroke="rgba(255,255,255,0.04)"
           vertical={false}
         />
 
@@ -128,7 +130,7 @@ export function TrendAreaChart({
           dataKey="label"
           tick={{
             fontSize: 10,
-            fill: "#94A3B8",
+            fill: "#64748B",
             fontFamily: "IBM Plex Mono, monospace",
           }}
           axisLine={false}
@@ -140,7 +142,7 @@ export function TrendAreaChart({
           domain={[0, 100]}
           tick={{
             fontSize: 10,
-            fill: "#94A3B8",
+            fill: "#64748B",
             fontFamily: "IBM Plex Mono, monospace",
           }}
           axisLine={false}
@@ -157,9 +159,8 @@ export function TrendAreaChart({
             />
           )}
           cursor={{
-            stroke: "#E2E8F0",
+            stroke: "rgba(255,255,255,0.08)",
             strokeWidth: 1,
-            strokeDasharray: "4 2",
           }}
         />
 
@@ -167,19 +168,31 @@ export function TrendAreaChart({
           const color = appColor(idx);
 
           return (
-            <Line
+            <Area
               key={name}
               type="monotone"
               dataKey={name}
               stroke={color}
-              strokeWidth={2}
-              dot={{ r: 4, fill: color, stroke: "white", strokeWidth: 2 }}
-              activeDot={{ r: 6, fill: color, stroke: "white", strokeWidth: 2 }}
+              strokeWidth={2.5}
+              fill={`url(#grad-${idx})`}
+              dot={{
+                r: 4,
+                fill: "#111111",
+                stroke: color,
+                strokeWidth: 2,
+              }}
+              activeDot={{
+                r: 6,
+                fill: color,
+                stroke: "#111111",
+                strokeWidth: 3,
+                style: { filter: `drop-shadow(0 0 6px ${color}80)` },
+              }}
               connectNulls={false}
             />
           );
         })}
-      </LineChart>
+      </AreaChart>
     </ResponsiveContainer>
   );
 }
