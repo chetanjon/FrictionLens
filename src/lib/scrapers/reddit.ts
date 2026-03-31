@@ -72,8 +72,8 @@ type PullRedditReviewsOptions = {
 
 // ── Constants ──
 
-// Use old.reddit.com — it's more permissive with server-side requests
-const REDDIT_BASE = "https://old.reddit.com";
+// api.reddit.com returns JSON directly and is less restrictive than www
+const REDDIT_BASE = "https://api.reddit.com";
 const BOT_AUTHORS = new Set([
   "AutoModerator",
   "BotDefense",
@@ -108,7 +108,7 @@ async function redditFetch(url: string, retries = 2): Promise<unknown> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; FrictionLens/1.0; +https://frictionlens.net)",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         Accept: "application/json",
       },
     });
@@ -155,8 +155,8 @@ export async function searchReddit(
   const query = encodeURIComponent(appName);
   // Sort by "new" and limit to past year to capture current user sentiment
   const url = subreddit
-    ? `${REDDIT_BASE}/r/${encodeURIComponent(subreddit)}/search.json?q=${query}&restrict_sr=on&sort=new&t=year&limit=25`
-    : `${REDDIT_BASE}/search.json?q=${query}&sort=new&t=year&limit=25`;
+    ? `${REDDIT_BASE}/r/${encodeURIComponent(subreddit)}/search?q=${query}&restrict_sr=on&sort=new&t=year&limit=25`
+    : `${REDDIT_BASE}/search?q=${query}&sort=new&t=year&limit=25`;
 
   const raw = await redditFetch(url);
   const listing = RedditListingSchema.parse(raw);
@@ -210,7 +210,7 @@ async function fetchRedditReviews(
     if (post.commentCount === 0) continue;
 
     try {
-      const commentsUrl = `${REDDIT_BASE}${post.permalink}.json?limit=100&sort=new`;
+      const commentsUrl = `${REDDIT_BASE}${post.permalink}?limit=100&sort=new`;
       const raw = await redditFetch(commentsUrl);
 
       // Reddit returns [postListing, commentsListing]

@@ -3,6 +3,8 @@ import { searchReddit } from "@/lib/scrapers/reddit";
 import { cacheGetOrSet } from "@/lib/cache/redis";
 import { redditSearchCacheKey } from "@/lib/cache/keys";
 
+export const runtime = "edge";
+
 export async function GET(request: NextRequest) {
   const appName = request.nextUrl.searchParams.get("q");
   const subreddit = request.nextUrl.searchParams.get("subreddit") || undefined;
