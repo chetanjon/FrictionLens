@@ -103,19 +103,42 @@ function isUsableComment(author: string, body: string): boolean {
   return true;
 }
 
-async function redditFetch(url: string): Promise<unknown> {
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent": "FrictionLens/1.0 (app review analysis tool)",
-      Accept: "application/json",
-    },
-  });
+async function redditFetch(url: string, retries = 2): Promise<unknown> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "FrictionLens:v1.0 (by /u/frictionlens)",
+        Accept: "application/json",
+      },
+    });
 
-  if (!res.ok) {
-    throw new Error(`Reddit API error: ${res.status} ${res.statusText}`);
+    if (res.status === 429) {
+      // Reddit rate limit — wait and retry
+      if (attempt < retries) {
+        await sleep(2000 * (attempt + 1));
+        continue;
+      }
+      throw new Error("Reddit rate limit exceeded. Please try again in a moment.");
+    }
+
+    if (!res.ok) {
+      throw new Error(`Reddit API error: ${res.status} ${res.statusText}`);
+    }
+
+    const contentType = res.headers.get("content-type") ?? "";
+    if (!contentType.includes("json")) {
+      // Reddit sometimes returns HTML instead of JSON from cloud IPs
+      if (attempt < retries) {
+        await sleep(1500);
+        continue;
+      }
+      throw new Error("Reddit returned an unexpected response. Please try again.");
+    }
+
+    return res.json();
   }
 
-  return res.json();
+  throw new Error("Failed to fetch from Reddit after retries.");
 }
 
 // ── Public API ──

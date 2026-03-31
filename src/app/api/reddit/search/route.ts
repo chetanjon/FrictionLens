@@ -24,9 +24,10 @@ export async function GET(request: NextRequest) {
     );
     return NextResponse.json({ results });
   } catch (err) {
-    console.error("Reddit search failed:", err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("Reddit search failed:", message, err);
     return NextResponse.json(
-      { error: "Failed to search Reddit. Please try again." },
+      { error: message.includes("Reddit") ? message : "Failed to search Reddit. Please try again." },
       { status: 500 }
     );
   }
