@@ -1,9 +1,9 @@
 import { z } from "zod";
 import type { ParsedReview } from "@/lib/types/review";
 import { cacheGetOrSet } from "@/lib/cache/redis";
-import { redditSearchCacheKey, redditReviewsCacheKey } from "@/lib/cache/keys";
+import { redditReviewsCacheKey } from "@/lib/cache/keys";
 
-// ── Zod schemas for Reddit JSON API responses ──
+// ── Zod schemas for Reddit API responses ──
 
 const RedditPostDataSchema = z.object({
   id: z.string(),
@@ -72,8 +72,6 @@ type PullRedditReviewsOptions = {
 
 // ── Constants ──
 
-// api.reddit.com returns JSON directly and is less restrictive than www
-const REDDIT_BASE = "https://api.reddit.com";
 const BOT_AUTHORS = new Set([
   "AutoModerator",
   "BotDefense",
@@ -85,6 +83,51 @@ const BOT_AUTHORS = new Set([
   "haikusbot",
 ]);
 const MIN_WORD_COUNT = 10;
+
+// ── OAuth Token Management ──
+
+let cachedToken: { token: string; expiresAt: number } | null = null;
+
+async function getRedditAccessToken(): Promise<string> {
+  // Return cached token if still valid (with 60s buffer)
+  if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) {
+    return cachedToken.token;
+  }
+
+  const clientId = process.env.REDDIT_CLIENT_ID;
+  const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    throw new Error(
+      "Reddit API credentials not configured. Add REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET to your environment variables."
+    );
+  }
+
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+
+  const res = await fetch("https://www.reddit.com/api/v1/access_token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "FrictionLens/1.0 (by /u/frictionlens)",
+    },
+    body: "grant_type=client_credentials",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Reddit OAuth failed: ${res.status} ${res.statusText}`);
+  }
+
+  const data = await res.json() as { access_token: string; expires_in: number };
+
+  cachedToken = {
+    token: data.access_token,
+    expiresAt: Date.now() + data.expires_in * 1000,
+  };
+
+  return cachedToken.token;
+}
 
 // ── Helpers ──
 
@@ -104,17 +147,20 @@ function isUsableComment(author: string, body: string): boolean {
   return true;
 }
 
-async function redditFetch(url: string, retries = 2): Promise<unknown> {
+async function redditFetch(path: string, retries = 2): Promise<unknown> {
+  const token = await getRedditAccessToken();
+  const url = `https://oauth.reddit.com${path}`;
+
   for (let attempt = 0; attempt <= retries; attempt++) {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Authorization: `Bearer ${token}`,
+        "User-Agent": "FrictionLens/1.0 (by /u/frictionlens)",
         Accept: "application/json",
       },
     });
 
     if (res.status === 429) {
-      // Reddit rate limit — wait and retry
       if (attempt < retries) {
         await sleep(2000 * (attempt + 1));
         continue;
@@ -124,16 +170,6 @@ async function redditFetch(url: string, retries = 2): Promise<unknown> {
 
     if (!res.ok) {
       throw new Error(`Reddit API error: ${res.status} ${res.statusText}`);
-    }
-
-    const contentType = res.headers.get("content-type") ?? "";
-    if (!contentType.includes("json")) {
-      // Reddit sometimes returns HTML instead of JSON from cloud IPs
-      if (attempt < retries) {
-        await sleep(1500);
-        continue;
-      }
-      throw new Error("Reddit returned an unexpected response. Please try again.");
     }
 
     return res.json();
@@ -146,19 +182,18 @@ async function redditFetch(url: string, retries = 2): Promise<unknown> {
 
 /**
  * Search Reddit for posts mentioning an app name.
- * Uses the Reddit JSON API (no auth required).
+ * Uses Reddit OAuth API (works from any server, including cloud providers).
  */
 export async function searchReddit(
   appName: string,
   subreddit?: string
 ): Promise<RedditSearchResult[]> {
   const query = encodeURIComponent(appName);
-  // Sort by "new" and limit to past year to capture current user sentiment
-  const url = subreddit
-    ? `${REDDIT_BASE}/r/${encodeURIComponent(subreddit)}/search?q=${query}&restrict_sr=on&sort=new&t=year&limit=25`
-    : `${REDDIT_BASE}/search?q=${query}&sort=new&t=year&limit=25`;
+  const path = subreddit
+    ? `/r/${encodeURIComponent(subreddit)}/search?q=${query}&restrict_sr=on&sort=new&t=year&limit=25`
+    : `/search?q=${query}&sort=new&t=year&limit=25`;
 
-  const raw = await redditFetch(url);
+  const raw = await redditFetch(path);
   const listing = RedditListingSchema.parse(raw);
 
   return listing.data.children
@@ -178,7 +213,6 @@ export async function searchReddit(
 
 /**
  * Pull Reddit comments as ParsedReview[] for the analysis pipeline.
- * Searches for posts mentioning the app, then extracts comments from top posts.
  */
 export async function pullRedditReviews(
   opts: PullRedditReviewsOptions
@@ -196,12 +230,9 @@ async function fetchRedditReviews(
   subreddit: string | undefined,
   count: number
 ): Promise<ParsedReview[]> {
-  // Step 1: Find relevant posts
   const posts = await searchReddit(appName, subreddit);
-
   if (posts.length === 0) return [];
 
-  // Step 2: Pull comments from top posts (sorted by most comments)
   const sorted = [...posts].sort((a, b) => b.commentCount - a.commentCount);
   const reviews: ParsedReview[] = [];
 
@@ -210,10 +241,9 @@ async function fetchRedditReviews(
     if (post.commentCount === 0) continue;
 
     try {
-      const commentsUrl = `${REDDIT_BASE}${post.permalink}?limit=100&sort=new`;
-      const raw = await redditFetch(commentsUrl);
+      const commentsPath = `${post.permalink}?limit=100&sort=new`;
+      const raw = await redditFetch(commentsPath);
 
-      // Reddit returns [postListing, commentsListing]
       const listings = z.array(z.unknown()).parse(raw);
       if (listings.length < 2) continue;
 
@@ -236,10 +266,8 @@ async function fetchRedditReviews(
         });
       }
 
-      // Throttle between post fetches to respect Reddit rate limits
       await sleep(1000);
     } catch {
-      // Skip posts that fail to parse — Reddit's JSON can be inconsistent
       continue;
     }
   }

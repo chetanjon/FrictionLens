@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pullRedditReviews } from "@/lib/scrapers/reddit";
 
-export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   const appName = request.nextUrl.searchParams.get("appName");
