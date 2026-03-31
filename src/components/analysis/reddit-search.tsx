@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import type { ParsedReview } from "@/lib/types/review";
 
+// ── Types ──
+
 type RedditPost = {
   postId: string;
   title: string;
@@ -31,6 +33,134 @@ type RedditSearchProps = {
   onReviewsPulled: (reviews: ParsedReview[], appName: string, platform: string) => void;
   disabled?: boolean;
 };
+
+// ── Reddit client-side helpers ──
+// Fetches directly from the user's browser to avoid Vercel IP blocks
+
+const REDDIT_BASE = "https://www.reddit.com";
+const BOT_AUTHORS = new Set([
+  "AutoModerator", "BotDefense", "RemindMeBot", "sneakpeekbot",
+  "RepostSleuthBot", "WikiSummarizerBot", "SaveVideo", "haikusbot",
+]);
+const MIN_WORD_COUNT = 10;
+
+function wordCount(text: string): number {
+  return text.trim().split(/\s+/).length;
+}
+
+function isUsableComment(author: string, body: string): boolean {
+  if (!body || body === "[deleted]" || body === "[removed]") return false;
+  if (BOT_AUTHORS.has(author) || author === "[deleted]") return false;
+  return wordCount(body) >= MIN_WORD_COUNT;
+}
+
+async function redditFetch(url: string): Promise<unknown> {
+  const res = await fetch(url, {
+    headers: { Accept: "application/json" },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Reddit API error: ${res.status} ${res.statusText}`);
+  }
+
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("json")) {
+    throw new Error("Reddit returned an unexpected response. Please try again.");
+  }
+
+  return res.json();
+}
+
+async function searchRedditClient(
+  appName: string,
+  subreddit?: string
+): Promise<RedditPost[]> {
+  const query = encodeURIComponent(appName);
+  const url = subreddit
+    ? `${REDDIT_BASE}/r/${encodeURIComponent(subreddit)}/search.json?q=${query}&restrict_sr=on&sort=new&t=year&limit=25`
+    : `${REDDIT_BASE}/search.json?q=${query}&sort=new&t=year&limit=25`;
+
+  const raw = await redditFetch(url);
+
+  // Loosely extract from the response without strict Zod (client-side)
+  const listing = raw as {
+    data?: { children?: Array<{ kind: string; data: Record<string, unknown> }> };
+  };
+
+  const children = listing?.data?.children ?? [];
+
+  return children
+    .filter((c) => c.kind === "t3")
+    .map((c) => {
+      const d = c.data;
+      return {
+        postId: String(d.id ?? ""),
+        title: String(d.title ?? ""),
+        subreddit: String(d.subreddit ?? ""),
+        author: String(d.author ?? ""),
+        commentCount: Number(d.num_comments ?? 0),
+        score: Number(d.score ?? 0),
+        permalink: String(d.permalink ?? ""),
+        preview: String(d.selftext ?? "").slice(0, 200),
+        createdAt: new Date(Number(d.created_utc ?? 0) * 1000).toISOString(),
+      };
+    });
+}
+
+async function pullCommentsFromPosts(
+  posts: RedditPost[],
+  maxReviews: number
+): Promise<ParsedReview[]> {
+  const sorted = [...posts].sort((a, b) => b.commentCount - a.commentCount);
+  const reviews: ParsedReview[] = [];
+
+  for (const post of sorted) {
+    if (reviews.length >= maxReviews) break;
+    if (post.commentCount === 0) continue;
+
+    try {
+      const url = `${REDDIT_BASE}${post.permalink}.json?limit=100&sort=new`;
+      const raw = await redditFetch(url);
+
+      const listings = raw as Array<{
+        data?: { children?: Array<{ kind: string; data: Record<string, unknown> }> };
+      }>;
+
+      if (!Array.isArray(listings) || listings.length < 2) continue;
+
+      const comments = listings[1]?.data?.children ?? [];
+
+      for (const child of comments) {
+        if (child.kind !== "t1") continue;
+        if (reviews.length >= maxReviews) break;
+
+        const body = String(child.data.body ?? "");
+        const author = String(child.data.author ?? "");
+        const createdUtc = Number(child.data.created_utc ?? 0);
+
+        if (!isUsableComment(author, body)) continue;
+
+        reviews.push({
+          content: body,
+          rating: undefined,
+          author,
+          date: new Date(createdUtc * 1000).toISOString(),
+          platform: "reddit",
+          version: undefined,
+        });
+      }
+
+      // Throttle between post fetches
+      await new Promise((r) => setTimeout(r, 1000));
+    } catch {
+      continue;
+    }
+  }
+
+  return reviews;
+}
+
+// ── Component ──
 
 export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
   const [appName, setAppName] = useState("");
@@ -52,54 +182,30 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
     setPullProgress("");
 
     try {
-      const params = new URLSearchParams({ q: appName.trim() });
-      if (subreddit.trim()) {
-        params.set("subreddit", subreddit.trim().replace(/^r\//, ""));
-      }
-
-      const res = await fetch(`/api/reddit/search?${params.toString()}`);
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error ?? "Search failed.");
-        return;
-      }
-
-      const posts: RedditPost[] = data.results ?? [];
+      const sub = subreddit.trim().replace(/^r\//, "") || undefined;
+      const posts = await searchRedditClient(appName.trim(), sub);
       setResults(posts);
 
       if (posts.length === 0) {
         setError("No Reddit posts found. Try a different search term or subreddit.");
       }
-    } catch {
-      setError("Network error. Please try again.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Search failed.";
+      setError(message);
     } finally {
       setIsSearching(false);
     }
   }, [appName, subreddit, disabled]);
 
   const handlePullReviews = useCallback(async () => {
-    if (disabled) return;
+    if (disabled || results.length === 0) return;
 
     setIsPulling(true);
     setPullProgress("Pulling comments from Reddit posts...");
     setError(null);
 
     try {
-      const params = new URLSearchParams({ appName: appName.trim(), count: "200" });
-      if (subreddit.trim()) {
-        params.set("subreddit", subreddit.trim().replace(/^r\//, ""));
-      }
-
-      const res = await fetch(`/api/reddit/reviews?${params.toString()}`);
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error ?? "Failed to pull comments.");
-        return;
-      }
-
-      const reviews: ParsedReview[] = data.reviews ?? [];
+      const reviews = await pullCommentsFromPosts(results, 200);
 
       if (reviews.length === 0) {
         setError("No usable comments found. Comments must be 10+ words and not from bots.");
@@ -110,11 +216,11 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
       setPullProgress(`Pulled ${reviews.length} comments from Reddit`);
       onReviewsPulled(reviews, appName.trim(), "reddit");
     } catch {
-      setError("Network error while pulling comments.");
+      setError("Failed to pull comments. Please try again.");
     } finally {
       setIsPulling(false);
     }
-  }, [appName, subreddit, disabled, onReviewsPulled]);
+  }, [appName, disabled, results, onReviewsPulled]);
 
   return (
     <div className="space-y-4">
