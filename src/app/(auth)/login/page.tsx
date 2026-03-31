@@ -55,8 +55,8 @@ function LoginForm() {
 
   return (
     <div className="w-full max-w-sm">
-      {/* Logo */}
-      <div className="mb-8 flex flex-col items-center gap-2">
+      {/* Logo — visible only on mobile (desktop has left panel) */}
+      <div className="mb-8 flex flex-col items-center gap-2 md:hidden">
         <Link href="/" className="flex items-center gap-3">
           <svg width="36" height="36" viewBox="-32 -32 64 64" fill="none">
             <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#0f0f0f" strokeWidth="1.2"/>
@@ -73,7 +73,7 @@ function LoginForm() {
       </div>
 
       {/* Card */}
-      <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl p-7 shadow-lg shadow-slate-200/20">
+      <div className="rounded-2xl border border-slate-200/50 bg-white p-8 shadow-xl shadow-slate-200/20">
         <div className="mb-6 text-center">
           <h1 className="text-lg font-bold text-slate-900">Welcome back</h1>
           <p className="mt-1 text-sm text-slate-400">Sign in to your account</p>

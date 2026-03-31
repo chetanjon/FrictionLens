@@ -28,7 +28,7 @@ export function KpiCard({
   icon,
 }: KpiCardProps) {
   return (
-    <GlassCard className="flex flex-col gap-3 p-4">
+    <GlassCard className="flex flex-col gap-3 p-5">
       {/* Header row: label + icon */}
       <div className="flex items-start justify-between gap-2">
         <span className="font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
@@ -45,7 +45,7 @@ export function KpiCard({
       <div className="flex items-end justify-between gap-2">
         <div className="min-w-0">
           <div
-            className="truncate font-mono text-2xl font-extrabold tracking-tight leading-none"
+            className="truncate font-mono text-3xl font-extrabold tracking-tight leading-none"
             style={color ? { color } : undefined}
             title={String(value)}
           >

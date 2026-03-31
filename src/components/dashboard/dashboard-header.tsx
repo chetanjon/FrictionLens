@@ -39,25 +39,30 @@ export function DashboardHeader({
   }, []);
 
   return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="min-w-0">
-        <h1 className="font-serif text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          {greeting}, {firstName}
-        </h1>
-        <p className="mt-0.5 font-mono text-[11px] text-slate-400 tracking-wide">
-          {formattedDate}
-        </p>
-      </div>
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 sm:p-8">
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-friction-blue/10 blur-3xl" />
 
-      <Button
-        onClick={onNewAnalysis}
-        size="lg"
-        className="shrink-0 bg-friction-blue text-white hover:bg-friction-blue/90"
-        aria-label="Start a new analysis"
-      >
-        <Plus className="h-4 w-4" aria-hidden="true" />
-        New Analysis
-      </Button>
+      <div className="relative flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-serif text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            {greeting}, {firstName}
+          </h1>
+          <p className="mt-0.5 font-mono text-[11px] text-slate-500 tracking-wide">
+            {formattedDate}
+          </p>
+        </div>
+
+        <Button
+          onClick={onNewAnalysis}
+          size="lg"
+          className="shrink-0 bg-friction-blue text-white shadow-lg shadow-friction-blue/20 hover:bg-friction-blue/90"
+          aria-label="Start a new analysis"
+        >
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          New Analysis
+        </Button>
+      </div>
     </div>
   );
 }

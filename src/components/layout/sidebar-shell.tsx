@@ -69,16 +69,16 @@ export function SidebarShell({
       {/* Logo */}
       <div className="flex h-14 items-center gap-2.5 px-5">
         <svg width="32" height="32" viewBox="-32 -32 64 64" fill="none">
-          <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#0f0f0f" strokeWidth="1.2"/>
-          <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#0f0f0f"/>
-          <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
+          <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#ffffff" strokeWidth="1.2"/>
+          <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+          <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
         </svg>
-        <span className="text-[15px] font-semibold tracking-tight text-slate-900">
+        <span className="text-[15px] font-semibold tracking-tight text-white">
           FrictionLens
         </span>
       </div>
 
-      <Separator className="mx-4 w-auto" />
+      <Separator className="mx-4 w-auto border-white/[0.08]" />
 
       {/* Quick action */}
       <div className="px-3 pt-3">
@@ -108,14 +108,14 @@ export function SidebarShell({
               className={cn(
                 "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue",
                 active
-                  ? "bg-friction-blue/10 text-friction-blue"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-friction-blue/15 text-friction-blue"
+                  : "text-slate-400 hover:bg-white/[0.06] hover:text-white"
               )}
             >
               <item.icon
                 className={cn(
                   "h-4 w-4 shrink-0",
-                  active ? "text-friction-blue" : "text-slate-400"
+                  active ? "text-friction-blue" : "text-slate-500"
                 )}
               />
               {item.label}
@@ -125,7 +125,7 @@ export function SidebarShell({
       </nav>
 
       {/* User section */}
-      <div className="border-t border-slate-200 px-4 py-3">
+      <div className="border-t border-white/[0.08] px-4 py-3">
         <div className="flex items-center gap-2.5">
           {avatarUrl ? (
             <img
@@ -134,16 +134,16 @@ export function SidebarShell({
               className="h-7 w-7 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-friction-blue/10 text-xs font-semibold text-friction-blue">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-friction-blue/20 text-xs font-semibold text-friction-blue">
               {initial}
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-slate-700" title={displayName ?? userEmail}>
+            <p className="truncate text-xs font-medium text-slate-200" title={displayName ?? userEmail}>
               {displayName ?? userEmail.split("@")[0]}
             </p>
             <div className="flex items-center gap-1.5">
-              <p className="truncate text-[10px] text-slate-400" title={userEmail}>
+              <p className="truncate text-[10px] text-slate-500" title={userEmail}>
                 {userEmail}
               </p>
               {hasApiKey !== undefined && (
@@ -160,7 +160,7 @@ export function SidebarShell({
         </div>
         <button
           onClick={handleSignOut}
-          className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+          className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
         >
           <LogOut className="h-3.5 w-3.5" />
           Sign out
@@ -170,10 +170,10 @@ export function SidebarShell({
   );
 
   return (
-    <div className="flex min-h-screen bg-slate-50/60">
+    <div className="flex min-h-screen bg-black">
       {/* Desktop sidebar */}
       <aside
-        className="hidden w-[220px] shrink-0 border-r border-slate-200 bg-white md:block"
+        className="hidden w-[220px] shrink-0 border-r border-white/[0.06] bg-slate-950 md:block"
         role="complementary"
         aria-label="Sidebar navigation"
       >
@@ -181,10 +181,10 @@ export function SidebarShell({
       </aside>
 
       {/* Mobile top bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-slate-200 bg-white px-4 md:hidden">
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-white/[0.06] bg-slate-950 px-4 md:hidden">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
+          className="rounded-lg p-2 text-slate-400 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
           aria-label={mobileOpen ? "Close sidebar menu" : "Open sidebar menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-sidebar"
@@ -197,11 +197,11 @@ export function SidebarShell({
         </button>
         <div className="ml-3 flex items-center gap-2">
           <svg width="28" height="28" viewBox="-32 -32 64 64" fill="none">
-            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#0f0f0f" strokeWidth="1.2"/>
-            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#0f0f0f"/>
-            <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
+            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#ffffff" strokeWidth="1.2"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+            <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
           </svg>
-          <span className="text-sm font-semibold text-slate-900">
+          <span className="text-sm font-semibold text-white">
             FrictionLens
           </span>
         </div>
@@ -211,12 +211,12 @@ export function SidebarShell({
       {mobileOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
             onClick={() => setMobileOpen(false)}
           />
           <aside
             id="mobile-sidebar"
-            className="fixed inset-y-0 left-0 z-50 w-[260px] border-r border-slate-200 bg-white pt-14 md:hidden"
+            className="fixed inset-y-0 left-0 z-50 w-[260px] border-r border-white/[0.06] bg-slate-950 pt-14 md:hidden"
             role="complementary"
             aria-label="Sidebar navigation"
           >

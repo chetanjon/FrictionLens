@@ -133,7 +133,7 @@ export function AnalysisCard({
         {/* Score + friction */}
         <div className="flex items-center gap-3">
           <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold text-white"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold text-white shadow-sm"
             style={{
               backgroundColor: isCompleted && vibeColorHex
                 ? vibeColorHex
