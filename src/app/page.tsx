@@ -1,6 +1,16 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import {
+  BarChart3,
+  Flame,
+  AlertTriangle,
+  GitCompare,
+  Sparkles,
+  FileText,
+} from "lucide-react";
+import { AnimateOnScroll } from "@/components/marketing/animate-on-scroll";
+import { MobileNav } from "@/components/marketing/mobile-nav";
 import { LandingNav } from "@/components/marketing/landing-nav";
+import { DemoStats, DemoVibeScore } from "@/components/marketing/demo-stats";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -22,6 +32,7 @@ const jsonLd = {
 };
 
 export default async function LandingPage() {
+  // Check if user is logged in
   let isLoggedIn = false;
   if (
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -33,358 +44,587 @@ export default async function LandingPage() {
       const { data: { user } } = await supabase.auth.getUser();
       isLoggedIn = !!user;
     } catch {
-      // Auth check failed silently
+      // Auth check failed silently — treat as logged out
     }
   }
 
   const ctaHref = isLoggedIn ? "/dashboard" : "/signup";
 
   return (
-    <div className="min-h-screen bg-[#B8C5D3] font-sans text-[#0F172A] relative">
+    <div className="min-h-screen bg-[#F2F2F7] font-sans text-gray-900 relative overflow-hidden">
+      {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── NAV ── */}
-      <nav className="sticky top-0 z-50 w-full border-b border-[#0F172A]/8">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="font-serif italic text-lg tracking-tight text-[#0F172A]">
-              FrictionLens
-            </span>
-          </Link>
+      {/* ── Aurora gradient blobs ── */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      </div>
 
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-[13px] text-[#0F172A]/60 hover:text-[#0F172A] transition-colors tracking-wide">
-              Features
-            </a>
-            <a href="#process" className="text-[13px] text-[#0F172A]/60 hover:text-[#0F172A] transition-colors tracking-wide">
-              Process
-            </a>
-            <a href="#pricing" className="text-[13px] text-[#0F172A]/60 hover:text-[#0F172A] transition-colors tracking-wide">
-              Pricing
-            </a>
+      {/* ══════════════════════════════════════════════
+          1. NAVIGATION
+      ══════════════════════════════════════════════ */}
+      <LandingNav isLoggedIn={isLoggedIn} />
+
+      {/* ══════════════════════════════════════════════
+          2. HERO
+      ══════════════════════════════════════════════ */}
+      <section id="main-content" className="relative z-10 mx-auto max-w-6xl px-6 pt-28 pb-20 lg:pt-32" aria-labelledby="hero-heading">
+        <div className="max-w-2xl">
+          {/* Badge */}
+          <div className="hero-fade mb-8 inline-flex items-center gap-2.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600">
+            <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-friction-blue" />
+            Analyze up to 200 reviews in under 60 seconds
           </div>
 
-          <div className="flex items-center gap-6">
-            {isLoggedIn ? (
-              <Link href="/dashboard" className="text-[13px] text-[#0F172A]/60 hover:text-[#0F172A] transition-colors flex items-center gap-1.5">
-                Dashboard <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            ) : (
-              <>
-                <Link href="/login" className="hidden md:inline text-[13px] text-[#0F172A]/60 hover:text-[#0F172A] transition-colors">
-                  Log in
-                </Link>
-                <Link href="/signup" className="text-[13px] text-[#0F172A]/80 hover:text-[#0F172A] transition-colors flex items-center gap-1.5">
-                  Get Started <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      {/* ── HERO ── */}
-      <section id="main-content" className="relative z-10 mx-auto max-w-7xl px-8 pt-32 pb-40 lg:pt-40 lg:pb-48">
-        {/* Decorative numeral */}
-        <div className="absolute top-20 right-12 lg:right-24 font-serif text-[clamp(8rem,20vw,16rem)] leading-none text-[#0F172A]/[0.04] select-none pointer-events-none">
-          01
-        </div>
-
-        <div className="relative max-w-3xl">
-          <p className="font-mono text-[11px] uppercase tracking-[4px] text-[#0F172A]/40 mb-8">
-            App Review Intelligence
-          </p>
-
-          <h1 className="text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.95] tracking-tight">
-            <span className="font-serif italic font-normal text-[#0F172A]">
-              The signal hiding
-            </span>
+          {/* Headline */}
+          <h1 id="hero-heading" className="hero-fade-1 text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-tight">
+            <span className="font-light text-gray-400">Stop reading</span>
             <br />
-            <span className="font-serif italic font-normal text-[#0F172A]">
-              in your reviews.
-            </span>
+            <span className="font-serif italic text-friction-blue">app reviews.</span>
+            <br />
+            <span className="font-bold text-gray-900">Start acting on them.</span>
           </h1>
 
-          <p className="mt-10 max-w-lg text-[17px] leading-[1.7] text-[#0F172A]/55">
-            FrictionLens reads hundreds of app store reviews and distills them
-            into one shareable report&mdash;sentiment scores, friction heatmaps,
-            churn signals, and the action items your roadmap is missing.
+          {/* Subtitle */}
+          <p className="hero-fade-2 mt-6 max-w-xl text-lg leading-relaxed text-gray-500">
+            FrictionLens synthesizes hundreds of app store reviews into one
+            shareable <span className="font-medium text-gray-900">Vibe Report</span> &mdash;
+            sentiment scores, churn signals, and the action items your roadmap is missing.
           </p>
 
-          <Link
-            href={ctaHref}
-            className="mt-12 inline-flex items-center gap-2 text-[15px] text-[#0F172A]/80 hover:text-[#0F172A] transition-colors group"
-          >
-            {isLoggedIn ? "Open Dashboard" : "Try your first analysis free"}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          {/* Search input */}
+          <Link href={ctaHref} className="hero-fade-3 mt-10 flex max-w-xl items-center gap-0 rounded-2xl border border-gray-200/80 bg-white p-2 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/40 transition-shadow cursor-pointer">
+            <div className="flex items-center flex-1 min-w-0">
+              <svg className="ml-3 mr-2.5 h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <span className="min-w-0 flex-1 py-3.5 text-base text-gray-400">
+                Search any app or paste reviews...
+              </span>
+            </div>
+            <span className="shrink-0 rounded-xl bg-friction-blue px-6 py-3.5 text-sm font-semibold text-white shadow-sm">
+              {isLoggedIn ? "Dashboard \u2192" : "Analyze Free \u2192"}
+            </span>
           </Link>
+
+          {/* Stats */}
+          <div className="hero-fade-4 mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-base font-semibold text-gray-900">200</span>
+              reviews per report
+            </div>
+            <div className="hidden sm:block h-4 w-px bg-white/[0.12]" />
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-base font-semibold text-gray-900">&lt; 60s</span>
+              per report
+            </div>
+            <div className="hidden sm:block h-4 w-px bg-white/[0.12]" />
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-base font-semibold text-gray-900">$0</span>
+              to start
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── EDITORIAL DIVIDER ── */}
-      <div className="mx-auto max-w-7xl px-8">
-        <div className="h-px bg-[#0F172A]/10" />
-      </div>
-
-      {/* ── FEATURES ── */}
-      <section id="features" className="relative z-10 mx-auto max-w-7xl px-8 py-32">
-        {/* Decorative numeral */}
-        <div className="absolute top-16 left-8 lg:left-24 font-serif text-[clamp(6rem,15vw,12rem)] leading-none text-[#0F172A]/[0.04] select-none pointer-events-none">
-          02
-        </div>
-
-        <div className="relative grid lg:grid-cols-2 gap-20 lg:gap-32">
-          {/* Left: editorial intro */}
-          <div className="max-w-md">
-            <p className="font-mono text-[11px] uppercase tracking-[4px] text-[#0F172A]/40 mb-6">
-              What you get
-            </p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] leading-[1.05] tracking-tight font-serif italic">
-              Six dimensions of clarity.
-            </h2>
-            <p className="mt-8 text-[15px] leading-[1.8] text-[#0F172A]/50">
-              Every analysis produces a Vibe Report&mdash;a single page your
-              entire team can read. No dashboards to configure, no SQL to
-              write, no meetings to schedule.
-            </p>
-          </div>
-
-          {/* Right: feature list */}
-          <div className="space-y-10 lg:pt-8">
-            {[
-              {
-                num: "01",
-                title: "Vibe Reports",
-                desc: "Five sentiment dimensions distilled into one shareable page.",
-              },
-              {
-                num: "02",
-                title: "Friction Scores",
-                desc: "Per-feature heatmap ranked by severity. Engineering knows exactly what to fix.",
-              },
-              {
-                num: "03",
-                title: "Churn Signals",
-                desc: "AI extracts patterns from the 2-3 star reviews nobody reads manually.",
-              },
-              {
-                num: "04",
-                title: "Release Impact",
-                desc: "Before-and-after for every version. Letter grades in seconds.",
-              },
-              {
-                num: "05",
-                title: "Competitor Battles",
-                desc: "Head-to-head dimension scores against up to three competitors.",
-              },
-              {
-                num: "06",
-                title: "AI Actions",
-                desc: "Prioritized recommendations with impact and effort estimates.",
-              },
-            ].map((feature) => (
-              <div key={feature.num} className="flex gap-6 group">
-                <span className="font-mono text-xs text-[#0F172A]/25 pt-1 shrink-0 w-6">
-                  {feature.num}
-                </span>
-                <div className="border-t border-[#0F172A]/10 pt-4 flex-1">
-                  <h3 className="text-[15px] font-semibold text-[#0F172A] mb-1.5">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[14px] leading-[1.7] text-[#0F172A]/45">
-                    {feature.desc}
-                  </p>
-                </div>
-              </div>
+      {/* ══════════════════════════════════════════════
+          2B. SOCIAL PROOF
+      ══════════════════════════════════════════════ */}
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pb-16">
+        <AnimateOnScroll>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs text-gray-500">
+            <span className="font-medium uppercase tracking-widest text-gray-500 font-mono">
+              Built for teams at
+            </span>
+            {["Product Managers", "Growth Teams", "Mobile Devs", "CX Leaders"].map((role) => (
+              <span
+                key={role}
+                className="rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-gray-600"
+              >
+                {role}
+              </span>
             ))}
           </div>
+        </AnimateOnScroll>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          3. DEMO SECTION
+      ══════════════════════════════════════════════ */}
+      <section id="demo" className="relative z-10 mx-auto max-w-5xl px-6 pb-28">
+        <AnimateOnScroll>
+          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl p-1 shadow-2xl shadow-gray-200/50">
+            {/* Browser chrome */}
+            <div className="flex items-center gap-3 rounded-t-xl bg-white px-4 py-3 border-b border-gray-200">
+              <div className="flex gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+                <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+                <div className="h-3 w-3 rounded-full bg-[#28C840]" />
+              </div>
+              <div className="flex-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1.5 text-xs text-gray-500 font-mono">
+                frictionlens.app/vibe/spotify-music
+              </div>
+            </div>
+
+            {/* Report content */}
+            <div className="p-4 sm:p-6 md:p-8 space-y-6">
+              {/* App header row */}
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-[#1DB954] text-white text-lg sm:text-xl font-bold shadow-md">
+                    &#x1F3B5;
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">Spotify</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 font-mono">
+                      iOS &amp; Android &middot; 200 reviews
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <DemoVibeScore />
+                </div>
+              </div>
+
+              {/* Stat cards — animated counters */}
+              <DemoStats />
+
+              {/* Charts row */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Sentiment Radar */}
+                <div className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
+                  <h4 className="text-[9px] font-semibold text-friction-blue uppercase tracking-[2px] font-mono mb-4">Sentiment Radar</h4>
+                  <svg viewBox="0 0 200 200" className="mx-auto w-40 h-40 sm:w-48 sm:h-48">
+                    {[1, 0.66, 0.33].map((scale) => (
+                      <polygon
+                        key={scale}
+                        points={pentagonPoints(100, 100, 80 * scale)}
+                        fill="none"
+                        stroke="#e2e8f0"
+                        strokeWidth="1"
+                      />
+                    ))}
+                    {pentagonVertices(100, 100, 80).map((p, i) => (
+                      <line
+                        key={i}
+                        x1="100"
+                        y1="100"
+                        x2={p[0]}
+                        y2={p[1]}
+                        stroke="#e2e8f0"
+                        strokeWidth="0.5"
+                      />
+                    ))}
+                    <defs>
+                      <linearGradient id="rf" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#4A90D9" stopOpacity="0.12" />
+                        <stop offset="100%" stopColor="#4A90D9" stopOpacity="0.03" />
+                      </linearGradient>
+                    </defs>
+                    <polygon
+                      points={radarDataPoints(100, 100, 80, [0.78, 0.46, 0.72, 0.41, 0.65])}
+                      fill="url(#rf)"
+                      stroke="#4A90D9"
+                      strokeWidth="1.5"
+                    />
+                    {radarVertices(100, 100, 80, [0.78, 0.46, 0.72, 0.41, 0.65]).map((p, i) => (
+                      <circle key={i} cx={p[0]} cy={p[1]} r="3" fill="#4A90D9" stroke="white" strokeWidth="1.5" />
+                    ))}
+                    {(["Love", "Frustration", "Loyalty", "Momentum", "WoM"] as const).map(
+                      (label, i) => {
+                        const lp = pentagonVertices(100, 100, 96);
+                        return (
+                          <text
+                            key={label}
+                            x={lp[i][0]}
+                            y={lp[i][1]}
+                            textAnchor="middle"
+                            dominantBaseline="central"
+                            className="text-[8px] fill-slate-400 font-sans font-medium"
+                          >
+                            {label}
+                          </text>
+                        );
+                      }
+                    )}
+                  </svg>
+                </div>
+
+                {/* Friction Heatmap */}
+                <div className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
+                  <h4 className="text-[9px] font-semibold text-friction-blue uppercase tracking-[2px] font-mono mb-4">Friction Heatmap</h4>
+                  <div className="space-y-3">
+                    {[
+                      { label: "Shuffle", score: 8.2, color: "bg-friction-red" },
+                      { label: "Downloads", score: 7.1, color: "bg-friction-red" },
+                      { label: "Home Feed", score: 6.4, color: "bg-friction-amber" },
+                      { label: "Search", score: 4.2, color: "bg-friction-amber" },
+                      { label: "Discovery", score: 1.8, color: "bg-friction-blue" },
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center gap-3">
+                        <div className="w-20 sm:w-24 text-xs text-gray-500 text-right shrink-0 truncate font-mono">
+                          {item.label}
+                        </div>
+                        <div className="flex-1 h-[3px] rounded-full bg-gray-50 overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${item.color} transition-all`}
+                            style={{ width: `${(item.score / 10) * 100}%` }}
+                          />
+                        </div>
+                        <div className="font-mono text-xs font-bold text-gray-600 w-8 text-right">
+                          {item.score}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Churn Driver alert */}
+              <div className="rounded-xl border border-friction-red/20 bg-friction-red/[0.04] px-4 sm:px-5 py-4 flex items-center gap-4 flex-wrap">
+                <div className="flex-1 min-w-0">
+                  <div className="text-[9px] font-semibold text-friction-red uppercase tracking-[2px] font-mono mb-1">Top Churn Driver</div>
+                  <div className="text-sm font-semibold text-gray-600">
+                    Shuffle algorithm feels non-random
+                  </div>
+                  <div className="text-xs text-gray-500 mt-0.5">342 mentions &middot; Critical severity</div>
+                </div>
+                <span className="pulse-glow inline-flex items-center rounded-md bg-friction-red px-2.5 py-1 text-[10px] font-bold text-gray-900 uppercase tracking-wide font-mono">
+                  P0
+                </span>
+              </div>
+            </div>
+          </div>
+        </AnimateOnScroll>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          4. FEATURES
+      ══════════════════════════════════════════════ */}
+      <section id="features" className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
+        <AnimateOnScroll>
+          <div className="mb-16">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[3px] text-friction-blue mb-3">
+              Features
+            </div>
+            <h2 className="text-3xl md:text-[46px] md:leading-[1.1] font-bold tracking-tight text-gray-900 max-w-lg">
+              <span className="font-light text-gray-400">The report your team</span>
+              <br />
+              <span className="font-serif italic">actually reads.</span>
+            </h2>
+          </div>
+        </AnimateOnScroll>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {([
+            {
+              num: "01",
+              title: "Vibe Reports",
+              desc: "Five sentiment dimensions distilled into one shareable page. No dashboards to learn, no setup wizards to click through.",
+              icon: FileText,
+              iconColor: "text-friction-blue",
+              iconBg: "bg-friction-blue/10",
+            },
+            {
+              num: "02",
+              title: "Friction Scores",
+              desc: "Per-feature heatmap that tells engineering exactly what's broken. Each feature scored, trended, and ranked by severity.",
+              icon: Flame,
+              iconColor: "text-friction-red",
+              iconBg: "bg-friction-red/10",
+            },
+            {
+              num: "03",
+              title: "Churn Signals",
+              desc: "AI extracts the patterns hiding in 2-3 star reviews that nobody reads manually. The reviews that predict users leaving.",
+              icon: AlertTriangle,
+              iconColor: "text-friction-amber",
+              iconBg: "bg-friction-amber/10",
+            },
+            {
+              num: "04",
+              title: "Release Impact",
+              desc: "Automatic before-and-after for every app version. Did the fix work? Did it break something new? Letter grades in seconds.",
+              icon: BarChart3,
+              iconColor: "text-[#22C55E]",
+              iconBg: "bg-[#22C55E]/10",
+            },
+            {
+              num: "05",
+              title: "Competitor Battles",
+              desc: "Head-to-head dimension scores against up to three competitors. Know where you lead and where you're vulnerable.",
+              icon: GitCompare,
+              iconColor: "text-[#7C3AED]",
+              iconBg: "bg-[#7C3AED]/10",
+            },
+            {
+              num: "06",
+              title: "AI Actions",
+              desc: "Prioritized recommendations with impact and effort estimates. Copy directly into Jira or Linear. Ship, measure, repeat.",
+              icon: Sparkles,
+              iconColor: "text-[#06B6D4]",
+              iconBg: "bg-[#06B6D4]/10",
+            },
+          ] as const).map((feature, i) => (
+            <AnimateOnScroll key={feature.num} delay={i * 100}>
+              <div className="gradient-border-hover group h-full rounded-2xl border border-gray-200/60 bg-white p-6 hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${feature.iconBg}`}>
+                    <feature.icon className={`h-4.5 w-4.5 ${feature.iconColor}`} />
+                  </div>
+                  <span className="font-mono text-xs font-semibold text-gray-500">
+                    {feature.num}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-[13.5px] leading-relaxed text-gray-500">{feature.desc}</p>
+              </div>
+            </AnimateOnScroll>
+          ))}
         </div>
       </section>
 
-      {/* ── DIVIDER ── */}
-      <div className="mx-auto max-w-7xl px-8">
-        <div className="h-px bg-[#0F172A]/10" />
-      </div>
+      {/* ══════════════════════════════════════════════
+          5. HOW IT WORKS
+      ══════════════════════════════════════════════ */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 pb-28">
+        <AnimateOnScroll>
+          <div className="text-center mb-16">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[3px] text-gray-500 mb-3">
+              Process
+            </div>
+            <h2 className="text-3xl md:text-[42px] font-bold tracking-tight text-gray-900">
+              <span className="font-light">Input.</span>{" "}
+              <span className="font-serif italic">Insight.</span>{" "}
+              <span className="font-bold">Action.</span>
+            </h2>
+          </div>
+        </AnimateOnScroll>
 
-      {/* ── PROCESS ── */}
-      <section id="process" className="relative z-10 mx-auto max-w-7xl px-8 py-32">
-        <div className="absolute top-16 right-8 lg:right-24 font-serif text-[clamp(6rem,15vw,12rem)] leading-none text-[#0F172A]/[0.04] select-none pointer-events-none">
-          03
-        </div>
+        <div className="relative grid md:grid-cols-3 gap-8 md:gap-12">
+          {/* Connecting line (desktop) */}
+          <div className="hidden md:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
 
-        <div className="relative max-w-md mb-20">
-          <p className="font-mono text-[11px] uppercase tracking-[4px] text-[#0F172A]/40 mb-6">
-            Process
-          </p>
-          <h2 className="text-[clamp(2rem,4vw,3.2rem)] leading-[1.05] tracking-tight font-serif italic">
-            Input. Insight. Action.
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-16 md:gap-12">
           {[
             {
               step: "01",
               title: "Enter an app",
-              desc: "Search by name, upload a CSV, or paste reviews directly. We handle both stores.",
+              desc: "Search by name or paste a CSV of reviews. We handle both stores automatically.",
+              color: "text-friction-blue",
             },
             {
               step: "02",
               title: "AI analyzes",
               desc: "Every review classified across five sentiment dimensions and scored for churn risk.",
+              color: "text-slate-900",
             },
             {
               step: "03",
               title: "Get your report",
               desc: "A shareable Vibe Report with friction heatmaps and prioritized action items.",
+              color: "text-friction-blue",
             },
-          ].map((s) => (
-            <div key={s.step}>
-              <span className="font-mono text-xs text-[#0F172A]/25 block mb-4">
-                {s.step}
-              </span>
-              <h3 className="text-[17px] font-semibold text-[#0F172A] mb-3">
-                {s.title}
-              </h3>
-              <p className="text-[14px] leading-[1.7] text-[#0F172A]/45">
-                {s.desc}
+          ].map((s, i) => (
+            <AnimateOnScroll key={s.step} delay={i * 120}>
+              <div className="text-center relative">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] mb-5">
+                  <span className="font-mono text-xl font-bold text-friction-blue">
+                    {s.step}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{s.title}</h3>
+                <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                  {s.desc}
+                </p>
+              </div>
+            </AnimateOnScroll>
+          ))}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          6. PRICING
+      ══════════════════════════════════════════════ */}
+      <section id="pricing" className="relative z-10 mx-auto max-w-5xl px-6 pb-28">
+        <AnimateOnScroll>
+          <div className="text-center mb-16">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[3px] text-friction-blue mb-3">
+              Pricing
+            </div>
+            <h2 className="text-3xl md:text-[42px] font-bold tracking-tight text-gray-900">
+              <span className="font-light text-gray-400">Completely</span>{" "}
+              <span className="font-serif italic">free.</span>
+            </h2>
+            <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto">
+              FrictionLens is free to use. Bring your own Gemini API key from Google AI Studio, or try 2 analyses on us, no key needed.
+            </p>
+          </div>
+        </AnimateOnScroll>
+
+        <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+          <AnimateOnScroll>
+            <div className="relative rounded-2xl border border-gray-200/60 bg-white p-7 flex flex-col h-full">
+              <div className="mb-5">
+                <h3 className="text-sm font-medium text-gray-500">Try It</h3>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span className="font-mono text-[40px] font-bold tracking-tight text-gray-900">2</span>
+                  <span className="text-sm text-gray-500">free analyses</span>
+                </div>
+              </div>
+              <ul className="flex-1 space-y-3 mb-7">
+                {["No API key needed", "100 reviews per analysis", "Full Vibe Report", "Shareable public link"].map((f) => (
+                  <li key={f} className="flex items-start gap-2.5 text-[13.5px] text-gray-600">
+                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-friction-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={ctaHref}
+                className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors bg-friction-blue text-white hover:bg-friction-blue/90"
+              >
+                Try Free
+              </Link>
+            </div>
+          </AnimateOnScroll>
+
+          <AnimateOnScroll delay={100}>
+            <div className="relative rounded-2xl border border-friction-blue/30 bg-white p-7 flex flex-col h-full shadow-[0_0_40px_rgba(107,159,212,0.08)] scale-[1.02]">
+              <div className="absolute -top-3 right-5 inline-flex items-center rounded-lg bg-friction-blue px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white font-mono">
+                Unlimited
+              </div>
+              <div className="mb-5">
+                <h3 className="text-sm font-medium text-gray-500">Bring Your Key</h3>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span className="font-mono text-[40px] font-bold tracking-tight text-gray-900">$0</span>
+                  <span className="text-sm text-gray-500">forever</span>
+                </div>
+              </div>
+              <ul className="flex-1 space-y-3 mb-7">
+                {["Unlimited analyses", "200 reviews per analysis", "All 5 sentiment dimensions", "Friction Scores & Churn Signals", "Competitor Battles", "Shareable Vibe Reports"].map((f) => (
+                  <li key={f} className="flex items-start gap-2.5 text-[13.5px] text-gray-600">
+                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-friction-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={ctaHref}
+                className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#2A3040]"
+              >
+                Get Your Free API Key &rarr;
+              </Link>
+              <p className="mt-3 text-center text-[11px] text-gray-500">
+                Free from <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="text-friction-blue hover:underline">Google AI Studio</a> (takes 30 seconds)
               </p>
             </div>
-          ))}
+          </AnimateOnScroll>
         </div>
       </section>
 
-      {/* ── DIVIDER ── */}
-      <div className="mx-auto max-w-7xl px-8">
-        <div className="h-px bg-[#0F172A]/10" />
-      </div>
-
-      {/* ── PRICING ── */}
-      <section id="pricing" className="relative z-10 mx-auto max-w-7xl px-8 py-32">
-        <div className="relative max-w-md mb-20">
-          <p className="font-mono text-[11px] uppercase tracking-[4px] text-[#0F172A]/40 mb-6">
-            Pricing
-          </p>
-          <h2 className="text-[clamp(2rem,4vw,3.2rem)] leading-[1.05] tracking-tight font-serif italic">
-            Completely free.
-          </h2>
-          <p className="mt-6 text-[15px] leading-[1.7] text-[#0F172A]/50">
-            Bring your own Gemini API key from Google AI Studio, or try two
-            analyses on us.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 max-w-2xl">
-          <div className="border-t border-[#0F172A]/10 pt-8">
-            <p className="font-mono text-xs text-[#0F172A]/30 mb-3">Try it</p>
-            <p className="font-mono text-4xl font-bold text-[#0F172A] mb-4">2</p>
-            <p className="text-[14px] text-[#0F172A]/45 mb-6">free analyses, no key needed</p>
-            <ul className="space-y-2.5 mb-8">
-              {["Full Vibe Report", "100 reviews per analysis", "Shareable public link"].map((f) => (
-                <li key={f} className="text-[14px] text-[#0F172A]/55 flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-[#4A90D9] shrink-0" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={ctaHref}
-              className="inline-flex items-center gap-2 text-[14px] text-[#0F172A]/70 hover:text-[#0F172A] transition-colors group"
-            >
-              Start free <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-
-          <div className="border-t border-[#4A90D9]/30 pt-8">
-            <p className="font-mono text-xs text-[#4A90D9] mb-3">Unlimited</p>
-            <p className="font-mono text-4xl font-bold text-[#0F172A] mb-4">$0</p>
-            <p className="text-[14px] text-[#0F172A]/45 mb-6">forever, with your own key</p>
-            <ul className="space-y-2.5 mb-8">
-              {["200 reviews per analysis", "All 5 dimensions", "Competitor Battles", "Friction Scores & Churn Signals"].map((f) => (
-                <li key={f} className="text-[14px] text-[#0F172A]/55 flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-[#4A90D9] shrink-0" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="https://aistudio.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-[14px] text-[#4A90D9] hover:text-[#0F172A] transition-colors group"
-            >
-              Get your free API key <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── BOTTOM CTA ── */}
-      <section className="relative z-10 mx-auto max-w-7xl px-8 pb-32">
-        <div className="border-t border-[#0F172A]/10 pt-20">
-          <h2 className="text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight font-serif italic max-w-lg">
-            Your first Vibe Report. Sixty seconds.
-          </h2>
-          <Link
-            href={ctaHref}
-            className="mt-10 inline-flex items-center gap-2 text-[15px] text-[#0F172A]/70 hover:text-[#0F172A] transition-colors group"
-          >
-            {isLoggedIn ? "Open Dashboard" : "Generate your report"}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </section>
-
-      {/* ── APP SHELF (magazine rack) ── */}
-      <section className="relative z-10 mx-auto max-w-7xl px-8 pb-20">
-        <div className="flex items-center gap-6 overflow-x-auto pb-4 scrollbar-hide">
-          {[
-            { name: "Spotify", color: "#1DB954", emoji: "🎵" },
-            { name: "Duolingo", color: "#58CC02", emoji: "🦉" },
-            { name: "Notion", color: "#000000", emoji: "📝" },
-            { name: "Figma", color: "#A259FF", emoji: "🎨" },
-            { name: "Slack", color: "#4A154B", emoji: "💬" },
-            { name: "Linear", color: "#5E6AD2", emoji: "📊" },
-          ].map((app) => (
-            <div
-              key={app.name}
-              className="shrink-0 flex items-center gap-3 rounded-xl bg-[#0F172A]/[0.06] px-4 py-3 backdrop-blur-sm"
-            >
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-sm"
-                style={{ backgroundColor: app.color + "20" }}
-              >
-                {app.emoji}
-              </div>
-              <div>
-                <p className="text-[13px] font-medium text-[#0F172A]">{app.name}</p>
-                <p className="text-[11px] text-[#0F172A]/35 font-mono">Vibe Report</p>
-              </div>
+      {/* ══════════════════════════════════════════════
+          7. CTA
+      ══════════════════════════════════════════════ */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 pb-28">
+        <AnimateOnScroll>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0A0A0A] via-[#111111] to-[#0A0A0A] px-8 py-20 text-center md:px-16 border border-gray-200 shadow-[0_0_60px_rgba(107,159,212,0.05)]">
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-40 w-40 rounded-full bg-friction-blue/10 blur-[60px]" />
             </div>
-          ))}
-        </div>
+            <div className="relative">
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+                <span className="font-light">Your first Vibe Report.</span>
+                <br />
+                <span className="font-serif italic text-friction-blue">Sixty seconds.</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-md text-base text-gray-500 leading-relaxed">
+                No credit card required. Just search an app and see what your users really think.
+              </p>
+              <Link
+                href={ctaHref}
+                className="shimmer-btn mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-gray-900 hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(107,159,212,0.15)]"
+              >
+                {isLoggedIn ? "Go to Dashboard \u2192" : "Generate Your Vibe Report \u2192"}
+              </Link>
+            </div>
+          </div>
+        </AnimateOnScroll>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="relative z-10 border-t border-[#0F172A]/8 py-8 px-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
-          <span className="font-serif italic text-sm text-[#0F172A]/50">
-            FrictionLens
-          </span>
-          <div className="flex items-center gap-6 text-[12px] text-[#0F172A]/35">
-            <a href="#" className="hover:text-[#0F172A]/70 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-[#0F172A]/70 transition-colors">Terms</a>
-            <a href="#" className="hover:text-[#0F172A]/70 transition-colors">Twitter</a>
-            <a href="#" className="hover:text-[#0F172A]/70 transition-colors">GitHub</a>
+      {/* ══════════════════════════════════════════════
+          8. FOOTER
+      ══════════════════════════════════════════════ */}
+      <footer className="relative z-10 border-t border-gray-200 bg-[#F2F2F7]" role="contentinfo">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
+          <div className="flex items-center gap-3">
+            <svg width="28" height="28" viewBox="-32 -32 64 64" fill="none">
+              <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#4A90D9" strokeWidth="1.2"/>
+              <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#4A90D9"/>
+              <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
+            </svg>
+            <span className="text-sm font-semibold text-gray-900">FrictionLens</span>
           </div>
-          <span className="text-[11px] text-[#0F172A]/30 font-mono">
+          <div className="flex items-center gap-6 text-sm text-gray-500">
+            <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">Terms</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">Twitter</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">GitHub</a>
+          </div>
+          <p className="text-xs text-gray-500 font-mono">
             Built by Chetan Jonnalagadda
-          </span>
+          </p>
         </div>
       </footer>
     </div>
   );
+}
+
+/* ─── SVG helper functions for the radar chart ─── */
+
+function pentagonVertices(
+  cx: number,
+  cy: number,
+  r: number
+): [number, number][] {
+  return Array.from({ length: 5 }, (_, i) => {
+    const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)] as [number, number];
+  });
+}
+
+function pentagonPoints(cx: number, cy: number, r: number): string {
+  return pentagonVertices(cx, cy, r)
+    .map((p) => `${p[0]},${p[1]}`)
+    .join(" ");
+}
+
+function radarVertices(
+  cx: number,
+  cy: number,
+  r: number,
+  values: number[]
+): [number, number][] {
+  return values.map((v, i) => {
+    const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+    return [cx + r * v * Math.cos(angle), cy + r * v * Math.sin(angle)] as [number, number];
+  });
+}
+
+function radarDataPoints(
+  cx: number,
+  cy: number,
+  r: number,
+  values: number[]
+): string {
+  return radarVertices(cx, cy, r, values)
+    .map((p) => `${p[0]},${p[1]}`)
+    .join(" ");
 }
