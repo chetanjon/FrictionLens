@@ -14,9 +14,9 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-3 group">
           <svg width="36" height="36" viewBox="-32 -32 64 64" fill="none">
-            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#1e293b" strokeWidth="1.2"/>
+            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#4A90D9" strokeWidth="1.2"/>
             <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
-            <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
+            <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
           </svg>
           <span className="text-[17px] font-semibold tracking-tight text-gray-900">
             FrictionLens

@@ -573,9 +573,9 @@ export default async function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
           <div className="flex items-center gap-3">
             <svg width="28" height="28" viewBox="-32 -32 64 64" fill="none">
-              <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#1e293b" strokeWidth="1.2"/>
+              <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#4A90D9" strokeWidth="1.2"/>
               <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
-              <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
+              <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
             </svg>
             <span className="text-sm font-semibold text-gray-900">FrictionLens</span>
           </div>

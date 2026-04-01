@@ -39,9 +39,7 @@ export function DashboardHeader({
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 sm:p-8">
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-friction-blue/[0.06] blur-3xl" />
+    <div className="relative overflow-hidden rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200/60 shadow-sm p-6 sm:p-8">
 
       <div className="relative flex items-center justify-between gap-4">
         <div className="min-w-0">

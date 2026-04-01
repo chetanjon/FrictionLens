@@ -21,8 +21,8 @@ export function EmptyStateGuide({
   return (
     <div className="mx-auto max-w-5xl px-6 py-20 sm:px-8">
       <div className="text-center">
-        <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-gray-900">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-friction-blue/10">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4A90D9" strokeWidth="2.5" strokeLinecap="round">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
