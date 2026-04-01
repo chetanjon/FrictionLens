@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { DashboardCommandCenter } from "@/components/dashboard/dashboard-command-center";
 import { EmptyStateGuide } from "@/components/dashboard/empty-state-guide";
 import { NewAnalysisDialog } from "@/components/dashboard/new-analysis-dialog";
@@ -41,6 +42,16 @@ type DashboardPageClientProps = {
 
 export function DashboardPageClient(props: DashboardPageClientProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Auto-open dialog when sidebar "New Analysis" button navigates here with ?new=1
+  useEffect(() => {
+    if (searchParams.get("new") === "1") {
+      setDialogOpen(true);
+      router.replace("/dashboard", { scroll: false });
+    }
+  }, [searchParams, router]);
 
   if (props.analysisCount === 0 && props.recentAnalyses.length === 0) {
     return (

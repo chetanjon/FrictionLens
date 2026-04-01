@@ -95,27 +95,20 @@ export default async function LandingPage() {
           </p>
 
           {/* Search input */}
-          <div className="hero-fade-3 mt-10 flex max-w-lg items-center gap-0 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-[0_0_40px_rgba(107,159,212,0.06)]">
+          <Link href={ctaHref} className="hero-fade-3 mt-10 flex max-w-xl items-center gap-0 rounded-2xl border border-gray-200/80 bg-white p-2 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/40 transition-shadow cursor-pointer">
             <div className="flex items-center flex-1 min-w-0">
-              <svg className="ml-3 mr-2 h-4 w-4 shrink-0 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <svg className="ml-3 mr-2.5 h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <input
-                type="text"
-                readOnly
-                placeholder="Search any app or paste reviews..."
-                aria-label="Search for an app to analyze"
-                className="min-w-0 flex-1 bg-transparent py-3 text-sm text-gray-600 placeholder:text-gray-500 outline-none"
-              />
+              <span className="min-w-0 flex-1 py-3.5 text-base text-gray-400">
+                Search any app or paste reviews...
+              </span>
             </div>
-            <Link
-              href={ctaHref}
-              className="shimmer-btn shrink-0 rounded-xl bg-friction-blue px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-friction-blue/90 transition-colors"
-            >
-              {isLoggedIn ? "Go to Dashboard \u2192" : "Analyze Free \u2192"}
-            </Link>
-          </div>
+            <span className="shrink-0 rounded-xl bg-friction-blue px-6 py-3.5 text-sm font-semibold text-white shadow-sm">
+              {isLoggedIn ? "Dashboard \u2192" : "Analyze Free \u2192"}
+            </span>
+          </Link>
 
           {/* Stats */}
           <div className="hero-fade-4 mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500">

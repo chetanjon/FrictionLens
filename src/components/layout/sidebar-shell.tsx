@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   FileBarChart,
@@ -49,6 +49,7 @@ export function SidebarShell({
   children,
 }: SidebarShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   async function handleSignOut() {
@@ -87,14 +88,18 @@ export function SidebarShell({
       {/* Quick action */}
       <div className="px-3 pt-3">
         <Button
-          size="sm"
-          className="w-full justify-start gap-2 bg-friction-blue text-white hover:bg-friction-blue/90"
+          size="default"
+          className="w-full justify-center gap-2 rounded-xl bg-friction-blue text-white hover:bg-friction-blue/90 shadow-sm"
           onClick={() => {
             setMobileOpen(false);
-            onNewAnalysis?.();
+            if (onNewAnalysis) {
+              onNewAnalysis();
+            } else {
+              router.push("/dashboard?new=1");
+            }
           }}
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-4 w-4" />
           New Analysis
         </Button>
       </div>
@@ -177,7 +182,7 @@ export function SidebarShell({
     <div className="flex min-h-screen bg-[#F2F2F7]">
       {/* Desktop sidebar */}
       <aside
-        className="hidden w-[220px] shrink-0 border-r border-gray-200/80 bg-white/70 backdrop-blur-xl md:block"
+        className="hidden w-[250px] shrink-0 border-r border-gray-200/80 bg-white/70 backdrop-blur-xl md:block"
         role="complementary"
         aria-label="Sidebar navigation"
       >
