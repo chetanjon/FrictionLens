@@ -292,7 +292,7 @@ export default async function LandingPage() {
                   </div>
                   <div className="text-xs text-gray-500 mt-0.5">342 mentions &middot; Critical severity</div>
                 </div>
-                <span className="pulse-glow inline-flex items-center rounded-md bg-friction-red px-2.5 py-1 text-[10px] font-bold text-gray-900 uppercase tracking-wide font-mono">
+                <span className="inline-flex items-center rounded-md bg-friction-red px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wide font-mono">
                   P0
                 </span>
               </div>
@@ -540,17 +540,17 @@ export default async function LandingPage() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-40 w-40 rounded-full bg-friction-blue/10 blur-[60px]" />
             </div>
             <div className="relative">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
-                <span className="font-light">Your first Vibe Report.</span>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                <span className="font-light text-white/70">Your first Vibe Report.</span>
                 <br />
                 <span className="font-serif italic text-friction-blue">Sixty seconds.</span>
               </h2>
-              <p className="mx-auto mt-5 max-w-md text-base text-gray-500 leading-relaxed">
+              <p className="mx-auto mt-5 max-w-md text-base text-white/50 leading-relaxed">
                 No credit card required. Just search an app and see what your users really think.
               </p>
               <Link
                 href={ctaHref}
-                className="shimmer-btn mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-gray-900 hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(107,159,212,0.15)]"
+                className="mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-white hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(107,159,212,0.15)]"
               >
                 {isLoggedIn ? "Go to Dashboard \u2192" : "Generate Your Vibe Report \u2192"}
               </Link>

@@ -48,7 +48,7 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
+              className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
             >
               Dashboard
             </Link>
@@ -62,7 +62,7 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
               </Link>
               <Link
                 href="/signup"
-                className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
+                className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
               >
                 Get Started
               </Link>

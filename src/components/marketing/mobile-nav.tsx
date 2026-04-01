@@ -57,7 +57,7 @@ export function MobileNav({ isLoggedIn = false }: MobileNavProps) {
               <Link
                 href="/dashboard"
                 onClick={() => setOpen(false)}
-                className="inline-flex h-9 items-center justify-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
               >
                 Dashboard
               </Link>
@@ -73,7 +73,7 @@ export function MobileNav({ isLoggedIn = false }: MobileNavProps) {
                 <Link
                   href="/signup"
                   onClick={() => setOpen(false)}
-                  className="inline-flex h-9 items-center justify-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
+                  className="inline-flex h-9 items-center justify-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
                 >
                   Get Started
                 </Link>
