@@ -460,7 +460,7 @@ function PasteInputFallback({
   return (
     <div className="space-y-3">
       <textarea
-        className="min-h-[120px] w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
+        className="min-h-[120px] w-full rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
         placeholder="Paste one review per line..."
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -496,7 +496,7 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
+      <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
         <p className="text-sm font-medium text-gray-600">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>

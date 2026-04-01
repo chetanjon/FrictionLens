@@ -156,7 +156,7 @@ export default async function LandingPage() {
       ══════════════════════════════════════════════ */}
       <section id="demo" className="relative z-10 mx-auto max-w-5xl px-6 pb-28">
         <AnimateOnScroll>
-          <div className="rounded-2xl border border-gray-200 bg-white p-1 shadow-2xl shadow-gray-200/50">
+          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl p-1 shadow-2xl shadow-gray-200/50">
             {/* Browser chrome */}
             <div className="flex items-center gap-3 rounded-t-xl bg-white px-4 py-3 border-b border-gray-200">
               <div className="flex gap-1.5">
@@ -195,7 +195,7 @@ export default async function LandingPage() {
               {/* Charts row */}
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Sentiment Radar */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                <div className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
                   <h4 className="text-[9px] font-semibold text-friction-blue uppercase tracking-[2px] font-mono mb-4">Sentiment Radar</h4>
                   <svg viewBox="0 0 200 200" className="mx-auto w-40 h-40 sm:w-48 sm:h-48">
                     {[1, 0.66, 0.33].map((scale) => (
@@ -254,7 +254,7 @@ export default async function LandingPage() {
                 </div>
 
                 {/* Friction Heatmap */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                <div className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
                   <h4 className="text-[9px] font-semibold text-friction-blue uppercase tracking-[2px] font-mono mb-4">Friction Heatmap</h4>
                   <div className="space-y-3">
                     {[
@@ -430,7 +430,7 @@ export default async function LandingPage() {
           ].map((s, i) => (
             <AnimateOnScroll key={s.step} delay={i * 120}>
               <div className="text-center relative">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-gray-200 bg-white mb-5">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] mb-5">
                   <span className="font-mono text-xl font-bold text-friction-blue">
                     {s.step}
                   </span>

@@ -350,7 +350,7 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
+      <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
         <p className="text-sm font-medium text-gray-600">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>

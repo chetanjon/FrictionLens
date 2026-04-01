@@ -79,7 +79,7 @@ export function ShareDialog({
 
         <div className="space-y-4 pt-2">
           {/* Toggle */}
-          <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4">
+          <div className="flex items-center justify-between rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
             <div className="flex items-center gap-3">
               {isPublic ? (
                 <Globe className="h-5 w-5 text-friction-blue" />
@@ -122,7 +122,7 @@ export function ShareDialog({
                 Public URL
               </label>
               <div className="flex items-center gap-2">
-                <div className="flex-1 truncate rounded-lg border border-gray-200 bg-white px-3 py-2 font-mono text-xs text-gray-600">
+                <div className="flex-1 truncate rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2 font-mono text-xs text-gray-600">
                   {publicUrl}
                 </div>
                 <Button

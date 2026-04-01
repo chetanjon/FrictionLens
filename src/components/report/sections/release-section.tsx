@@ -67,7 +67,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
 
         {/* 3 stat cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
+          <div className="rounded-[14px] border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-[18px] text-center">
             <div
               className="font-mono text-[26px] font-extrabold"
               style={{ color: sentimentColor }}
@@ -79,7 +79,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
               Sentiment Change
             </div>
           </div>
-          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
+          <div className="rounded-[14px] border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-[18px] text-center">
             <div className="font-mono text-[26px] font-extrabold text-[#C9B06A]">
               {releaseImpact.new_themes.length}
             </div>
@@ -87,7 +87,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
               New Themes
             </div>
           </div>
-          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
+          <div className="rounded-[14px] border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-[18px] text-center">
             <div className="font-mono text-[26px] font-extrabold text-[#6B9FD4]">
               {releaseImpact.review_velocity}
             </div>

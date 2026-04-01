@@ -46,7 +46,7 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
               </div>
 
               <div className="flex flex-shrink-0 gap-1.5">
-                <div className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-center">
+                <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl px-2.5 py-1.5 text-center">
                   <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-gray-500">
                     Impact
                   </div>
@@ -57,7 +57,7 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
                     {action.impact}
                   </div>
                 </div>
-                <div className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-center">
+                <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl px-2.5 py-1.5 text-center">
                   <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-gray-500">
                     Effort
                   </div>

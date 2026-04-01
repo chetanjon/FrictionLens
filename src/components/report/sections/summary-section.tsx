@@ -91,7 +91,7 @@ export function SummarySection({
       {/* Stat cards row — matches reference design */}
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Churn Risk */}
-        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
           <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Churn Risk
           </div>
@@ -104,7 +104,7 @@ export function SummarySection({
         </div>
 
         {/* Top Friction */}
-        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
           <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Top Friction
           </div>
@@ -117,7 +117,7 @@ export function SummarySection({
         </div>
 
         {/* Release Grade */}
-        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
           <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Release Grade
           </div>
@@ -133,7 +133,7 @@ export function SummarySection({
         </div>
 
         {/* Momentum */}
-        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
           <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Momentum
           </div>
@@ -155,7 +155,7 @@ export function SummarySection({
       {dimensionScores && (
         <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
           {/* Sentiment Radar Card */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
             <h3 className="mb-3 text-base font-bold text-gray-900">
               Sentiment Radar
             </h3>
@@ -163,7 +163,7 @@ export function SummarySection({
           </div>
 
           {/* Friction Heatmap Card */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
             <h3 className="mb-3 text-base font-bold text-gray-900">
               Friction Heatmap
             </h3>

@@ -169,7 +169,7 @@ export function AppStoreSearch({ onReviewsPulled, disabled }: AppStoreSearchProp
               return (
                 <div
                   key={pullId}
-                  className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2.5 transition-colors hover:bg-gray-50"
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2.5 transition-colors hover:bg-white/80"
                 >
                   {/* App icon */}
                   <Image

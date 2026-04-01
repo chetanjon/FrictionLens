@@ -52,7 +52,7 @@ function CustomTooltip(props: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white border border-gray-200 shadow-lg px-4 py-3 shadow-xl shadow-black/40">
+    <div className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-lg px-4 py-3">
       <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-gray-500">
         {label}
       </p>

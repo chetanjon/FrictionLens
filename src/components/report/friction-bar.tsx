@@ -21,7 +21,7 @@ export function FrictionBar({
   return (
     <div
       className={cn(
-        "grid items-center gap-3.5 rounded-2xl border border-gray-200 bg-white px-[18px] py-[13px]",
+        "grid items-center gap-3.5 rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-[18px] py-[13px]",
         "grid-cols-[160px_1fr_60px_50px_56px]"
       )}
     >

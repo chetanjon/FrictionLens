@@ -169,7 +169,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
             {results.slice(0, 10).map((post) => (
               <div
                 key={post.postId}
-                className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 transition-colors hover:bg-gray-50"
+                className="rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2.5 transition-colors hover:bg-white/80"
               >
                 <div className="flex items-start gap-3">
                   <div className="min-w-0 flex-1">
@@ -228,7 +228,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
 
       {/* Pulled state */}
       {pulled && (
-        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-3 py-2.5">
+        <div className="flex items-center justify-between rounded-xl border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2.5">
           <div className="flex items-center gap-2 text-sm text-green-600">
             <CheckCircle2 className="h-3.5 w-3.5" />
             {pullProgress}
