@@ -22,12 +22,10 @@ export function GlassCard({
     <div
       className={cn(
         "rounded-2xl",
-        variant === "light" &&
-          "bg-white border border-gray-200",
-        variant === "dark" &&
-          "bg-white border border-gray-200 text-gray-900",
+        "bg-white/65 backdrop-blur-xl border border-slate-200/60 shadow-[0_4px_24px_rgba(0,0,0,0.04)]",
+        variant === "dark" && "text-gray-900",
         hover &&
-          "transition-all duration-300 hover:bg-white hover:border-gray-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.2)]",
+          "transition-all duration-300 hover:bg-white/80 hover:border-slate-300/60 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)]",
         className
       )}
       style={style}
