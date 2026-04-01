@@ -1,17 +1,8 @@
 "use client";
 
 import { Star, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { ParsedReview } from "@/lib/types/review";
 
 function StarRating({ rating }: { rating: number }) {
@@ -24,28 +15,28 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: fullStars }, (_, i) => (
         <Star
           key={`full-${i}`}
-          className="size-3.5 fill-[#D4A843] text-[#D4A843]"
+          className="size-3.5 fill-[#C9B06A] text-[#C9B06A]"
         />
       ))}
       {hasHalf && (
         <span className="relative inline-block size-3.5">
-          <Star className="absolute inset-0 size-3.5 text-slate-300" />
+          <Star className="absolute inset-0 size-3.5 text-slate-600" />
           <span className="absolute inset-0 overflow-hidden" style={{ width: "50%" }}>
-            <Star className="size-3.5 fill-[#D4A843] text-[#D4A843]" />
+            <Star className="size-3.5 fill-[#C9B06A] text-[#C9B06A]" />
           </span>
         </span>
       )}
       {Array.from({ length: emptyStars }, (_, i) => (
-        <Star key={`empty-${i}`} className="size-3.5 text-slate-300" />
+        <Star key={`empty-${i}`} className="size-3.5 text-slate-600" />
       ))}
-      <span className="ml-1 text-xs text-muted-foreground">{rating}</span>
+      <span className="ml-1 text-xs text-slate-400">{rating}</span>
     </span>
   );
 }
 
 type ReviewPreviewProps = {
   reviews: ParsedReview[];
-  onClear: () => void;
+  onClear?: () => void;
 };
 
 export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
@@ -54,71 +45,73 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
   const hasDates = reviews.some((r) => r.date !== undefined);
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Parsed Reviews</CardTitle>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">
-              {reviews.length} total
-            </Badge>
-            <Button variant="ghost" size="sm" onClick={onClear}>
-              <X className="size-3" />
+    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
+        <h3 className="text-sm font-semibold text-white">Parsed Reviews</h3>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="bg-white/[0.06] text-slate-300 border-white/[0.08] text-xs">
+            {reviews.length} total
+          </Badge>
+          {onClear && (
+            <Button variant="ghost" size="sm" onClick={onClear} className="text-slate-400 hover:text-slate-300 h-7 px-2">
+              <X className="size-3 mr-1" />
               Clear
             </Button>
-          </div>
+          )}
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-10">#</TableHead>
-                <TableHead>Content</TableHead>
-                {hasRatings && <TableHead className="w-28">Rating</TableHead>}
-                {hasDates && <TableHead className="w-28">Date</TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {previewRows.map((review, i) => (
-                <TableRow key={i}>
-                  <TableCell className="text-muted-foreground">
-                    {i + 1}
-                  </TableCell>
-                  <TableCell className="max-w-md">
-                    <span className="line-clamp-2 text-sm">
-                      {review.content.length > 80
-                        ? `${review.content.slice(0, 80)}...`
-                        : review.content}
-                    </span>
-                  </TableCell>
-                  {hasRatings && (
-                    <TableCell>
-                      {review.rating !== undefined ? (
-                        <StarRating rating={review.rating} />
-                      ) : (
-                        <span className="text-sm text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                  )}
-                  {hasDates && (
-                    <TableCell className="text-sm text-muted-foreground">
-                      {review.date ?? "-"}
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+      </div>
 
-        {reviews.length > 10 && (
-          <p className="mt-3 text-center text-sm text-muted-foreground">
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              <th className="w-10 px-4 py-2.5 text-left text-xs font-medium text-slate-500">#</th>
+              <th className="px-4 py-2.5 text-left text-xs font-medium text-slate-500">Content</th>
+              {hasRatings && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-slate-500">Rating</th>}
+              {hasDates && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-slate-500">Date</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {previewRows.map((review, i) => (
+              <tr key={i} className="border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors">
+                <td className="px-4 py-2.5 text-slate-500">{i + 1}</td>
+                <td className="px-4 py-2.5 max-w-md">
+                  <span className="line-clamp-2 text-sm text-slate-300">
+                    {review.content.length > 80
+                      ? `${review.content.slice(0, 80)}...`
+                      : review.content}
+                  </span>
+                </td>
+                {hasRatings && (
+                  <td className="px-4 py-2.5">
+                    {review.rating !== undefined ? (
+                      <StarRating rating={review.rating} />
+                    ) : (
+                      <span className="text-sm text-slate-500">-</span>
+                    )}
+                  </td>
+                )}
+                {hasDates && (
+                  <td className="px-4 py-2.5 text-sm text-slate-500">
+                    {review.date ? review.date.slice(0, 10) : "-"}
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Footer */}
+      {reviews.length > 10 && (
+        <div className="px-5 py-3 border-t border-white/[0.06]">
+          <p className="text-center text-xs text-slate-500">
             Showing 10 of {reviews.length} reviews
           </p>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </div>
   );
 }

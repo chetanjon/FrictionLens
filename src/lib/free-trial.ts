@@ -88,24 +88,40 @@ export async function consumeFreeTrial(
     };
   }
 
-  // Increment usage — upsert handles users who don't have a settings row yet
-  const { error: upsertError } = await supabase
-    .from("user_settings")
-    .upsert(
-      {
-        user_id: userId,
+  // Increment usage — try update first, then insert if no row exists
+  if (settings) {
+    const { error: updateError } = await supabase
+      .from("user_settings")
+      .update({
         free_analyses_used: used + 1,
         updated_at: new Date().toISOString(),
-      },
-      { onConflict: "user_id", ignoreDuplicates: false }
-    );
+      })
+      .eq("user_id", userId);
 
-  if (upsertError) {
-    console.error("Failed to increment free trial usage:", upsertError);
-    return {
-      allowed: false,
-      reason: "Failed to verify trial status. Please try again.",
-    };
+    if (updateError) {
+      console.error("Failed to update free trial usage:", updateError);
+      return {
+        allowed: false,
+        reason: "Failed to verify trial status. Please try again.",
+      };
+    }
+  } else {
+    // New user with no settings row — create one
+    const { error: insertError } = await supabase
+      .from("user_settings")
+      .insert({
+        user_id: userId,
+        free_analyses_used: 1,
+        updated_at: new Date().toISOString(),
+      });
+
+    if (insertError) {
+      console.error("Failed to create trial record:", insertError);
+      return {
+        allowed: false,
+        reason: "Failed to verify trial status. Please try again.",
+      };
+    }
   }
 
   return { allowed: true };
