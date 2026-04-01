@@ -90,7 +90,7 @@ export default async function LandingPage() {
           {/* Subtitle */}
           <p className="hero-fade-2 mt-6 max-w-xl text-lg leading-relaxed text-gray-500">
             FrictionLens synthesizes hundreds of app store reviews into one
-            shareable <span className="font-medium text-gray-900">Vibe Report</span> &mdash;
+            shareable <span className="font-medium text-gray-900">Vibe Report</span> with
             sentiment scores, churn signals, and the action items your roadmap is missing.
           </p>
 
