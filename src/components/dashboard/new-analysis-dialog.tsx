@@ -138,12 +138,12 @@ export function NewAnalysisDialog({
 
   return (
     <Dialog open={open} onOpenChange={isAnalyzing ? undefined : onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl bg-[#0c0c0c] border border-white/[0.08] rounded-2xl p-6">
         <DialogHeader>
-          <DialogTitle>New Analysis</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-white">New Analysis</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 pt-2">
+        <div className="space-y-6 pt-3">
           {/* App name */}
           <div>
             <Label htmlFor="dialog-app-name" className="text-sm font-medium text-slate-300">
@@ -225,7 +225,7 @@ export function NewAnalysisDialog({
 
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-2 rounded-lg border border-red-200/60 bg-red-50/50 px-4 py-3 text-sm text-red-700">
+            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
               {error}
             </div>
@@ -244,7 +244,7 @@ export function NewAnalysisDialog({
 
           {/* Free trial notice */}
           {!hasApiKey && freeTrialRemaining > 0 && !isAnalyzing && (
-            <div className="flex items-center gap-2 rounded-lg border border-friction-blue/20 bg-friction-blue/5 px-4 py-3 text-sm text-friction-blue">
+            <div className="flex items-center gap-2 rounded-xl border border-friction-blue/20 bg-friction-blue/10 px-4 py-3 text-sm text-[#6B9FD4]">
               <Sparkles className="h-4 w-4 shrink-0" />
               <span>
                 <strong>{freeTrialRemaining}</strong> free {freeTrialRemaining === 1 ? "analysis" : "analyses"} remaining.{" "}
