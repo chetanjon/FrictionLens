@@ -21,16 +21,16 @@ export function EmptyStateGuide({
   return (
     <div className="mx-auto max-w-5xl px-6 py-20 sm:px-8">
       <div className="text-center">
-        <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-white">
+        <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-gray-900">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight text-white">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900">
           Welcome to FrictionLens
         </h1>
-        <p className="mx-auto mt-4 max-w-lg text-base text-slate-400">
+        <p className="mx-auto mt-4 max-w-lg text-base text-gray-500">
           Your AI-powered review intelligence platform.
           {hasFreeTrials
             ? ` You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"} — no API key needed.`
@@ -42,17 +42,17 @@ export function EmptyStateGuide({
       {hasFreeTrials ? (
         <>
           <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:max-w-3xl sm:mx-auto">
-            <div className="relative rounded-2xl border border-friction-blue/30 bg-white/[0.03] backdrop-blur-md p-8 shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10">
+            <div className="relative rounded-2xl border border-friction-blue/30 bg-white p-8 shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10">
               <div className="mb-5 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-friction-blue/10">
                   <FileUp className="h-5 w-5 text-friction-blue" />
                 </div>
-                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gray-500">
                   Step 1
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-white">Import Reviews</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">
+              <h3 className="text-lg font-semibold text-gray-900">Import Reviews</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-500">
                 Search the App Store, Reddit, upload a CSV, or paste reviews directly.
               </p>
               <Button
@@ -65,24 +65,24 @@ export function EmptyStateGuide({
               </Button>
             </div>
 
-            <div className="relative rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-8">
+            <div className="relative rounded-2xl border border-gray-200/60 bg-white p-8">
               <div className="mb-5 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
                   <BarChart3 className="h-5 w-5 text-green-600" />
                 </div>
-                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gray-500">
                   Step 2
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-white">Get Your Report</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">
+              <h3 className="text-lg font-semibold text-gray-900">Get Your Report</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-500">
                 AI analyzes sentiment across 5 dimensions and surfaces friction & churn signals.
               </p>
             </div>
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-gray-500">
               Want unlimited analyses?{" "}
               <Link href="/dashboard/settings" className="text-friction-blue hover:underline">
                 Add your Gemini API key
@@ -146,10 +146,10 @@ export function EmptyStateGuide({
                 className={cn(
                   "relative rounded-2xl border p-8 transition-all",
                   step.isActive
-                    ? "border-friction-blue/30 bg-white/[0.03] backdrop-blur-md shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
+                    ? "border-friction-blue/30 bg-white shadow-lg shadow-friction-blue/8 ring-1 ring-friction-blue/10"
                     : isCompleted
                       ? "border-emerald-500/20 bg-emerald-500/5"
-                      : "border-white/[0.07] bg-white/[0.03] backdrop-blur-md"
+                      : "border-gray-200/60 bg-white"
                 )}
               >
                 <div className="mb-5 flex items-center gap-3">
@@ -167,13 +167,13 @@ export function EmptyStateGuide({
                       <StepIcon className={cn("h-5 w-5", step.color)} />
                     )}
                   </div>
-                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-slate-400">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gray-500">
                     Step {i + 1}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-white">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-500">
                   {step.description}
                 </p>
 
@@ -184,7 +184,7 @@ export function EmptyStateGuide({
         </div>
       )}
 
-      <div className="mt-12 flex items-center justify-center gap-6 text-sm text-slate-400">
+      <div className="mt-12 flex items-center justify-center gap-6 text-sm text-gray-500">
         <span className="flex items-center gap-2">
           <span className="inline-block h-2 w-2 rounded-full bg-friction-blue/40" />
           App Store search

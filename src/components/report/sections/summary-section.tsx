@@ -65,20 +65,20 @@ export function SummarySection({
                 boxShadow: "0 6px 20px rgba(107,159,212,0.15)",
               }}
             >
-              <span className="leading-none text-white">{initial}</span>
+              <span className="leading-none text-gray-900">{initial}</span>
             </div>
             <div>
-              <h1 className="m-0 text-[28px] font-extrabold tracking-[-1px] text-white">
+              <h1 className="m-0 text-[28px] font-extrabold tracking-[-1px] text-gray-900">
                 {appName}
               </h1>
-              <div className="mt-0.5 font-mono text-xs text-slate-400">
+              <div className="mt-0.5 font-mono text-xs text-gray-500">
                 Vibe Report · {reviewCount.toLocaleString()} reviews
                 {platform ? ` · ${platform}` : ""}
               </div>
             </div>
           </div>
 
-          <p className="mb-5 max-w-[480px] text-[15.5px] leading-7 text-slate-300">
+          <p className="mb-5 max-w-[480px] text-[15.5px] leading-7 text-gray-600">
             {summary}
           </p>
         </div>
@@ -91,8 +91,8 @@ export function SummarySection({
       {/* Stat cards row — matches reference design */}
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Churn Risk */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-[18px] backdrop-blur-md">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-400">
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Churn Risk
           </div>
           <div
@@ -104,21 +104,21 @@ export function SummarySection({
         </div>
 
         {/* Top Friction */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-[18px] backdrop-blur-md">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-400">
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Top Friction
           </div>
           <div className="mt-1 font-mono text-2xl font-extrabold tracking-tight text-[#C47070]">
             {topFrictionScore != null ? topFrictionScore.toFixed(1) : "N/A"}
           </div>
           {topFriction && (
-            <div className="mt-0.5 text-[11px] text-slate-400">{topFriction}</div>
+            <div className="mt-0.5 text-[11px] text-gray-500">{topFriction}</div>
           )}
         </div>
 
         {/* Release Grade */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-[18px] backdrop-blur-md">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-400">
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Release Grade
           </div>
           <div
@@ -128,13 +128,13 @@ export function SummarySection({
             {releaseGrade ?? "—"}
           </div>
           {releaseVersion && (
-            <div className="mt-0.5 text-[11px] text-slate-400">{releaseVersion}</div>
+            <div className="mt-0.5 text-[11px] text-gray-500">{releaseVersion}</div>
           )}
         </div>
 
         {/* Momentum */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-[18px] backdrop-blur-md">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-400">
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 py-[18px]">
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
             Momentum
           </div>
           <div
@@ -144,7 +144,7 @@ export function SummarySection({
             {momentum != null ? momentum.toFixed(1) : "N/A"}
           </div>
           {momentum != null && (
-            <div className="mt-0.5 text-[11px] text-slate-400">
+            <div className="mt-0.5 text-[11px] text-gray-500">
               {momentumLabel(momentum)}
             </div>
           )}
@@ -155,22 +155,22 @@ export function SummarySection({
       {dimensionScores && (
         <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
           {/* Sentiment Radar Card */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5 backdrop-blur-md">
-            <h3 className="mb-3 text-base font-bold text-white">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <h3 className="mb-3 text-base font-bold text-gray-900">
               Sentiment Radar
             </h3>
             <RadarMini dims={dimensionScores} />
           </div>
 
           {/* Friction Heatmap Card */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5 backdrop-blur-md">
-            <h3 className="mb-3 text-base font-bold text-white">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <h3 className="mb-3 text-base font-bold text-gray-900">
               Friction Heatmap
             </h3>
             {frictionScores && frictionScores.length > 0 ? (
               <FrictionMiniChart items={frictionScores} />
             ) : (
-              <p className="py-8 text-center text-sm text-slate-400">
+              <p className="py-8 text-center text-sm text-gray-500">
                 No friction data yet
               </p>
             )}
@@ -180,7 +180,7 @@ export function SummarySection({
 
       {/* Top Churn Driver Banner */}
       {churnRiskPercent != null && churnRiskPercent > 0 && topFriction && (
-        <div className="mt-4 flex items-center gap-4 rounded-2xl border border-[#C47070]/20 bg-[#C47070]/[0.06] px-5 py-4 backdrop-blur-md">
+        <div className="mt-4 flex items-center gap-4 rounded-2xl border border-[#C47070]/20 bg-[#C47070]/[0.06] px-5 py-4">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#C47070]/10">
             <svg className="h-5 w-5 text-[#C47070]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.072 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -190,11 +190,11 @@ export function SummarySection({
             <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-[#C47070]">
               Top Churn Driver
             </div>
-            <div className="mt-0.5 text-[13px] font-semibold text-white">
+            <div className="mt-0.5 text-[13px] font-semibold text-gray-900">
               {topFriction} — highest friction point driving user churn
             </div>
           </div>
-          <span className="shrink-0 rounded-full bg-[#C47070] px-3 py-1 font-mono text-xs font-bold text-white">
+          <span className="shrink-0 rounded-full bg-[#C47070] px-3 py-1 font-mono text-xs font-bold text-gray-900">
             P0
           </span>
         </div>
@@ -264,10 +264,10 @@ function FrictionMiniChart({ items }: { items: Array<{ name: string; score: numb
     <div className="space-y-2.5 py-1">
       {items.map((item) => (
         <div key={item.name} className="flex items-center gap-3">
-          <span className="w-[120px] shrink-0 truncate text-[13px] font-medium text-slate-300">
+          <span className="w-[120px] shrink-0 truncate text-[13px] font-medium text-gray-600">
             {item.name}
           </span>
-          <div className="h-[10px] flex-1 rounded bg-white/[0.06]">
+          <div className="h-[10px] flex-1 rounded bg-gray-100">
             <div
               className="h-full rounded transition-[width] duration-500 ease-out"
               style={{

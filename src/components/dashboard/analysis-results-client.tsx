@@ -125,7 +125,7 @@ export function AnalysisResultsClient({
       {/* Back link */}
       <Link
         href="/"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 transition-colors hover:text-gray-600"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to Dashboard
@@ -134,10 +134,10 @@ export function AnalysisResultsClient({
       {/* Header */}
       <header className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
             {analysis.appName}
           </h1>
-          <div className="mt-1.5 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+          <div className="mt-1.5 flex flex-wrap items-center gap-3 text-sm text-gray-500">
             {analysis.platform && analysis.platform !== "unknown" && (
               <span className="capitalize">{analysis.platform}</span>
             )}
@@ -161,15 +161,15 @@ export function AnalysisResultsClient({
               boxShadow: `0 8px 30px ${analysis.vibeHex}33`,
             }}
           >
-            <span className="font-mono text-2xl font-bold text-white">
+            <span className="font-mono text-2xl font-bold text-gray-900">
               {Math.round(analysis.vibeScore)}
             </span>
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
               Vibe Score
             </p>
-            <p className="text-sm text-slate-400">out of 100</p>
+            <p className="text-sm text-gray-500">out of 100</p>
           </div>
         </div>
       </header>
@@ -206,10 +206,10 @@ export function AnalysisResultsClient({
       {/* Sentiment Dimensions */}
       {dimensions && (
         <section className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold text-white">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">
             Sentiment Dimensions
           </h2>
-          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
+          <div className="rounded-2xl border border-gray-200/60 bg-white p-5">
             <div className="space-y-4">
               {DIMENSION_CONFIG.map((dim) => {
                 const score = dimensions[dim.key];
@@ -220,7 +220,7 @@ export function AnalysisResultsClient({
                         className="h-4 w-4 shrink-0"
                         style={{ color: dim.color }}
                       />
-                      <span className="text-sm font-medium text-slate-300">
+                      <span className="text-sm font-medium text-gray-600">
                         {dim.label}
                       </span>
                     </div>
@@ -245,10 +245,10 @@ export function AnalysisResultsClient({
                 );
               })}
             </div>
-            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-white/[0.06] pt-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-gray-200 pt-4 sm:grid-cols-2 lg:grid-cols-3">
               {DIMENSION_CONFIG.map((dim) => (
-                <p key={dim.key} className="text-xs text-slate-400">
-                  <span className="font-medium text-slate-500">
+                <p key={dim.key} className="text-xs text-gray-500">
+                  <span className="font-medium text-gray-500">
                     {dim.label}:
                   </span>{" "}
                   {dim.description}
@@ -262,7 +262,7 @@ export function AnalysisResultsClient({
       {/* Reviews Table */}
       <section>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-lg font-semibold text-white">Reviews</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Reviews</h2>
           <Tabs
             value={starFilter}
             onValueChange={setStarFilter}
@@ -278,16 +278,16 @@ export function AnalysisResultsClient({
           </Tabs>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md">
+        <div className="overflow-hidden rounded-2xl border border-gray-200/60 bg-white">
           {filteredReviews.length === 0 ? (
-            <div className="px-6 py-12 text-center text-sm text-slate-400">
+            <div className="px-6 py-12 text-center text-sm text-gray-500">
               No reviews match this filter.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/[0.06]">
+                  <TableRow className="border-gray-200">
                     <TableHead className="w-20 text-xs">Rating</TableHead>
                     <TableHead className="text-xs">Content</TableHead>
                     <TableHead className="w-16 text-center text-xs">
@@ -303,12 +303,12 @@ export function AnalysisResultsClient({
                 </TableHeader>
                 <TableBody>
                   {filteredReviews.map((review) => (
-                    <TableRow key={review.id} className="border-white/[0.04]">
+                    <TableRow key={review.id} className="border-gray-100">
                       <TableCell className="align-top">
                         <RatingStars rating={review.rating} />
                       </TableCell>
                       <TableCell className="max-w-xs align-top">
-                        <p className="line-clamp-3 text-sm text-slate-300">
+                        <p className="line-clamp-3 text-sm text-gray-600">
                           {review.content}
                         </p>
                       </TableCell>
@@ -350,7 +350,7 @@ export function AnalysisResultsClient({
         </div>
 
         {filteredReviews.length > 0 && (
-          <p className="mt-3 text-center text-xs text-slate-400">
+          <p className="mt-3 text-center text-xs text-gray-500">
             Showing {filteredReviews.length} of {reviews.length} reviews
           </p>
         )}
@@ -371,8 +371,8 @@ function StatCard({
   color?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-4">
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+    <div className="rounded-2xl border border-gray-200/60 bg-white p-4">
+      <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
         {label}
       </p>
       <p
@@ -381,14 +381,14 @@ function StatCard({
       >
         {value}
       </p>
-      <p className="mt-0.5 text-xs text-slate-400">{sublabel}</p>
+      <p className="mt-0.5 text-xs text-gray-500">{sublabel}</p>
     </div>
   );
 }
 
 function RatingStars({ rating }: { rating: number | null }) {
   if (rating == null) {
-    return <span className="text-xs text-slate-300">N/A</span>;
+    return <span className="text-xs text-gray-600">N/A</span>;
   }
 
   return (
@@ -409,7 +409,7 @@ function RatingStars({ rating }: { rating: number | null }) {
 }
 
 function ChurnBadge({ risk }: { risk: string | null }) {
-  if (!risk) return <span className="text-xs text-slate-300">-</span>;
+  if (!risk) return <span className="text-xs text-gray-600">-</span>;
 
   const colorHex = severityColor(risk);
 

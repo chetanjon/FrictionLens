@@ -124,10 +124,10 @@ export function DimensionsSection({ dimensionScores }: DimensionsSectionProps) {
             return (
               <div
                 key={d.key}
-                className="mb-[18px] border-b border-white/[0.06] pb-[18px] last:mb-0 last:border-b-0 last:pb-0"
+                className="mb-[18px] border-b border-gray-200 pb-[18px] last:mb-0 last:border-b-0 last:pb-0"
               >
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-white">
+                  <span className="text-sm font-semibold text-gray-900">
                     {d.label}
                   </span>
                   <span
@@ -137,7 +137,7 @@ export function DimensionsSection({ dimensionScores }: DimensionsSectionProps) {
                     {d.value.toFixed(1)}
                   </span>
                 </div>
-                <div className="mb-2 h-[3px] rounded-sm bg-white/[0.06]">
+                <div className="mb-2 h-[3px] rounded-sm bg-gray-100">
                   <div
                     className="h-full rounded-sm transition-[width] duration-600 ease-out"
                     style={{
@@ -146,7 +146,7 @@ export function DimensionsSection({ dimensionScores }: DimensionsSectionProps) {
                     }}
                   />
                 </div>
-                <p className="m-0 text-[12.5px] leading-normal text-slate-400">
+                <p className="m-0 text-[12.5px] leading-normal text-gray-500">
                   {d.description}
                 </p>
               </div>

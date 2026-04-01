@@ -8,7 +8,7 @@ type LandingNavProps = {
 export function LandingNav({ isLoggedIn }: LandingNavProps) {
   return (
     <nav
-      className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-black/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 w-full border-b border-gray-200 bg-black/80"
       aria-label="Main navigation"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -18,7 +18,7 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
             <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
           </svg>
-          <span className="text-[17px] font-semibold tracking-tight text-white">
+          <span className="text-[17px] font-semibold tracking-tight text-gray-900">
             FrictionLens
           </span>
         </Link>
@@ -26,19 +26,19 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
         <div className="hidden md:flex items-center gap-8">
           <a
             href="#features"
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
           >
             Features
           </a>
           <a
             href="#demo"
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
           >
             Demo
           </a>
           <a
             href="#pricing"
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
           >
             Pricing
           </a>
@@ -48,7 +48,7 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
+              className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
             >
               Dashboard
             </Link>
@@ -56,13 +56,13 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
             <>
               <Link
                 href="/login"
-                className="hidden md:inline text-sm text-slate-500 hover:text-slate-900 transition-colors"
+                className="hidden md:inline text-sm text-gray-500 hover:text-slate-900 transition-colors"
               >
                 Log in
               </Link>
               <Link
                 href="/signup"
-                className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
+                className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-gray-900 hover:bg-friction-blue/90 transition-colors"
               >
                 Get Started
               </Link>

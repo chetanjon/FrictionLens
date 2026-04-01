@@ -58,7 +58,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
       {/* Filters */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <Input
             placeholder="Search by app name..."
             value={search}
@@ -74,7 +74,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                 statusFilter === status
                   ? "bg-friction-blue/10 text-friction-blue"
-                  : "text-slate-500 hover:bg-white/[0.06]"
+                  : "text-gray-500 hover:bg-gray-100"
               }`}
             >
               {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -85,7 +85,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md">
+      <div className="rounded-2xl border border-gray-200/60 bg-white">
         <Table>
           <TableHeader>
             <TableRow>
@@ -100,7 +100,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center text-sm text-slate-400">
+                <TableCell colSpan={6} className="py-12 text-center text-sm text-gray-500">
                   {search.trim() ? "No analyses match your search." : "No analyses yet."}
                 </TableCell>
               </TableRow>
@@ -110,13 +110,13 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
                   <TableCell>
                     <Link
                       href={`/dashboard/analysis/${a.id}`}
-                      className="font-medium text-white hover:text-friction-blue"
+                      className="font-medium text-gray-900 hover:text-friction-blue"
                     >
                       {a.app_name}
                     </Link>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-gray-500">
                       {a.platform ?? "—"}
                     </span>
                   </TableCell>
@@ -129,11 +129,11 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
                         {Math.round(a.vibe_score)}
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-400">—</span>
+                      <span className="text-xs text-gray-500">—</span>
                     )}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <span className="text-sm text-slate-400">
+                    <span className="text-sm text-gray-500">
                       {a.review_count.toLocaleString()}
                     </span>
                   </TableCell>
@@ -141,7 +141,7 @@ export function AnalysesTable({ analyses }: AnalysesTableProps) {
                     <StatusBadge status={a.status} />
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-gray-500">
                       {new Date(a.created_at).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",

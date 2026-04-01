@@ -79,18 +79,18 @@ export function ShareDialog({
 
         <div className="space-y-4 pt-2">
           {/* Toggle */}
-          <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.04] p-4">
+          <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4">
             <div className="flex items-center gap-3">
               {isPublic ? (
                 <Globe className="h-5 w-5 text-friction-blue" />
               ) : (
-                <Lock className="h-5 w-5 text-slate-400" />
+                <Lock className="h-5 w-5 text-gray-500" />
               )}
               <div>
-                <p className="text-sm font-medium text-white">
+                <p className="text-sm font-medium text-gray-900">
                   {isPublic ? "Public" : "Private"}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-gray-500">
                   {isPublic
                     ? "Anyone with the link can view"
                     : "Only you can access this report"}
@@ -118,11 +118,11 @@ export function ShareDialog({
           {/* Public URL */}
           {isPublic && publicUrl && (
             <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-500">
+              <label className="text-xs font-medium text-gray-500">
                 Public URL
               </label>
               <div className="flex items-center gap-2">
-                <div className="flex-1 truncate rounded-lg border border-white/[0.06] bg-white/[0.04] px-3 py-2 font-mono text-xs text-slate-300">
+                <div className="flex-1 truncate rounded-lg border border-gray-200 bg-white px-3 py-2 font-mono text-xs text-gray-600">
                   {publicUrl}
                 </div>
                 <Button

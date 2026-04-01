@@ -29,7 +29,7 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: emptyStars }, (_, i) => (
         <Star key={`empty-${i}`} className="size-3.5 text-slate-600" />
       ))}
-      <span className="ml-1 text-xs text-slate-400">{rating}</span>
+      <span className="ml-1 text-xs text-gray-500">{rating}</span>
     </span>
   );
 }
@@ -45,16 +45,16 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
   const hasDates = reviews.some((r) => r.date !== undefined);
 
   return (
-    <div className="rounded-2xl border border-white/[0.10] bg-[#141414] overflow-hidden">
+    <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
-        <h3 className="text-sm font-semibold text-white">Parsed Reviews</h3>
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-200">
+        <h3 className="text-sm font-semibold text-gray-900">Parsed Reviews</h3>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="bg-white/[0.06] text-slate-300 border-white/[0.08] text-xs">
+          <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs">
             {reviews.length} total
           </Badge>
           {onClear && (
-            <Button variant="ghost" size="sm" onClick={onClear} className="text-slate-400 hover:text-slate-300 h-7 px-2">
+            <Button variant="ghost" size="sm" onClick={onClear} className="text-gray-500 hover:text-gray-600 h-7 px-2">
               <X className="size-3 mr-1" />
               Clear
             </Button>
@@ -66,19 +66,19 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/[0.06]">
-              <th className="w-10 px-4 py-2.5 text-left text-xs font-medium text-slate-500">#</th>
-              <th className="px-4 py-2.5 text-left text-xs font-medium text-slate-500">Content</th>
-              {hasRatings && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-slate-500">Rating</th>}
-              {hasDates && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-slate-500">Date</th>}
+            <tr className="border-b border-gray-200">
+              <th className="w-10 px-4 py-2.5 text-left text-xs font-medium text-gray-500">#</th>
+              <th className="px-4 py-2.5 text-left text-xs font-medium text-gray-500">Content</th>
+              {hasRatings && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-gray-500">Rating</th>}
+              {hasDates && <th className="w-28 px-4 py-2.5 text-left text-xs font-medium text-gray-500">Date</th>}
             </tr>
           </thead>
           <tbody>
             {previewRows.map((review, i) => (
-              <tr key={i} className="border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors">
-                <td className="px-4 py-2.5 text-slate-500">{i + 1}</td>
+              <tr key={i} className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
+                <td className="px-4 py-2.5 text-gray-500">{i + 1}</td>
                 <td className="px-4 py-2.5 max-w-md">
-                  <span className="line-clamp-2 text-sm text-slate-300">
+                  <span className="line-clamp-2 text-sm text-gray-600">
                     {review.content.length > 80
                       ? `${review.content.slice(0, 80)}...`
                       : review.content}
@@ -89,12 +89,12 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
                     {review.rating !== undefined ? (
                       <StarRating rating={review.rating} />
                     ) : (
-                      <span className="text-sm text-slate-500">-</span>
+                      <span className="text-sm text-gray-500">-</span>
                     )}
                   </td>
                 )}
                 {hasDates && (
-                  <td className="px-4 py-2.5 text-sm text-slate-500">
+                  <td className="px-4 py-2.5 text-sm text-gray-500">
                     {review.date ? review.date.slice(0, 10) : "-"}
                   </td>
                 )}
@@ -106,8 +106,8 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
 
       {/* Footer */}
       {reviews.length > 10 && (
-        <div className="px-5 py-3 border-t border-white/[0.06]">
-          <p className="text-center text-xs text-slate-500">
+        <div className="px-5 py-3 border-t border-gray-200">
+          <p className="text-center text-xs text-gray-500">
             Showing 10 of {reviews.length} reviews
           </p>
         </div>

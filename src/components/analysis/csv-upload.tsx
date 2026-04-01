@@ -224,7 +224,7 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
             "relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-all",
             isDragOver
               ? "border-[#4A90D9] bg-[#4A90D9]/5"
-              : "border-white/[0.08] hover:border-[#4A90D9]/50 hover:bg-[#1C1C1C]",
+              : "border-gray-200 hover:border-[#4A90D9]/50 hover:bg-gray-50",
             fileName && !error && "border-emerald-300 bg-emerald-50/50"
           )}
         >
@@ -262,7 +262,7 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
               <Upload
                 className={cn(
                   "size-8",
-                  isDragOver ? "text-[#4A90D9]" : "text-slate-400"
+                  isDragOver ? "text-[#4A90D9]" : "text-gray-500"
                 )}
               />
               <div className="text-center">

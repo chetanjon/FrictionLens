@@ -64,7 +64,7 @@ function StatusBadge({ status }: { status: string }) {
     default:
       return (
         <Badge
-          className="gap-1 bg-slate-500/10 text-slate-400 border-slate-500/20"
+          className="gap-1 bg-slate-500/10 text-gray-500 border-slate-500/20"
           variant="outline"
         >
           <Clock className="h-3 w-3" aria-hidden="true" />
@@ -122,7 +122,7 @@ export function AnalysisCard({
         {/* Header: status badge */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-semibold text-white">
+            <span className="text-sm font-semibold text-gray-900">
               {appName}
             </span>
             <PlatformBadge platform={platform} />
@@ -133,7 +133,7 @@ export function AnalysisCard({
         {/* Score + friction */}
         <div className="flex items-center gap-3">
           <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold text-white shadow-sm"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold text-gray-900 shadow-sm"
             style={{
               backgroundColor: isCompleted && vibeColorHex
                 ? vibeColorHex
@@ -147,7 +147,7 @@ export function AnalysisCard({
               {topFriction.map((item) => (
                 <li
                   key={item}
-                  className="truncate text-xs text-slate-500"
+                  className="truncate text-xs text-gray-500"
                 >
                   <span className="mr-1.5 inline-block h-1 w-1 rounded-full bg-friction-red/50 align-middle" />
                   {item}
@@ -155,20 +155,20 @@ export function AnalysisCard({
               ))}
             </ul>
           ) : (
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-gray-500">
               {isCompleted ? "No friction data" : "Awaiting results"}
             </span>
           )}
         </div>
 
         {/* Bottom: review count + relative date */}
-        <div className="flex items-center justify-between gap-2 border-t border-white/[0.06] pt-2.5">
-          <span className="font-mono text-[10px] text-slate-400">
+        <div className="flex items-center justify-between gap-2 border-t border-gray-200 pt-2.5">
+          <span className="font-mono text-[10px] text-gray-500">
             {reviewCount.toLocaleString()} reviews
           </span>
           <time
             dateTime={createdAt}
-            className="font-mono text-[10px] text-slate-400"
+            className="font-mono text-[10px] text-gray-500"
           >
             {relativeTime(createdAt)}
           </time>

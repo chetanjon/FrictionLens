@@ -34,7 +34,7 @@ export function VibeScoreCircle({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-full border-2 border-white/[0.10] bg-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-md",
+        "flex flex-col items-center justify-center rounded-full border-2 border-gray-200 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.3)]",
         s.container
       )}
     >
@@ -49,7 +49,7 @@ export function VibeScoreCircle({
       </span>
       <span
         className={cn(
-          "mt-0.5 font-mono uppercase text-slate-400",
+          "mt-0.5 font-mono uppercase text-gray-500",
           s.label
         )}
       >

@@ -25,7 +25,7 @@ export function FrictionSection({ frictionScores }: FrictionSectionProps) {
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex gap-5 text-[11px] text-slate-400">
+      <div className="mt-4 flex gap-5 text-[11px] text-gray-500">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-sm bg-[#C47070]" />
           High friction (7&ndash;10)

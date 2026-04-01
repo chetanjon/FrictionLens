@@ -25,9 +25,9 @@ export function DemoStats() {
       {STATS.map((stat) => (
         <div
           key={stat.label}
-          className="rounded-xl border border-white/[0.08] bg-[#1E2333] p-3 sm:p-4 text-center"
+          className="rounded-xl border border-gray-200 bg-[#1E2333] p-3 sm:p-4 text-center"
         >
-          <div className="text-[9px] font-semibold text-slate-500 uppercase tracking-[1px] font-mono">
+          <div className="text-[9px] font-semibold text-gray-500 uppercase tracking-[1px] font-mono">
             {stat.label}
           </div>
           <div className={`font-mono text-xl sm:text-2xl font-bold mt-1 ${stat.color}`}>
@@ -41,7 +41,7 @@ export function DemoStats() {
               />
             )}
           </div>
-          <div className="text-[10px] sm:text-xs text-slate-500 mt-0.5">{stat.sub}</div>
+          <div className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{stat.sub}</div>
         </div>
       ))}
     </div>
@@ -51,7 +51,7 @@ export function DemoStats() {
 export function DemoVibeScore() {
   return (
     <div className="text-right">
-      <div className="text-[9px] font-semibold text-slate-500 uppercase tracking-[2px] font-mono">Vibe Score</div>
+      <div className="text-[9px] font-semibold text-gray-500 uppercase tracking-[2px] font-mono">Vibe Score</div>
       <div className="font-serif text-3xl sm:text-4xl font-bold text-friction-amber tracking-tight">
         <AnimatedCounter value={72} duration={1500} />
       </div>

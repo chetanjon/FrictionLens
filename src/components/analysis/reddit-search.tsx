@@ -162,21 +162,21 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
       {/* Search results preview */}
       {results.length > 0 && !pulled && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-slate-500">
+          <p className="text-xs font-medium text-gray-500">
             {results.length} {results.length === 1 ? "post" : "posts"} found
           </p>
           <div className="max-h-[280px] space-y-1.5 overflow-y-auto">
             {results.slice(0, 10).map((post) => (
               <div
                 key={post.postId}
-                className="rounded-xl border border-white/[0.08] bg-[#161616] px-3 py-2.5 transition-colors hover:bg-[#1C1C1C]"
+                className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 transition-colors hover:bg-gray-50"
               >
                 <div className="flex items-start gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">
+                    <p className="truncate text-sm font-medium text-gray-900">
                       {post.title}
                     </p>
-                    <div className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+                    <div className="mt-1 flex items-center gap-3 text-xs text-gray-500">
                       <Badge
                         variant="secondary"
                         className="bg-orange-500/10 text-orange-400 border-orange-500/20 text-[10px]"
@@ -193,7 +193,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
                       </span>
                     </div>
                     {post.preview && (
-                      <p className="mt-1.5 line-clamp-2 text-xs text-slate-500">
+                      <p className="mt-1.5 line-clamp-2 text-xs text-gray-500">
                         {post.preview}
                       </p>
                     )}
@@ -228,7 +228,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
 
       {/* Pulled state */}
       {pulled && (
-        <div className="flex items-center justify-between rounded-xl border border-white/[0.08] bg-[#161616] px-3 py-2.5">
+        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-3 py-2.5">
           <div className="flex items-center gap-2 text-sm text-green-600">
             <CheckCircle2 className="h-3.5 w-3.5" />
             {pullProgress}
@@ -242,7 +242,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
               setResults([]);
             }}
             disabled={disabled}
-            className="text-xs text-slate-400 hover:text-slate-300"
+            className="text-xs text-gray-500 hover:text-gray-600"
           >
             Change
           </Button>
@@ -251,7 +251,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
 
       {/* Pull progress */}
       {isPulling && pullProgress && (
-        <div className="flex items-center gap-2 text-sm text-slate-400">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
           <Loader2 className="h-4 w-4 animate-spin" />
           {pullProgress}
         </div>

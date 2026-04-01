@@ -78,11 +78,11 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
       <GlassCard hover={false} className="overflow-hidden p-0">
         <table className="w-full border-collapse text-[12.5px]">
           <thead>
-            <tr className="bg-white/[0.04]">
+            <tr className="bg-white">
               {["Rating", "Review", "Love", "Frust.", "Risk"].map((h) => (
                 <th
                   key={h}
-                  className="border-b border-white/[0.06] px-3.5 py-[11px] text-left font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-slate-400"
+                  className="border-b border-gray-200 px-3.5 py-[11px] text-left font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-gray-500"
                 >
                   {h}
                 </th>
@@ -94,7 +94,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
               <tr>
                 <td
                   colSpan={5}
-                  className="px-3.5 py-8 text-center text-sm text-slate-400"
+                  className="px-3.5 py-8 text-center text-sm text-gray-500"
                 >
                   No reviews match this filter.
                 </td>
@@ -109,7 +109,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                 return (
                   <tr
                     key={i}
-                    className="border-b border-white/[0.06] last:border-b-0"
+                    className="border-b border-gray-200 last:border-b-0"
                   >
                     <td
                       className="whitespace-nowrap px-3.5 py-[11px] font-mono font-semibold"
@@ -117,7 +117,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                     >
                       {starDisplay(rating)}
                     </td>
-                    <td className="max-w-[340px] px-3.5 py-[11px] leading-snug text-slate-400">
+                    <td className="max-w-[340px] px-3.5 py-[11px] leading-snug text-gray-500">
                       {rv.content}
                     </td>
                     <td
@@ -152,7 +152,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
                           {rv.churn_risk}
                         </span>
                       ) : (
-                        <span className="text-slate-300">-</span>
+                        <span className="text-gray-600">-</span>
                       )}
                     </td>
                   </tr>
@@ -164,7 +164,7 @@ export function ExplorerSection({ reviews }: ExplorerSectionProps) {
       </GlassCard>
 
       {/* Footer count */}
-      <div className="mt-3 text-right font-mono text-[11px] text-slate-400">
+      <div className="mt-3 text-right font-mono text-[11px] text-gray-500">
         Showing {displayed.length} of {filtered.length} reviews
       </div>
     </SectionWrapper>

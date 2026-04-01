@@ -73,12 +73,12 @@ export function SidebarShell({
           <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
           <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
         </svg>
-        <span className="text-[15px] font-semibold tracking-tight text-white">
+        <span className="text-[15px] font-semibold tracking-tight text-gray-900">
           FrictionLens
         </span>
       </div>
 
-      <Separator className="mx-4 w-auto border-white/[0.08]" />
+      <Separator className="mx-4 w-auto border-gray-200" />
 
       {/* Quick action */}
       <div className="px-3 pt-3">
@@ -109,13 +109,13 @@ export function SidebarShell({
                 "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue",
                 active
                   ? "bg-friction-blue/15 text-friction-blue"
-                  : "text-slate-400 hover:bg-white/[0.06] hover:text-white"
+                  : "text-gray-500 hover:bg-gray-100 hover:text-white"
               )}
             >
               <item.icon
                 className={cn(
                   "h-4 w-4 shrink-0",
-                  active ? "text-friction-blue" : "text-slate-500"
+                  active ? "text-friction-blue" : "text-gray-500"
                 )}
               />
               {item.label}
@@ -125,7 +125,7 @@ export function SidebarShell({
       </nav>
 
       {/* User section */}
-      <div className="border-t border-white/[0.08] px-4 py-3">
+      <div className="border-t border-gray-200 px-4 py-3">
         <div className="flex items-center gap-2.5">
           {avatarUrl ? (
             <img
@@ -139,11 +139,11 @@ export function SidebarShell({
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-slate-200" title={displayName ?? userEmail}>
+            <p className="truncate text-xs font-medium text-gray-600" title={displayName ?? userEmail}>
               {displayName ?? userEmail.split("@")[0]}
             </p>
             <div className="flex items-center gap-1.5">
-              <p className="truncate text-[10px] text-slate-500" title={userEmail}>
+              <p className="truncate text-[10px] text-gray-500" title={userEmail}>
                 {userEmail}
               </p>
               {hasApiKey !== undefined && (
@@ -160,7 +160,7 @@ export function SidebarShell({
         </div>
         <button
           onClick={handleSignOut}
-          className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
+          className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-600"
         >
           <LogOut className="h-3.5 w-3.5" />
           Sign out
@@ -170,10 +170,10 @@ export function SidebarShell({
   );
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex min-h-screen bg-[#F2F2F7]">
       {/* Desktop sidebar */}
       <aside
-        className="hidden w-[220px] shrink-0 border-r border-white/[0.06] bg-slate-950 md:block"
+        className="hidden w-[220px] shrink-0 border-r border-gray-200 bg-slate-950 md:block"
         role="complementary"
         aria-label="Sidebar navigation"
       >
@@ -181,10 +181,10 @@ export function SidebarShell({
       </aside>
 
       {/* Mobile top bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-white/[0.06] bg-slate-950 px-4 md:hidden">
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-gray-200 bg-slate-950 px-4 md:hidden">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="rounded-lg p-2 text-slate-400 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
+          className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
           aria-label={mobileOpen ? "Close sidebar menu" : "Open sidebar menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-sidebar"
@@ -201,7 +201,7 @@ export function SidebarShell({
             <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
           </svg>
-          <span className="text-sm font-semibold text-white">
+          <span className="text-sm font-semibold text-gray-900">
             FrictionLens
           </span>
         </div>
@@ -211,12 +211,12 @@ export function SidebarShell({
       {mobileOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-[#F2F2F7]/40 backdrop-blur-sm md:hidden"
             onClick={() => setMobileOpen(false)}
           />
           <aside
             id="mobile-sidebar"
-            className="fixed inset-y-0 left-0 z-50 w-[260px] border-r border-white/[0.06] bg-slate-950 pt-14 md:hidden"
+            className="fixed inset-y-0 left-0 z-50 w-[260px] border-r border-gray-200 bg-slate-950 pt-14 md:hidden"
             role="complementary"
             aria-label="Sidebar navigation"
           >

@@ -62,12 +62,12 @@ export function CompareSection({
           <GlassCard hover={false} className="overflow-hidden p-0">
             <table className="w-full border-collapse text-[13px]">
               <thead>
-                <tr className="bg-white/[0.04]">
+                <tr className="bg-white">
                   {["", "Vibe", "Love", "Frust.", "Loyalty", "Mom.", "WoM"].map(
                     (h) => (
                       <th
                         key={h}
-                        className={`border-b border-white/[0.06] px-3.5 py-3 font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-slate-400 ${
+                        className={`border-b border-gray-200 px-3.5 py-3 font-mono text-[9px] font-semibold uppercase tracking-[1.5px] text-gray-500 ${
                           h ? "text-center" : "text-left"
                         }`}
                       >
@@ -80,9 +80,9 @@ export function CompareSection({
               <tbody>
                 {/* Your app row (highlighted) */}
                 <tr className="bg-friction-blue/[0.04]">
-                  <td className="px-3.5 py-3.5 text-sm font-bold text-white">
+                  <td className="px-3.5 py-3.5 text-sm font-bold text-gray-900">
                     {appName ?? "Your App"}{" "}
-                    <span className="ml-1.5 inline-block rounded bg-white/[0.15] px-1.5 py-px font-mono text-[9px] font-bold text-white">
+                    <span className="ml-1.5 inline-block rounded bg-white/[0.15] px-1.5 py-px font-mono text-[9px] font-bold text-gray-900">
                       YOU
                     </span>
                   </td>
@@ -121,9 +121,9 @@ export function CompareSection({
                 {competitors.map((comp) => (
                   <tr
                     key={`${comp.platform}-${comp.name}`}
-                    className="border-b border-white/[0.06]"
+                    className="border-b border-gray-200"
                   >
-                    <td className="px-3.5 py-3.5 font-medium text-slate-400">
+                    <td className="px-3.5 py-3.5 font-medium text-gray-500">
                       {comp.name}
                     </td>
                     <td
@@ -141,7 +141,7 @@ export function CompareSection({
                     ].map((v, i) => (
                       <td
                         key={i}
-                        className="text-center font-mono text-xs text-slate-400"
+                        className="text-center font-mono text-xs text-gray-500"
                       >
                         {v.toFixed(1)}
                       </td>
@@ -157,8 +157,8 @@ export function CompareSection({
             hover={false}
             className="mt-3 border-l-[3px] border-l-friction-blue px-5 py-3.5"
           >
-            <p className="text-[13px] leading-relaxed text-slate-400">
-              <strong className="text-white">Summary:</strong>{" "}
+            <p className="text-[13px] leading-relaxed text-gray-500">
+              <strong className="text-gray-900">Summary:</strong>{" "}
               {generateCompareSummary(
                 appName ?? "Your App",
                 vibeScore ?? 0,
@@ -173,10 +173,10 @@ export function CompareSection({
           hover={false}
           className="border-l-[3px] border-l-friction-blue px-5 py-10 text-center"
         >
-          <div className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-slate-400">
+          <div className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-gray-500">
             No Competitors Selected
           </div>
-          <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-400">
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-gray-500">
             Add competitor apps when creating your analysis to see a head-to-head
             comparison across all five sentiment dimensions.
           </p>

@@ -35,7 +35,7 @@ export function KpiCard({
           {label}
         </span>
         {icon && (
-          <span className="shrink-0 text-slate-400" aria-hidden="true">
+          <span className="shrink-0 text-gray-500" aria-hidden="true">
             {icon}
           </span>
         )}
@@ -53,7 +53,7 @@ export function KpiCard({
           </div>
 
           {subtitle && (
-            <div className="mt-1 text-xs text-slate-400 leading-snug">
+            <div className="mt-1 text-xs text-gray-500 leading-snug">
               {subtitle}
             </div>
           )}

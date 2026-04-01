@@ -52,8 +52,8 @@ function CustomTooltip(props: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-white/[0.10] bg-[#1A1A1A] px-4 py-3 shadow-xl shadow-black/40">
-      <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-slate-500">
+    <div className="rounded-xl border border-gray-200 bg-[#1A1A1A] px-4 py-3 shadow-xl shadow-black/40">
+      <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[2px] text-gray-500">
         {label}
       </p>
       <div className="flex flex-col gap-1.5">
@@ -66,7 +66,7 @@ function CustomTooltip(props: CustomTooltipProps) {
                 className="inline-block h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}60` }}
               />
-              <span className="text-[12px] font-medium text-slate-300">
+              <span className="text-[12px] font-medium text-gray-600">
                 {entry.name}
               </span>
               <span
@@ -97,7 +97,7 @@ export function TrendAreaChart({
         style={{ height }}
         aria-label="No trend data available"
       >
-        <p className="text-sm text-slate-500">No trend data available</p>
+        <p className="text-sm text-gray-500">No trend data available</p>
       </div>
     );
   }

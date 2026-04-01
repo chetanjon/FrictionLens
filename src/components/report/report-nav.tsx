@@ -61,7 +61,7 @@ export function ReportNav({
 
   return (
     <>
-      <nav className="sticky top-0 z-40 border-b border-white/[0.06] bg-black/80 backdrop-blur-xl print:hidden" aria-label="Report sections">
+      <nav className="sticky top-0 z-40 border-b border-gray-200 bg-black/80 print:hidden" aria-label="Report sections">
         <div className="mx-auto flex max-w-[920px] items-center justify-between px-7 py-2">
           <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="Report sections">
             {NAV_ITEMS.map((item) => (
@@ -71,7 +71,7 @@ export function ReportNav({
                 onClick={() => scrollToSection(item.id)}
                 aria-label={`Scroll to ${item.label} section`}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-400 transition-colors hover:bg-white/[0.06] hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
+                  "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
                 )}
               >
                 <item.icon className="h-3.5 w-3.5" aria-hidden="true" />

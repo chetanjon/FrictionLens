@@ -22,14 +22,14 @@ export function ChurnSection({
       {/* Overall churn risk banner */}
       <GlassCard
         hover={false}
-        className="mb-[18px] border-l-[3px] border-l-[#C47070] bg-white/[0.03] px-5 py-4"
+        className="mb-[18px] border-l-[3px] border-l-[#C47070] bg-white px-5 py-4"
       >
         <div className="flex items-center justify-between">
           <div>
             <div className="mb-[3px] font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-[#C47070]">
               Overall Churn Risk
             </div>
-            <div className="text-[13px] text-slate-400">
+            <div className="text-[13px] text-gray-500">
               {churnRiskPercent}% of analyzed reviewers show high or critical
               churn signals
             </div>
@@ -46,12 +46,12 @@ export function ChurnSection({
           <GlassCard key={driver.theme} className="p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <span className="text-[15px] font-bold text-white">
+                <span className="text-[15px] font-bold text-gray-900">
                   {driver.theme}
                 </span>
                 <SeverityBadge severity={driver.severity} />
               </div>
-              <span className="font-mono text-xs text-slate-300">
+              <span className="font-mono text-xs text-gray-600">
                 {driver.count} reviews
               </span>
             </div>
@@ -60,7 +60,7 @@ export function ChurnSection({
               {driver.quotes.map((quote, j) => (
                 <div
                   key={j}
-                  className="rounded-[10px] border-l-2 border-white/[0.08] bg-white/[0.04] px-3.5 py-[9px] font-serif text-[12.5px] italic leading-normal text-slate-400"
+                  className="rounded-[10px] border-l-2 border-gray-200 bg-white px-3.5 py-[9px] font-serif text-[12.5px] italic leading-normal text-gray-500"
                 >
                   &ldquo;{quote}&rdquo;
                 </div>

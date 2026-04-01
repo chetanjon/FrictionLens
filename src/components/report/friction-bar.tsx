@@ -21,13 +21,13 @@ export function FrictionBar({
   return (
     <div
       className={cn(
-        "grid items-center gap-3.5 rounded-2xl border border-white/[0.06] bg-white/[0.03] px-[18px] py-[13px] backdrop-blur-md",
+        "grid items-center gap-3.5 rounded-2xl border border-gray-200 bg-white px-[18px] py-[13px]",
         "grid-cols-[160px_1fr_60px_50px_56px]"
       )}
     >
-      <span className="text-[13px] font-semibold text-white">{name}</span>
+      <span className="text-[13px] font-semibold text-gray-900">{name}</span>
 
-      <div className="h-[5px] rounded-[3px] bg-white/[0.06]">
+      <div className="h-[5px] rounded-[3px] bg-gray-100">
         <div
           className="h-full rounded-[3px] transition-[width] duration-600 ease-out"
           style={{
@@ -45,7 +45,7 @@ export function FrictionBar({
       </span>
 
       {mentions !== undefined && (
-        <span className="text-right font-mono text-[11px] text-slate-300">
+        <span className="text-right font-mono text-[11px] text-gray-600">
           {mentions}
         </span>
       )}

@@ -22,7 +22,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
         title="Release Impact Analysis"
       >
         <GlassCard hover={false} className="px-6 py-10 text-center">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-gray-500">
             No release data available yet. Release impact analysis will appear
             here once version-tagged reviews are detected.
           </p>
@@ -46,16 +46,16 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
         {/* Header: version info + grade */}
         <div className="mb-7 flex items-start justify-between">
           <div>
-            <div className="text-xs text-slate-400">Latest Release</div>
-            <div className="font-mono text-[22px] font-extrabold text-white">
+            <div className="text-xs text-gray-500">Latest Release</div>
+            <div className="font-mono text-[22px] font-extrabold text-gray-900">
               v{releaseImpact.version}
             </div>
-            <div className="mt-0.5 text-[11px] text-slate-500">
+            <div className="mt-0.5 text-[11px] text-gray-500">
               Released {releaseImpact.date}
             </div>
           </div>
           <div
-            className="grid h-[68px] w-[68px] place-items-center rounded-2xl font-serif text-[26px] font-extrabold text-white"
+            className="grid h-[68px] w-[68px] place-items-center rounded-2xl font-serif text-[26px] font-extrabold text-gray-900"
             style={{
               background: bgColor,
               boxShadow: `0 6px 20px ${bgColor}33`,
@@ -67,7 +67,7 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
 
         {/* 3 stat cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
+          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
             <div
               className="font-mono text-[26px] font-extrabold"
               style={{ color: sentimentColor }}
@@ -75,23 +75,23 @@ export function ReleaseSection({ releaseImpact }: ReleaseSectionProps) {
               {sentimentPrefix}
               {releaseImpact.sentiment_delta}%
             </div>
-            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-slate-400">
+            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-gray-500">
               Sentiment Change
             </div>
           </div>
-          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
+          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
             <div className="font-mono text-[26px] font-extrabold text-[#C9B06A]">
               {releaseImpact.new_themes.length}
             </div>
-            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-slate-400">
+            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-gray-500">
               New Themes
             </div>
           </div>
-          <div className="rounded-[14px] border border-white/[0.06] bg-white/[0.04] p-[18px] text-center">
+          <div className="rounded-[14px] border border-gray-200 bg-white p-[18px] text-center">
             <div className="font-mono text-[26px] font-extrabold text-[#6B9FD4]">
               {releaseImpact.review_velocity}
             </div>
-            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-slate-400">
+            <div className="mt-1 font-mono text-[9px] uppercase tracking-[1px] text-gray-500">
               Review Velocity
             </div>
           </div>

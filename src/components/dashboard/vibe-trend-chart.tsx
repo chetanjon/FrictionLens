@@ -49,7 +49,7 @@ export function VibeScoreTrendChart({ data }: VibeScoreTrendChartProps) {
   if (data.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-gray-500">
           Run analyses to see vibe score trends
         </p>
       </div>
@@ -61,13 +61,13 @@ export function VibeScoreTrendChart({ data }: VibeScoreTrendChartProps) {
     return (
       <div className="flex flex-col items-center justify-center py-8">
         <div
-          className="mb-3 flex h-16 w-16 items-center justify-center rounded-full font-mono text-xl font-bold text-white"
+          className="mb-3 flex h-16 w-16 items-center justify-center rounded-full font-mono text-xl font-bold text-gray-900"
           style={{ backgroundColor: app.color, boxShadow: `0 0 20px ${app.color}40` }}
         >
           {app.vibeScore}
         </div>
-        <p className="text-sm font-medium text-white">{app.appName}</p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="text-sm font-medium text-gray-900">{app.appName}</p>
+        <p className="mt-1 text-xs text-gray-500">
           Run more analyses to compare apps
         </p>
       </div>
@@ -90,7 +90,7 @@ export function VibeScoreTrendChart({ data }: VibeScoreTrendChartProps) {
             <span className="absolute -left-1 -translate-x-full font-mono text-[10px] text-slate-600 tabular-nums">
               {val}
             </span>
-            <div className="ml-6 flex-1 border-t border-white/[0.04]" />
+            <div className="ml-6 flex-1 border-t border-gray-100" />
           </div>
         ))}
 

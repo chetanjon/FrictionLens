@@ -48,7 +48,7 @@ export function DashboardHeader({
           <h1 className="font-serif text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             {greeting}, {firstName}
           </h1>
-          <p className="mt-0.5 font-mono text-[11px] text-slate-500 tracking-wide">
+          <p className="mt-0.5 font-mono text-[11px] text-gray-500 tracking-wide">
             {formattedDate}
           </p>
         </div>

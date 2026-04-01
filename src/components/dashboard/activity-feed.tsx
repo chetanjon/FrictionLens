@@ -63,10 +63,10 @@ function ActivityRow({ event }: { event: ActivityEvent }) {
         aria-hidden="true"
       />
       <div className="min-w-0 flex-1">
-        <p className="text-xs text-slate-300 leading-snug">{text}</p>
+        <p className="text-xs text-gray-600 leading-snug">{text}</p>
         <time
           dateTime={event.timestamp}
-          className="mt-0.5 block font-mono text-[10px] text-slate-400"
+          className="mt-0.5 block font-mono text-[10px] text-gray-500"
         >
           {relativeTime(event.timestamp)}
         </time>
@@ -79,14 +79,14 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
   const visible = events.slice(0, MAX_EVENTS);
 
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-5">
+    <div className="rounded-2xl border border-gray-200/60 bg-white p-5">
       {/* Section label */}
       <span className="mb-3 block font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
         Activity
       </span>
 
       {visible.length === 0 ? (
-        <p className="py-4 text-center text-xs text-slate-400">
+        <p className="py-4 text-center text-xs text-gray-500">
           No activity yet.
         </p>
       ) : (

@@ -15,19 +15,19 @@ function sectionFallback(label: string) {
     <div className="mx-auto max-w-[920px] px-7 py-13">
       <div className="animate-pulse space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-2 w-16 rounded bg-white/[0.06]" />
-          <div className="h-2 w-2 rounded-full bg-white/[0.06]" />
-          <div className="h-3 w-32 rounded bg-white/[0.06]" />
+          <div className="h-2 w-16 rounded bg-gray-100" />
+          <div className="h-2 w-2 rounded-full bg-gray-100" />
+          <div className="h-3 w-32 rounded bg-gray-100" />
         </div>
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-8">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
           <div className="space-y-3">
-            <div className="h-3 w-3/4 rounded bg-white/[0.06]" />
-            <div className="h-3 w-1/2 rounded bg-white/[0.06]" />
-            <div className="h-3 w-2/3 rounded bg-white/[0.06]" />
+            <div className="h-3 w-3/4 rounded bg-gray-100" />
+            <div className="h-3 w-1/2 rounded bg-gray-100" />
+            <div className="h-3 w-2/3 rounded bg-gray-100" />
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-slate-300">
+      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
         Loading {label}
       </p>
     </div>
@@ -38,10 +38,10 @@ function sectionPlaceholder(label: string) {
   return function PlaceholderSection() {
     return (
       <GlassCard className="mx-auto max-w-[920px] p-8 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-slate-300">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-600">
           Coming Soon
         </p>
-        <p className="mt-1 text-sm text-slate-400">{label}</p>
+        <p className="mt-1 text-sm text-gray-500">{label}</p>
       </GlassCard>
     );
   };
@@ -319,7 +319,7 @@ export default async function PublicVibePage({
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-[#6B9FD4]/[0.05] blur-3xl" />
-        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-white/[0.02] blur-3xl" />
+        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-gray-50 blur-3xl" />
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -331,10 +331,10 @@ export default async function PublicVibePage({
       </div>
 
       {/* Branding header */}
-      <header className="relative z-10 border-b border-white/[0.06] bg-black/80 backdrop-blur-xl">
+      <header className="relative z-10 border-b border-gray-200 bg-black/80">
         <div className="mx-auto flex max-w-[920px] items-center justify-between px-7 py-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08] border border-white/[0.10] text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08] border border-gray-200 text-gray-900">
               <svg
                 width="12"
                 height="12"
@@ -348,11 +348,11 @@ export default async function PublicVibePage({
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
             </div>
-            <span className="text-[15px] font-bold tracking-tight text-white">
+            <span className="text-[15px] font-bold tracking-tight text-gray-900">
               FrictionLens
             </span>
           </Link>
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
             <span className="font-mono uppercase tracking-[2px]">
               Vibe Report
             </span>
@@ -416,7 +416,7 @@ export default async function PublicVibePage({
       <ExplorerSection reviews={explorerReviews} />
 
       {/* Footer with CTA */}
-      <footer className="border-t border-white/[0.06] print:hidden">
+      <footer className="border-t border-gray-200 print:hidden">
         <div className="mx-auto max-w-[920px] px-7 py-14">
           <div className="relative overflow-hidden rounded-2xl bg-slate-900 px-8 py-12 text-center md:px-14">
             {/* Ambient glow */}
@@ -425,10 +425,10 @@ export default async function PublicVibePage({
               <div className="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-friction-amber/15 blur-3xl" />
             </div>
             <div className="relative">
-              <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white">
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight text-gray-900">
                 Get your own Vibe Report
               </h3>
-              <p className="mx-auto mt-3 max-w-sm text-sm text-slate-400">
+              <p className="mx-auto mt-3 max-w-sm text-sm text-gray-500">
                 Turn hundreds of app store reviews into actionable intelligence. Free to start.
               </p>
               <Link
@@ -442,15 +442,15 @@ export default async function PublicVibePage({
 
           <div className="mt-8 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-white">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-gray-900">
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold text-slate-500">FrictionLens</span>
+              <span className="text-xs font-semibold text-gray-500">FrictionLens</span>
             </div>
-            <p className="text-[11px] text-slate-400 font-mono">
+            <p className="text-[11px] text-gray-500 font-mono">
               Powered by AI review intelligence
             </p>
           </div>

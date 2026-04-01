@@ -41,8 +41,8 @@ export function TrendsClient({
 }: TrendsClientProps) {
   if (vibeTrendData.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-6 py-16 text-center">
-        <p className="text-sm text-slate-500">
+      <div className="rounded-2xl border border-dashed border-gray-200/60 bg-white px-6 py-16 text-center">
+        <p className="text-sm text-gray-500">
           No completed analyses yet. Run your first analysis to see trends.
         </p>
       </div>
@@ -59,7 +59,7 @@ export function TrendsClient({
   return (
     <div className="space-y-6">
       {/* Vibe Score Trend */}
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
+      <div className="rounded-2xl border border-gray-200/60 bg-white p-6">
         <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
           Vibe Score Over Time
         </p>
@@ -68,7 +68,7 @@ export function TrendsClient({
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Latest Dimensions */}
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-6">
           <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
             Latest Dimension Scores
           </p>
@@ -83,14 +83,14 @@ export function TrendsClient({
               }}
             />
           ) : (
-            <p className="py-8 text-center text-xs text-slate-400">
+            <p className="py-8 text-center text-xs text-gray-500">
               No dimension data available
             </p>
           )}
         </div>
 
         {/* Friction Feature Frequency */}
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-6">
           <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[2.5px] text-friction-blue">
             Top Friction Features
           </p>
@@ -98,7 +98,7 @@ export function TrendsClient({
             <div className="space-y-2.5">
               {frictionFrequency.map((item) => (
                 <div key={item.feature} className="flex items-center gap-3">
-                  <span className="w-28 truncate text-xs font-medium text-slate-300">
+                  <span className="w-28 truncate text-xs font-medium text-gray-600">
                     {item.feature}
                   </span>
                   <div className="flex-1">
@@ -111,14 +111,14 @@ export function TrendsClient({
                       />
                     </div>
                   </div>
-                  <span className="w-8 text-right font-mono text-xs font-medium text-slate-500">
+                  <span className="w-8 text-right font-mono text-xs font-medium text-gray-500">
                     {item.count}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="py-8 text-center text-xs text-slate-400">
+            <p className="py-8 text-center text-xs text-gray-500">
               No friction data available
             </p>
           )}

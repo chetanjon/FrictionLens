@@ -90,7 +90,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
   return (
     <div className="flex flex-col gap-6">
       {/* API Key Card */}
-      <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
+      <Card className="bg-white border-gray-200/60 rounded-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -153,7 +153,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
                 id="model"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-foreground shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 dark:text-white dark:[&>option]:bg-[#1a1a1a] dark:[&>option]:text-white"
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-foreground shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {MODELS.map((m) => (
                   <option key={m.value} value={m.value}>
@@ -169,7 +169,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
                 type="submit"
                 formAction={handleSave}
                 disabled={isSaving}
-                className="bg-[#0F172A] text-white hover:bg-[#0F172A]/90"
+                className="bg-gray-900 text-white hover:bg-gray-900/90"
               >
                 {isSaving ? (
                   <Loader2 className="mr-1.5 size-4 animate-spin" />
@@ -216,11 +216,11 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
 
       {/* Free Trial Status */}
       {!keyExists && (
-        <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
+        <Card className="bg-white border-gray-200/60 rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-white">Free Trial</p>
+                <p className="text-sm font-semibold text-gray-900">Free Trial</p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   {freeTrialRemaining > 0
                     ? `You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"} remaining. Add your own API key for unlimited access.`
@@ -244,7 +244,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
       )}
 
       {/* Help Card */}
-      <Card className="bg-white/[0.03] backdrop-blur-md border-white/[0.07] rounded-2xl">
+      <Card className="bg-white border-gray-200/60 rounded-2xl">
         <CardHeader>
           <CardTitle className="text-base font-semibold">
             Getting an API Key

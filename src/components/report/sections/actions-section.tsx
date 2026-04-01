@@ -36,18 +36,18 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
               <div className="flex-1">
                 <div className="mb-1.5 flex items-center gap-2">
                   <PriorityBadge priority={action.priority} />
-                  <span className="text-sm font-bold text-white">
+                  <span className="text-sm font-bold text-gray-900">
                     {action.title}
                   </span>
                 </div>
-                <p className="m-0 text-[12.5px] leading-relaxed text-slate-400">
+                <p className="m-0 text-[12.5px] leading-relaxed text-gray-500">
                   {action.description}
                 </p>
               </div>
 
               <div className="flex flex-shrink-0 gap-1.5">
-                <div className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2.5 py-1.5 text-center">
-                  <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-slate-400">
+                <div className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-center">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-gray-500">
                     Impact
                   </div>
                   <div
@@ -57,11 +57,11 @@ export function ActionsSection({ actionItems }: ActionsSectionProps) {
                     {action.impact}
                   </div>
                 </div>
-                <div className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2.5 py-1.5 text-center">
-                  <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-slate-400">
+                <div className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-center">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.5px] text-gray-500">
                     Effort
                   </div>
-                  <div className="text-[11px] font-semibold text-slate-400">
+                  <div className="text-[11px] font-semibold text-gray-500">
                     {action.effort}
                   </div>
                 </div>

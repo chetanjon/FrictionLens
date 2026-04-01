@@ -26,7 +26,7 @@ export function RecentAnalysesGrid({ analyses }: RecentAnalysesGridProps) {
             Recent Analyses
           </h2>
           <Badge
-            className="bg-white/[0.06] text-slate-400 border-white/[0.08] font-mono text-[10px]"
+            className="bg-gray-100 text-gray-500 border-gray-200 font-mono text-[10px]"
             variant="outline"
           >
             {analyses.length}
@@ -35,7 +35,7 @@ export function RecentAnalysesGrid({ analyses }: RecentAnalysesGridProps) {
 
         <Link
           href="/dashboard/analyses"
-          className="font-mono text-[10px] font-semibold uppercase tracking-[2px] text-slate-400 transition-colors hover:text-friction-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-1 rounded"
+          className="font-mono text-[10px] font-semibold uppercase tracking-[2px] text-gray-500 transition-colors hover:text-friction-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-1 rounded"
           aria-label="View all analyses"
         >
           View all

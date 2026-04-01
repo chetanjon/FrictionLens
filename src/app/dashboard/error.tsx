@@ -15,10 +15,10 @@ export default function DashboardError({
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10 ring-1 ring-red-500/20">
         <AlertTriangle className="h-7 w-7 text-friction-red" />
       </div>
-      <h2 className="text-lg font-semibold text-white">
+      <h2 className="text-lg font-semibold text-gray-900">
         Something went wrong
       </h2>
-      <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-slate-500">
+      <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-500">
         {error.message || "An unexpected error occurred while loading the dashboard."}
       </p>
       <Button

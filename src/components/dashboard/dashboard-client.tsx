@@ -138,18 +138,18 @@ export function DashboardClient({
       {/* New Analysis Section */}
       <section>
         <div className="mb-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
             New Analysis
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-gray-500">
             Upload or paste app reviews to generate a Vibe Report.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-6">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-6">
           {/* App name */}
           <div className="mb-5">
-            <Label htmlFor="app-name" className="text-sm font-medium text-slate-300">
+            <Label htmlFor="app-name" className="text-sm font-medium text-gray-600">
               App Name
             </Label>
             <Input
@@ -227,7 +227,7 @@ export function DashboardClient({
           {/* Progress */}
           {isAnalyzing && (
             <div className="mb-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-slate-400">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 {progressText}
               </div>
@@ -261,28 +261,28 @@ export function DashboardClient({
       <section className="mt-12">
         <Separator className="mb-8" />
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold text-gray-900">
             Recent Reports
           </h2>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-gray-500">
             {recentAnalyses.length} {recentAnalyses.length === 1 ? "report" : "reports"}
           </span>
         </div>
 
         {recentAnalyses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-6 py-16 text-center">
+          <div className="rounded-2xl border border-dashed border-gray-200/60 bg-white px-6 py-16 text-center">
             {/* Illustrated empty state */}
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/[0.04] ring-1 ring-white/[0.08]">
-              <FileText className="h-7 w-7 text-slate-400" />
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white ring-1 ring-white/[0.08]">
+              <FileText className="h-7 w-7 text-gray-500" />
             </div>
-            <h3 className="text-base font-semibold text-slate-300">
+            <h3 className="text-base font-semibold text-gray-600">
               No reports yet
             </h3>
-            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-400">
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-gray-500">
               Search for an app or upload a CSV above to generate your first
               Vibe Report with sentiment scores and churn signals.
             </p>
-            <div className="mt-6 flex items-center justify-center gap-4 text-xs text-slate-400">
+            <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1.5">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-friction-blue/40" />
                 App Store search
@@ -303,12 +303,12 @@ export function DashboardClient({
               <Link
                 key={a.id}
                 href={`/dashboard/analysis/${a.id}`}
-                className="group flex items-center gap-4 rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md px-4 py-3.5 transition-all duration-200 hover:border-white/[0.12] hover:bg-white/[0.06] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="group flex items-center gap-4 rounded-xl border border-gray-200/60 bg-white px-4 py-3.5 transition-all duration-200 hover:border-gray-200 hover:bg-gray-100 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label={`View ${a.app_name} report${a.vibe_score != null ? `, vibe score ${Math.round(a.vibe_score)}` : ""}`}
               >
                 {/* Vibe score circle */}
                 <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-sm font-semibold text-white"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-sm font-semibold text-gray-900"
                   style={{
                     backgroundColor:
                       a.status === "completed" && a.vibeColorHex
@@ -324,12 +324,12 @@ export function DashboardClient({
                 {/* Info */}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="truncate text-sm font-medium text-white">
+                    <span className="truncate text-sm font-medium text-gray-900">
                       {a.app_name}
                     </span>
                     <StatusBadge status={a.status} />
                   </div>
-                  <div className="mt-0.5 flex items-center gap-3 text-xs text-slate-400">
+                  <div className="mt-0.5 flex items-center gap-3 text-xs text-gray-500">
                     <span>{a.review_count} reviews</span>
                     <span>
                       {new Date(a.created_at).toLocaleDateString("en-US", {
@@ -341,7 +341,7 @@ export function DashboardClient({
                   </div>
                 </div>
 
-                <ArrowRight className="h-4 w-4 shrink-0 text-slate-300 transition-colors group-hover:text-slate-500" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-gray-600 transition-colors group-hover:text-gray-500" />
               </Link>
             ))}
           </div>
@@ -404,8 +404,8 @@ function CsvUploadSlot({
     return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
   } catch {
     return (
-      <div className="rounded-lg border border-dashed border-white/[0.08] bg-white/[0.04] p-8 text-center">
-        <p className="text-sm text-slate-400">
+      <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center">
+        <p className="text-sm text-gray-500">
           CSV upload component is being built...
         </p>
       </div>
@@ -460,7 +460,7 @@ function PasteInputFallback({
   return (
     <div className="space-y-3">
       <textarea
-        className="min-h-[120px] w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
+        className="min-h-[120px] w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
         placeholder="Paste one review per line..."
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -496,19 +496,19 @@ function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
     return <ReviewPreview reviews={reviews} />;
   } catch {
     return (
-      <div className="rounded-lg border border-white/[0.08] bg-white/[0.04] p-4">
-        <p className="text-sm font-medium text-slate-300">
+      <div className="rounded-lg border border-gray-200 bg-white p-4">
+        <p className="text-sm font-medium text-gray-600">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
         </p>
         <div className="mt-2 max-h-40 space-y-1.5 overflow-y-auto">
           {reviews.slice(0, 5).map((r, i) => (
-            <p key={i} className="truncate text-xs text-slate-500">
+            <p key={i} className="truncate text-xs text-gray-500">
               {r.rating ? `${"★".repeat(r.rating)} ` : ""}
               {r.content}
             </p>
           ))}
           {reviews.length > 5 && (
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-gray-500">
               ...and {reviews.length - 5} more
             </p>
           )}

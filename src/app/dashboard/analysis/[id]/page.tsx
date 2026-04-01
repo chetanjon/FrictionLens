@@ -14,19 +14,19 @@ function sectionFallback(label: string) {
     <div className="mx-auto max-w-[920px] px-7 py-13">
       <div className="animate-pulse space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-2 w-16 rounded bg-white/[0.06]" />
-          <div className="h-2 w-2 rounded-full bg-white/[0.06]" />
-          <div className="h-3 w-32 rounded bg-white/[0.06]" />
+          <div className="h-2 w-16 rounded bg-gray-100" />
+          <div className="h-2 w-2 rounded-full bg-gray-100" />
+          <div className="h-3 w-32 rounded bg-gray-100" />
         </div>
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-8">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
           <div className="space-y-3">
-            <div className="h-3 w-3/4 rounded bg-white/[0.06]" />
-            <div className="h-3 w-1/2 rounded bg-white/[0.06]" />
-            <div className="h-3 w-2/3 rounded bg-white/[0.06]" />
+            <div className="h-3 w-3/4 rounded bg-gray-100" />
+            <div className="h-3 w-1/2 rounded bg-gray-100" />
+            <div className="h-3 w-2/3 rounded bg-gray-100" />
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-slate-300">
+      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
         Loading {label}
       </p>
     </div>
@@ -37,10 +37,10 @@ function sectionPlaceholder(label: string) {
   return function PlaceholderSection() {
     return (
       <GlassCard className="mx-auto max-w-[920px] p-8 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-slate-300">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-600">
           Coming Soon
         </p>
-        <p className="mt-1 text-sm text-slate-400">{label}</p>
+        <p className="mt-1 text-sm text-gray-500">{label}</p>
       </GlassCard>
     );
   };
@@ -198,7 +198,7 @@ export default async function AnalysisPage({
           <h2 className="text-lg font-semibold text-[#C9B06A]">
             Supabase Not Configured
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-gray-500">
             Set{" "}
             <code className="font-mono text-xs">NEXT_PUBLIC_SUPABASE_URL</code>{" "}
             and{" "}
@@ -240,17 +240,17 @@ export default async function AnalysisPage({
   if (a.status === "processing") {
     return (
       <div className="mx-auto max-w-4xl px-4 py-16 text-center">
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-md p-12">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white/[0.08] border-t-friction-blue" />
-          <h2 className="text-lg font-semibold text-white">
+        <div className="rounded-2xl border border-gray-200/60 bg-white p-12">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-friction-blue" />
+          <h2 className="text-lg font-semibold text-gray-900">
             Analysis in Progress
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-gray-500">
             Your reviews for{" "}
             <span className="font-medium">{a.app_name}</span> are being
             analyzed. This page will update when complete.
           </p>
-          <p className="mt-4 text-xs text-slate-400">
+          <p className="mt-4 text-xs text-gray-500">
             {a.review_count} reviews queued
           </p>
         </div>
@@ -281,9 +281,9 @@ export default async function AnalysisPage({
           <h2 className="text-lg font-semibold text-[#C47070]">
             Analysis Failed
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-gray-500">
             Something went wrong while analyzing reviews for{" "}
-            <span className="font-medium text-slate-300">{a.app_name}</span>.
+            <span className="font-medium text-gray-600">{a.app_name}</span>.
           </p>
           <p className="mt-4 text-xs text-[#C47070]/70">
             Please check your API key in Settings and try again.

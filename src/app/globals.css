@@ -178,12 +178,6 @@
     transform: none;
     transition: none;
   }
-  .aurora-blob-1, .aurora-blob-2, .aurora-blob-3 { animation: none; }
-  .shimmer-btn::after { animation: none; display: none; }
-  .pulse-glow { animation: none; }
-  * {
-    scroll-behavior: auto !important;
-  }
 }
 
 /* Print styles for Vibe Reports */
@@ -222,70 +216,6 @@ button:focus-visible,
   border-radius: 4px;
 }
 
-/* Aurora gradient animation for hero background */
-@keyframes auroraFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -40px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.95); }
-}
-@keyframes auroraFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-40px, 30px) scale(1.05); }
-  66% { transform: translate(25px, -25px) scale(1.1); }
-}
-@keyframes auroraFloat3 {
-  0%, 100% { transform: translate(0, 0) scale(1.05); }
-  50% { transform: translate(35px, 25px) scale(0.95); }
-}
-.aurora-blob-1 { animation: auroraFloat1 12s ease-in-out infinite; }
-.aurora-blob-2 { animation: auroraFloat2 15s ease-in-out infinite; }
-.aurora-blob-3 { animation: auroraFloat3 18s ease-in-out infinite; }
-
-/* CTA shimmer sweep */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.shimmer-btn {
-  position: relative;
-  overflow: hidden;
-}
-.shimmer-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 60%
-  );
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-/* Subtle border glow on hover for feature cards */
-.gradient-border-hover {
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.gradient-border-hover:hover {
-  border-color: rgba(74, 144, 217, 0.3);
-  box-shadow: 0 0 20px rgba(74, 144, 217, 0.06);
-}
-
-/* P0 badge pulse glow */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(217, 79, 79, 0.4); }
-  50% { box-shadow: 0 0 20px rgba(217, 79, 79, 0.7); }
-}
-.pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, #7BAFD6, #7EC8BD);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 
 /* Card hover lift effect */
 .card-hover-lift {
