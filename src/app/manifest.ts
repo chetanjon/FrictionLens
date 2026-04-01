@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "FrictionLens — App Review Intelligence",
+    name: "FrictionLens | App Review Intelligence",
     short_name: "FrictionLens",
     description:
       "Synthesize hundreds of app store reviews into one shareable Vibe Report with sentiment scores, churn signals, and action items.",

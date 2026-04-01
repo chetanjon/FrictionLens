@@ -2,7 +2,7 @@ import { AnalysesTable } from "@/components/dashboard/analyses-table";
 import { vibeColor } from "@/lib/constants";
 
 export const metadata = {
-  title: "All Analyses — FrictionLens",
+  title: "All Analyses",
 };
 
 type AnalysisRow = {

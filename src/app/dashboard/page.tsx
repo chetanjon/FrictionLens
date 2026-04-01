@@ -4,7 +4,7 @@ import { vibeColor } from "@/lib/constants";
 import { FREE_TRIAL_LIMIT } from "@/lib/free-trial";
 
 export const metadata = {
-  title: "Dashboard — FrictionLens",
+  title: "Dashboard",
 };
 
 type AnalysisRow = {

@@ -1,7 +1,7 @@
 import { TrendsClient } from "@/components/dashboard/trends-client";
 
 export const metadata = {
-  title: "Trends — FrictionLens",
+  title: "Trends",
 };
 
 type AnalysisRow = {

@@ -19,10 +19,10 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
 const MODELS = [
-  { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash", desc: "Best balance — 10 RPM, 250 RPD" },
-  { value: "gemini-2.5-flash-lite", label: "Gemini 2.5 Flash-Lite", desc: "Fastest — 15 RPM, 1000 RPD" },
-  { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro", desc: "Most powerful — 5 RPM, 100 RPD" },
-  { value: "gemini-2.0-flash", label: "Gemini 2.0 Flash", desc: "Previous gen — 15 RPM, 1500 RPD" },
+  { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash", desc: "Best balance, 10 RPM, 250 RPD" },
+  { value: "gemini-2.5-flash-lite", label: "Gemini 2.5 Flash-Lite", desc: "Fastest, 15 RPM, 1000 RPD" },
+  { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro", desc: "Most powerful, 5 RPM, 100 RPD" },
+  { value: "gemini-2.0-flash", label: "Gemini 2.0 Flash", desc: "Previous gen, 15 RPM, 1500 RPD" },
 ] as const;
 
 /** Must match the value in @/lib/free-trial.ts (can't import server module in client component). */
@@ -157,7 +157,7 @@ export function SettingsForm({ hasKey, currentModel, freeAnalysesUsed = 0 }: Pro
               >
                 {MODELS.map((m) => (
                   <option key={m.value} value={m.value}>
-                    {m.label} — {m.desc}
+                    {m.label} · {m.desc}
                   </option>
                 ))}
               </select>

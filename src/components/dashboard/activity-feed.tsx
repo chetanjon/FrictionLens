@@ -30,7 +30,7 @@ function buildEventText(event: ActivityEvent): string {
   switch (event.type) {
     case "completed":
       return event.vibeScore != null
-        ? `${event.appName} analysis completed — Vibe ${Math.round(event.vibeScore)}`
+        ? `${event.appName} analysis completed, Vibe ${Math.round(event.vibeScore)}`
         : `${event.appName} analysis completed`;
     case "started":
       return `${event.appName} analysis started`;

@@ -1,7 +1,7 @@
 import { SettingsForm } from "@/components/settings/settings-form";
 
 export const metadata = {
-  title: "Settings — FrictionLens",
+  title: "Settings",
 };
 
 export default async function SettingsPage() {

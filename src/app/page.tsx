@@ -459,7 +459,7 @@ export default async function LandingPage() {
               <span className="font-serif italic">free.</span>
             </h2>
             <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto">
-              FrictionLens is free to use. Bring your own Gemini API key from Google AI Studio, or try 2 analyses on us — no key needed.
+              FrictionLens is free to use. Bring your own Gemini API key from Google AI Studio, or try 2 analyses on us, no key needed.
             </p>
           </div>
         </AnimateOnScroll>
@@ -522,7 +522,7 @@ export default async function LandingPage() {
                 Get Your Free API Key &rarr;
               </Link>
               <p className="mt-3 text-center text-[11px] text-gray-500">
-                Free from <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="text-friction-blue hover:underline">Google AI Studio</a> — takes 30 seconds
+                Free from <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="text-friction-blue hover:underline">Google AI Studio</a> (takes 30 seconds)
               </p>
             </div>
           </AnimateOnScroll>

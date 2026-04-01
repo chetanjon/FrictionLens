@@ -178,7 +178,7 @@ export async function generateMetadata({
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   ) {
-    return { title: "Vibe Report — FrictionLens" };
+    return { title: "Vibe Report" };
   }
 
   const { createServerClient } = await import("@supabase/ssr");
@@ -196,16 +196,16 @@ export async function generateMetadata({
     .single();
 
   if (!data) {
-    return { title: "Report Not Found — FrictionLens" };
+    return { title: "Report Not Found" };
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://frictionlens.com";
 
   return {
-    title: `${data.app_name} Vibe Report — FrictionLens`,
+    title: `${data.app_name} Vibe Report`,
     description: `Vibe Score: ${data.vibe_score ?? "N/A"}/100. See the full sentiment analysis, friction scores, and churn drivers.`,
     openGraph: {
-      title: `${data.app_name} — Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
+      title: `${data.app_name} Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
       description: `AI-powered review intelligence for ${data.app_name}. Friction scores, churn drivers, and actionable insights.`,
       url: `${appUrl}/vibe/${slug}`,
       siteName: "FrictionLens",
@@ -213,7 +213,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${data.app_name} — Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
+      title: `${data.app_name} Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
       description: `AI-powered review intelligence by FrictionLens`,
     },
   };

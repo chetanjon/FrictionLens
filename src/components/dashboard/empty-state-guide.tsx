@@ -33,7 +33,7 @@ export function EmptyStateGuide({
         <p className="mx-auto mt-4 max-w-lg text-base text-gray-500">
           Your AI-powered review intelligence platform.
           {hasFreeTrials
-            ? ` You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"} — no API key needed.`
+            ? ` You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"}, no API key needed.`
             : " Get started in three simple steps."}
         </p>
       </div>
@@ -87,7 +87,7 @@ export function EmptyStateGuide({
               <Link href="/dashboard/settings" className="text-friction-blue hover:underline">
                 Add your Gemini API key
               </Link>{" "}
-              — it&apos;s free from Google.
+              (it&apos;s free from Google).
             </p>
           </div>
         </>

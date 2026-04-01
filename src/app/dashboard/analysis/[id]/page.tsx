@@ -173,7 +173,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: `Analysis ${id.slice(0, 8)}... — FrictionLens`,
+    title: `Analysis ${id.slice(0, 8)}...`,
   };
 }
 

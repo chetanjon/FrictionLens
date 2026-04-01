@@ -28,7 +28,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   title: {
-    default: "FrictionLens — App Review Intelligence",
+    default: "FrictionLens | App Review Intelligence",
     template: "%s | FrictionLens",
   },
   description:
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "FrictionLens",
-    title: "FrictionLens — App Review Intelligence",
+    title: "FrictionLens | App Review Intelligence",
     description:
       "Synthesize hundreds of app store reviews into one shareable Vibe Report with sentiment scores, churn signals, and action items.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FrictionLens — App Review Intelligence",
+    title: "FrictionLens | App Review Intelligence",
     description:
       "Synthesize hundreds of app store reviews into one shareable Vibe Report with sentiment scores, churn signals, and action items.",
   },

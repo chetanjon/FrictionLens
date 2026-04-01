@@ -191,7 +191,7 @@ export function SummarySection({
               Top Churn Driver
             </div>
             <div className="mt-0.5 text-[13px] font-semibold text-gray-900">
-              {topFriction} — highest friction point driving user churn
+              {topFriction}, the highest friction point driving user churn
             </div>
           </div>
           <span className="shrink-0 rounded-full bg-[#C47070] px-3 py-1 font-mono text-xs font-bold text-gray-900">
