@@ -106,17 +106,18 @@ export async function consumeFreeTrial(
       };
     }
   } else {
-    // New user with no settings row — create one
+    // New user with no settings row — create one with all required fields
     const { error: insertError } = await supabase
       .from("user_settings")
       .insert({
         user_id: userId,
         free_analyses_used: 1,
+        preferred_model: "gemini-2.5-flash",
         updated_at: new Date().toISOString(),
       });
 
     if (insertError) {
-      console.error("Failed to create trial record:", insertError);
+      console.error("Failed to create trial record:", insertError.message, insertError.code, insertError.details);
       return {
         allowed: false,
         reason: "Failed to verify trial status. Please try again.",
