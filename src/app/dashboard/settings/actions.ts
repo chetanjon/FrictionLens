@@ -34,7 +34,7 @@ export async function saveApiKey(formData: FormData): Promise<{ success: true } 
           gemini_api_key_encrypted: encrypted,
           gemini_api_key_iv: iv,
           gemini_api_key_tag: tag,
-          default_model: model || "gemini-2.5-flash",
+          preferred_model: model || "gemini-2.5-flash",
           updated_at: new Date().toISOString(),
         },
         { onConflict: "user_id" }

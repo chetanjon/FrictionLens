@@ -117,11 +117,10 @@ export async function consumeFreeTrial(
       });
 
     if (insertError) {
-      console.error("Failed to create trial record:", insertError.message, insertError.code, insertError.details);
-      return {
-        allowed: false,
-        reason: "Failed to verify trial status. Please try again.",
-      };
+      // Log but don't block — the user should still get their free trial.
+      // The insert may fail due to FK timing (profiles row not ready yet).
+      // Usage will be tracked on the next successful write.
+      console.error("Failed to create trial record (allowing anyway):", insertError.message, insertError.code, insertError.details);
     }
   }
 

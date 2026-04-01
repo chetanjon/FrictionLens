@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         const { data: settings } = await supabase
           .from("user_settings")
           .select(
-            "gemini_api_key_encrypted, gemini_api_key_iv, gemini_api_key_tag, default_model"
+            "gemini_api_key_encrypted, gemini_api_key_iv, gemini_api_key_tag, preferred_model"
           )
           .eq("user_id", user.id)
           .single();
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
               settings.gemini_api_key_iv,
               settings.gemini_api_key_tag
             );
-            model = settings.default_model ?? "gemini-2.5-flash";
+            model = settings.preferred_model ?? "gemini-2.5-flash";
           } catch {
             send("error", {
               error: "Failed to decrypt API key. Please re-enter it in Settings.",

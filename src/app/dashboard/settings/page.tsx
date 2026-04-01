@@ -43,13 +43,13 @@ export default async function SettingsPage() {
     if (user) {
       const { data: settings } = await supabase
         .from("user_settings")
-        .select("gemini_api_key_encrypted, default_model, free_analyses_used")
+        .select("gemini_api_key_encrypted, preferred_model, free_analyses_used")
         .eq("user_id", user.id)
         .single();
 
       if (settings) {
         hasKey = !!settings.gemini_api_key_encrypted;
-        currentModel = settings.default_model ?? "gemini-2.5-flash";
+        currentModel = settings.preferred_model ?? "gemini-2.5-flash";
         freeAnalysesUsed = settings.free_analyses_used ?? 0;
       }
     }

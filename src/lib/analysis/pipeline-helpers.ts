@@ -55,7 +55,7 @@ export async function authenticateAndDecryptKey(
   const { data: settings } = await supabase
     .from("user_settings")
     .select(
-      "gemini_api_key_encrypted, gemini_api_key_iv, gemini_api_key_tag, default_model"
+      "gemini_api_key_encrypted, gemini_api_key_iv, gemini_api_key_tag, preferred_model"
     )
     .eq("user_id", user.id)
     .single();
@@ -73,7 +73,7 @@ export async function authenticateAndDecryptKey(
       settings.gemini_api_key_iv,
       settings.gemini_api_key_tag
     );
-    model = settings.default_model ?? "gemini-2.5-flash";
+    model = settings.preferred_model ?? "gemini-2.5-flash";
   }
 
   // If user has no key, try free trial with the platform key
