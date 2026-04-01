@@ -69,8 +69,8 @@ export function SidebarShell({
       {/* Logo */}
       <div className="flex h-14 items-center gap-2.5 px-5">
         <svg width="32" height="32" viewBox="-32 -32 64 64" fill="none">
-          <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#ffffff" strokeWidth="1.2"/>
-          <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+          <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#1e293b" strokeWidth="1.2"/>
+          <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#1e293b"/>
           <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
         </svg>
         <span className="text-[15px] font-semibold tracking-tight text-gray-900">
@@ -197,8 +197,8 @@ export function SidebarShell({
         </button>
         <div className="ml-3 flex items-center gap-2">
           <svg width="28" height="28" viewBox="-32 -32 64 64" fill="none">
-            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#ffffff" strokeWidth="1.2"/>
-            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+            <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#1e293b" strokeWidth="1.2"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#1e293b"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
           </svg>
           <span className="text-sm font-semibold text-gray-900">

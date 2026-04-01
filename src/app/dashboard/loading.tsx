@@ -3,7 +3,7 @@ export default function DashboardLoading() {
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 animate-pulse">
       {/* Section header skeleton */}
       <div className="mb-6">
-        <div className="h-7 w-36 rounded-lg bg-white/[0.10]" />
+        <div className="h-7 w-36 rounded-lg bg-gray-200" />
         <div className="mt-2 h-4 w-64 rounded-md bg-gray-100" />
       </div>
 
@@ -26,7 +26,7 @@ export default function DashboardLoading() {
         <div className="h-32 rounded-lg bg-white border border-dashed border-gray-200" />
 
         {/* Button */}
-        <div className="mt-5 h-11 w-40 rounded-lg bg-white/[0.10]" />
+        <div className="mt-5 h-11 w-40 rounded-lg bg-gray-200" />
       </div>
 
       {/* Separator */}
@@ -34,7 +34,7 @@ export default function DashboardLoading() {
 
       {/* Recent Reports header */}
       <div className="mb-5 flex items-center justify-between">
-        <div className="h-5 w-32 rounded-md bg-white/[0.10]" />
+        <div className="h-5 w-32 rounded-md bg-gray-200" />
         <div className="h-3 w-16 rounded bg-gray-100" />
       </div>
 
@@ -46,7 +46,7 @@ export default function DashboardLoading() {
             className="flex items-center gap-4 rounded-xl border border-gray-200/60 bg-white px-4 py-3.5"
           >
             {/* Score circle */}
-            <div className="h-10 w-10 shrink-0 rounded-full bg-white/[0.10]" />
+            <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200" />
             {/* Text */}
             <div className="flex-1 space-y-2">
               <div className="h-4 w-36 rounded bg-gray-200" />

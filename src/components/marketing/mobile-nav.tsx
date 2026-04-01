@@ -29,7 +29,7 @@ export function MobileNav({ isLoggedIn = false }: MobileNavProps) {
       </button>
 
       {open && (
-        <div className="absolute top-16 left-0 right-0 border-b border-gray-200 bg-black/95 md:hidden">
+        <div className="absolute top-16 left-0 right-0 border-b border-gray-200 bg-white md:hidden">
           <div className="flex flex-col px-6 py-4 gap-3">
             <a
               href="#features"

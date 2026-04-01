@@ -25,7 +25,7 @@ export function DemoStats() {
       {STATS.map((stat) => (
         <div
           key={stat.label}
-          className="rounded-xl border border-gray-200 bg-[#1E2333] p-3 sm:p-4 text-center"
+          className="rounded-xl border border-gray-200 bg-white border border-gray-200 p-3 sm:p-4 text-center"
         >
           <div className="text-[9px] font-semibold text-gray-500 uppercase tracking-[1px] font-mono">
             {stat.label}
