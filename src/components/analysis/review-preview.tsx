@@ -45,7 +45,7 @@ export function ReviewPreview({ reviews, onClear }: ReviewPreviewProps) {
   const hasDates = reviews.some((r) => r.date !== undefined);
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.10] bg-[#141414] overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
         <h3 className="text-sm font-semibold text-white">Parsed Reviews</h3>

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { Inter, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { PostHogAnalyticsProvider } from "@/components/analytics/posthog-provider";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -74,9 +74,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${plusJakarta.variable} ${ibmPlexMono.variable} ${newsreader.variable} antialiased`}
+        className={`${inter.variable} ${ibmPlexMono.variable} ${newsreader.variable} antialiased`}
       >
         {/* Skip-to-content for keyboard / screen-reader users */}
         <a

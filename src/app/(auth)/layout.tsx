@@ -25,8 +25,8 @@ export default function AuthLayout({
       </div>
 
       {/* Right panel — form */}
-      <div className="flex flex-1 items-center justify-center bg-white px-6 py-12 md:bg-white">
-        {/* Mobile: show subtle bg */}
+      <div className="flex flex-1 items-center justify-center bg-white px-6 py-12 md:bg-white [&_input]:!text-slate-900 [&_input]:dark:!text-slate-900">
+        {/* Mobile: show subtle bg — force light text in inputs */}
         <div className="relative z-10 w-full max-w-sm">
           {children}
         </div>
