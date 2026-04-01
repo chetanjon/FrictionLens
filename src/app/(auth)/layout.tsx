@@ -14,7 +14,7 @@ export default function AuthLayout({
         <div className="relative text-center">
           <svg width="56" height="56" viewBox="-32 -32 64 64" fill="none" className="mx-auto mb-6">
             <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#ffffff" strokeWidth="1.2"/>
-            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#4A90D9"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
           </svg>
           <h2 className="text-2xl font-bold text-white tracking-tight">FrictionLens</h2>

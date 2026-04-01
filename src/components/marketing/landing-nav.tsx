@@ -15,7 +15,7 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
         <Link href="/" className="flex items-center gap-3 group">
           <svg width="36" height="36" viewBox="-32 -32 64 64" fill="none">
             <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="#4A90D9" strokeWidth="1.2"/>
-            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#4A90D9"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="white"/>
           </svg>
           <span className="text-[17px] font-semibold tracking-tight text-gray-900">

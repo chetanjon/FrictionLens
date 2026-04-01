@@ -78,7 +78,7 @@ export default async function OGImage({
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <svg width="44" height="44" viewBox="-32 -32 64 64" fill="none">
             <ellipse cx="0" cy="0" rx="30" ry="29.5" fill="none" stroke="white" stroke-width="1.4"/>
-            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="white"/>
+            <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#4A90D9"/>
             <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f0f0f"/>
           </svg>
           <span
