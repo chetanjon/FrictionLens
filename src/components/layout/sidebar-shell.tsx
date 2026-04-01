@@ -109,7 +109,7 @@ export function SidebarShell({
                 "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue",
                 active
                   ? "bg-friction-blue/15 text-friction-blue"
-                  : "text-gray-500 hover:bg-gray-100 hover:text-white"
+                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
               <item.icon

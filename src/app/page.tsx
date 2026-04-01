@@ -51,7 +51,7 @@ export default async function LandingPage() {
   const ctaHref = isLoggedIn ? "/dashboard" : "/signup";
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7] font-sans text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#F2F2F7] font-sans text-gray-900 relative overflow-hidden">
       {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
@@ -80,9 +80,9 @@ export default async function LandingPage() {
 
           {/* Headline */}
           <h1 id="hero-heading" className="hero-fade-1 text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-tight">
-            <span className="font-light text-gray-600">Stop reading</span>
+            <span className="font-light text-gray-400">Stop reading</span>
             <br />
-            <span className="font-serif italic gradient-text">app reviews.</span>
+            <span className="font-serif italic text-friction-blue">app reviews.</span>
             <br />
             <span className="font-bold text-gray-900">Start acting on them.</span>
           </h1>
@@ -317,8 +317,8 @@ export default async function LandingPage() {
             <div className="font-mono text-[11px] font-semibold uppercase tracking-[3px] text-friction-blue mb-3">
               Features
             </div>
-            <h2 className="text-3xl md:text-[46px] md:leading-[1.1] font-bold tracking-tight text-white max-w-lg">
-              <span className="font-light text-gray-600">The report your team</span>
+            <h2 className="text-3xl md:text-[46px] md:leading-[1.1] font-bold tracking-tight text-gray-900 max-w-lg">
+              <span className="font-light text-gray-400">The report your team</span>
               <br />
               <span className="font-serif italic">actually reads.</span>
             </h2>
@@ -462,7 +462,7 @@ export default async function LandingPage() {
               Pricing
             </div>
             <h2 className="text-3xl md:text-[42px] font-bold tracking-tight text-gray-900">
-              <span className="font-light text-gray-600">Completely</span>{" "}
+              <span className="font-light text-gray-400">Completely</span>{" "}
               <span className="font-serif italic">free.</span>
             </h2>
             <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto">
@@ -524,7 +524,7 @@ export default async function LandingPage() {
               </ul>
               <Link
                 href={ctaHref}
-                className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors border border-gray-200 bg-gray-50 text-white hover:bg-[#2A3040]"
+                className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#2A3040]"
               >
                 Get Your Free API Key &rarr;
               </Link>
@@ -547,10 +547,10 @@ export default async function LandingPage() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-40 w-40 rounded-full bg-friction-blue/10 blur-[60px]" />
             </div>
             <div className="relative">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
                 <span className="font-light">Your first Vibe Report.</span>
                 <br />
-                <span className="font-serif italic gradient-text">Sixty seconds.</span>
+                <span className="font-serif italic text-friction-blue">Sixty seconds.</span>
               </h2>
               <p className="mx-auto mt-5 max-w-md text-base text-gray-500 leading-relaxed">
                 No credit card required. Just search an app and see what your users really think.
@@ -577,13 +577,13 @@ export default async function LandingPage() {
               <ellipse cx="0" cy="0" rx="24" ry="23.5" fill="#ffffff"/>
               <path d="M -7 -12 L 7 -12 L 7 -8.5 L -3 -8.5 L -3 -1.5 L 5 -1.5 L 5 1.5 L -3 1.5 L -3 13 L -7 13 Z" fill="#0f172a"/>
             </svg>
-            <span className="text-sm font-semibold text-gray-600">FrictionLens</span>
+            <span className="text-sm font-semibold text-gray-900">FrictionLens</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">Terms</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">Twitter</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">GitHub</a>
           </div>
           <p className="text-xs text-gray-500 font-mono">
             Built by Chetan Jonnalagadda

@@ -45,7 +45,7 @@ export function DashboardHeader({
 
       <div className="relative flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <h1 className="font-serif text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+          <h1 className="font-serif text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
             {greeting}, {firstName}
           </h1>
           <p className="mt-0.5 font-mono text-[11px] text-gray-500 tracking-wide">

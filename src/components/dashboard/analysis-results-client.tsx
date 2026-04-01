@@ -400,7 +400,7 @@ function RatingStars({ rating }: { rating: number | null }) {
             "h-3.5 w-3.5",
             i < rating
               ? "fill-amber-400 text-amber-400"
-              : "fill-white/[0.08] text-white/[0.12]"
+              : "fill-gray-200 text-gray-300"
           )}
         />
       ))}
