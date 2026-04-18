@@ -58,8 +58,14 @@ export default async function LandingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Aurora gradient blobs ── */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {/* ── Ambient blue aurora (spec: 2026-04-18-landing-ambient-gradient-design.md) ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      >
+        <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-friction-blue/[0.08] blur-[96px]" />
+        <div className="absolute top-[45%] -left-48 h-[450px] w-[450px] rounded-full bg-friction-blue/[0.08] blur-[96px]" />
+        <div className="absolute top-[65%] -right-36 h-[550px] w-[550px] rounded-full bg-friction-blue/[0.08] blur-[96px]" />
       </div>
 
       {/* ══════════════════════════════════════════════
