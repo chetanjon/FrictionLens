@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { PostHogAnalyticsProvider } from "@/components/analytics/posthog-provider";
+import { getSiteUrl } from "@/lib/config/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,8 +24,7 @@ const newsreader = Newsreader({
   style: ["normal", "italic"],
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://frictionlens.app";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: {

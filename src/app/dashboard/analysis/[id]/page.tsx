@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { ChevronLeft } from "lucide-react";
-import type { AnalysisResult } from "@/lib/types/review";
+import type { AnalysisResult, FrictionItem } from "@/lib/types/review";
 import { ReportNav } from "@/components/report/report-nav";
 import { GlassCard } from "@/components/report/glass-card";
 
@@ -332,11 +332,12 @@ export default async function AnalysisPage({
 
   const topFriction = frictionScores[0] ?? null;
 
-  // Map friction_scores from AnalysisResult shape to FrictionItem shape
-  const mappedFrictionScores = frictionScores.map((f) => ({
+  // Map AnalysisResult.friction_scores (mention_count) to FrictionItem (mentions).
+  // Stored analyses in Supabase use mention_count; we translate at the UI boundary.
+  const mappedFrictionScores: FrictionItem[] = frictionScores.map((f) => ({
     feature: f.feature,
     score: f.score,
-    mentions: "mentions" in f ? (f as Record<string, unknown>).mentions as number : ("mention_count" in f ? (f as Record<string, unknown>).mention_count as number : 0),
+    mentions: f.mention_count,
     trend: f.trend,
     delta: f.delta,
   }));

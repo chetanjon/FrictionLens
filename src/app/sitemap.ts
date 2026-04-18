@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 
+import { getSiteUrl } from "@/lib/config/site";
+
 // Re-fetch hourly so newly-published reports show up in search engines without
 // requiring a redeploy.
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://frictionlens.app";
+  const baseUrl = getSiteUrl();
 
   const staticEntries: MetadataRoute.Sitemap = [
     {

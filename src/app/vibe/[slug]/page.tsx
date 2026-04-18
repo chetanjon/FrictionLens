@@ -2,9 +2,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { AnalysisResult } from "@/lib/types/review";
+import type { AnalysisResult, FrictionItem } from "@/lib/types/review";
 import { ReportNav } from "@/components/report/report-nav";
 import { GlassCard } from "@/components/report/glass-card";
+import { getSiteUrl } from "@/lib/config/site";
 
 /* ---------------------------------------------------------------------------
  * Dynamic section imports with graceful fallbacks
@@ -201,7 +202,7 @@ export async function generateMetadata({
     return { title: "Report Not Found" };
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://frictionlens.com";
+  const appUrl = getSiteUrl();
   const score = Math.round(data.vibe_score ?? 0);
   const aiSummary =
     typeof (data.results as AnalysisResult | null)?.summary === "string"
@@ -261,9 +262,13 @@ export default async function PublicVibePage({
     { cookies: { getAll: () => [], setAll: () => {} } }
   );
 
+  // Explicit column list — avoids exposing internal fields (user_id, encrypted
+  // keys, etc.) to anon clients even if RLS on `analyses` is ever loosened.
   const { data: analysis, error: analysisError } = await supabase
     .from("analyses")
-    .select("*")
+    .select(
+      "id,app_name,platform,status,vibe_score,review_count,results,dimension_scores,friction_scores,churn_drivers,action_items,competitors,created_at,completed_at,is_public,slug"
+    )
     .eq("slug", slug)
     .eq("is_public", true)
     .single();
@@ -312,11 +317,13 @@ export default async function PublicVibePage({
 
   const topFriction = frictionScores[0] ?? null;
 
-  // Map friction_scores from AnalysisResult shape to FrictionItem shape
-  const mappedFrictionScores = frictionScores.map((f) => ({
+  // Map AnalysisResult.friction_scores (mention_count) to FrictionItem (mentions).
+  // Separate names are load-bearing: stored analyses in Supabase already use
+  // mention_count, so we can't rename the stored shape without a migration.
+  const mappedFrictionScores: FrictionItem[] = frictionScores.map((f) => ({
     feature: f.feature,
     score: f.score,
-    mentions: "mentions" in f ? (f as Record<string, unknown>).mentions as number : ("mention_count" in f ? (f as Record<string, unknown>).mention_count as number : 0),
+    mentions: f.mention_count,
     trend: f.trend,
     delta: f.delta,
   }));

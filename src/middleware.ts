@@ -37,9 +37,17 @@ export async function middleware(request: NextRequest) {
 
   // Per-IP rate limit on the public report routes — keeps the slug space
   // from being brute-forced and protects the anon Supabase queries.
+  //
+  // Wrapped in a 250ms timeout that fails open: if Upstash is slow or down,
+  // we'd rather serve the page than hold up every request behind a stuck
+  // Redis call.
   if (pathname.startsWith("/vibe/")) {
     const ip = clientIpFromHeaders(request.headers);
-    const limit = await checkApiRateLimit("vibe-page", ip, 60);
+    const limitCheck = checkApiRateLimit("vibe-page", ip, 60);
+    const timeout = new Promise<{ ok: true }>((resolve) =>
+      setTimeout(() => resolve({ ok: true }), 250)
+    );
+    const limit = await Promise.race([limitCheck, timeout]);
     if (!limit.ok) {
       return new NextResponse("Too Many Requests", rateLimitResponseInit(limit));
     }
@@ -98,6 +106,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Skip Next internals, static metadata files (manifest/robots/sitemap are
+    // served by Next's route handlers — middleware intercepting them breaks
+    // the response body), and common image types.
+    "/((?!_next/static|_next/image|favicon\\.ico|manifest\\.webmanifest|robots\\.txt|sitemap\\.xml|icon\\.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
