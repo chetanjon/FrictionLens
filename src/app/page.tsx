@@ -86,15 +86,15 @@ export default async function LandingPage() {
 
           {/* Headline */}
           <h1 id="hero-heading" className="hero-fade-1 text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-tight">
-            <span className="font-light text-gray-400">Stop reading</span>
+            <span className="font-light text-gray-500">Stop reading</span>
             <br />
-            <span className="font-serif italic text-friction-blue">app reviews.</span>
+            <span className="font-serif italic text-[#3E7BB0]">app reviews.</span>
             <br />
             <span className="font-bold text-gray-900">Start acting on them.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-fade-2 mt-6 max-w-xl text-lg leading-relaxed text-gray-500">
+          <p className="hero-fade-2 mt-6 max-w-xl text-lg leading-relaxed text-gray-600">
             FrictionLens synthesizes hundreds of app store reviews into one
             shareable <span className="font-medium text-gray-900">Vibe Report</span> with
             sentiment scores, churn signals, and the action items your roadmap is missing.
@@ -328,7 +328,7 @@ export default async function LandingPage() {
               Features
             </div>
             <h2 className="text-3xl md:text-[46px] md:leading-[1.1] font-bold tracking-tight text-gray-900 max-w-lg">
-              <span className="font-light text-gray-400">The report your team</span>
+              <span className="font-light text-gray-500">The report your team</span>
               <br />
               <span className="font-serif italic">actually reads.</span>
             </h2>
@@ -472,7 +472,7 @@ export default async function LandingPage() {
               Pricing
             </div>
             <h2 className="text-3xl md:text-[42px] font-bold tracking-tight text-gray-900">
-              <span className="font-light text-gray-400">Completely</span>{" "}
+              <span className="font-light text-gray-500">Completely</span>{" "}
               <span className="font-serif italic">free.</span>
             </h2>
             <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto">
