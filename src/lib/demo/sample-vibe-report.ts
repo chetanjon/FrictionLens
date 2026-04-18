@@ -55,7 +55,7 @@ export type DemoAnalysis = {
   churn_drivers: ChurnDriver[];
   action_items: ActionItem[];
   competitors: DemoCompetitor[];
-  release_impact: ReleaseImpact;
+  release_impact?: ReleaseImpact;
   created_at: string;
   completed_at: string;
   is_public: boolean;

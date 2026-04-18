@@ -5,7 +5,6 @@
  */
 
 import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 
 import { GEMINI_MODELS, GeminiAnalysisError } from "@/lib/ai/gemini";
 import { getRedis } from "./redis";
@@ -29,7 +28,7 @@ function getRedisLimiter(model: string): Ratelimit | null {
   if (!limits) return null;
 
   const limiter = new Ratelimit({
-    redis: Redis.fromEnv(),
+    redis,
     limiter: Ratelimit.slidingWindow(limits.rpm, "1 m"),
     prefix: `fl:rl:${model}`,
   });

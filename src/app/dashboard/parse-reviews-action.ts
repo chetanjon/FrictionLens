@@ -31,10 +31,6 @@ export async function parseReviewsAction(
     };
   }
 
-  if (typeof text !== "string") {
-    return { ok: false, error: "Expected text payload." };
-  }
-
   return parseReviewsText(text);
 }
 

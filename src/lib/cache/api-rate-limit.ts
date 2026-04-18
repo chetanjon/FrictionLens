@@ -7,7 +7,6 @@
  */
 
 import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 
 import { getRedis } from "./redis";
 
@@ -24,7 +23,7 @@ function getApiLimiter(namespace: string, rpm: number): Ratelimit | null {
   const existing = apiLimiters.get(key);
   if (existing) return existing;
   const limiter = new Ratelimit({
-    redis: Redis.fromEnv(),
+    redis,
     limiter: Ratelimit.slidingWindow(rpm, "1 m"),
     prefix: `fl:api:${namespace}`,
   });
@@ -51,7 +50,12 @@ function inMemoryCheck(key: string, rpm: number): ApiRateLimitResult {
     evictOldest(Math.floor(MAX_MEM_KEYS / 4));
   }
   let bucket = memBuckets.get(key);
-  if (!bucket) {
+  if (bucket) {
+    // Touch: re-insert to move to the end of insertion order, so evictOldest
+    // behaves as LRU rather than FIFO — noisy keys stay hot, quiet ones age out.
+    memBuckets.delete(key);
+    memBuckets.set(key, bucket);
+  } else {
     bucket = { times: [] };
     memBuckets.set(key, bucket);
   }
