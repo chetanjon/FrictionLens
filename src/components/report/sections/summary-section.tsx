@@ -65,7 +65,7 @@ export function SummarySection({
                 boxShadow: "0 6px 20px rgba(107,159,212,0.15)",
               }}
             >
-              <span className="leading-none text-gray-900">{initial}</span>
+              <span className="leading-none font-bold text-white">{initial}</span>
             </div>
             <div>
               <h1 className="m-0 text-[28px] font-extrabold tracking-[-1px] text-gray-900">
@@ -88,11 +88,21 @@ export function SummarySection({
         </div>
       </div>
 
-      {/* Stat cards row — matches reference design */}
+      {/* Stat cards row */}
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Churn Risk */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] px-4 py-[18px]">
+          <div
+            className="absolute inset-x-0 top-0 h-[3px]"
+            style={{
+              background: (churnRiskPercent ?? 0) > 15
+                ? "#C47070"
+                : (churnRiskPercent ?? 0) > 8
+                  ? "#C9B06A"
+                  : "#6B9FD4",
+            }}
+          />
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-500">
             Churn Risk
           </div>
           <div
@@ -101,24 +111,32 @@ export function SummarySection({
           >
             {churnRiskPercent != null ? `${churnRiskPercent}%` : "N/A"}
           </div>
+          <div className="mt-0.5 text-[11px] text-slate-500">at-risk reviews</div>
         </div>
 
         {/* Top Friction */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] px-4 py-[18px]">
+          <div className="absolute inset-x-0 top-0 h-[3px] bg-[#C47070]" />
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-500">
             Top Friction
           </div>
           <div className="mt-1 font-mono text-2xl font-extrabold tracking-tight text-[#C47070]">
             {topFrictionScore != null ? topFrictionScore.toFixed(1) : "N/A"}
           </div>
           {topFriction && (
-            <div className="mt-0.5 text-[11px] text-gray-500">{topFriction}</div>
+            <div className="mt-0.5 truncate text-[11px] text-slate-500" title={topFriction}>
+              {topFriction}
+            </div>
           )}
         </div>
 
         {/* Release Grade */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] px-4 py-[18px]">
+          <div
+            className="absolute inset-x-0 top-0 h-[3px]"
+            style={{ background: releaseGrade ? "#C9B06A" : "#cbd5e1" }}
+          />
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-500">
             Release Grade
           </div>
           <div
@@ -127,14 +145,18 @@ export function SummarySection({
           >
             {releaseGrade ?? "—"}
           </div>
-          {releaseVersion && (
-            <div className="mt-0.5 text-[11px] text-gray-500">{releaseVersion}</div>
-          )}
+          <div className="mt-0.5 text-[11px] text-slate-500">
+            {releaseVersion ?? "no version data"}
+          </div>
         </div>
 
         {/* Momentum */}
-        <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-4 py-[18px]">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-gray-500">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] px-4 py-[18px]">
+          <div
+            className="absolute inset-x-0 top-0 h-[3px]"
+            style={{ background: momentum != null ? scoreColor(momentum) : "#cbd5e1" }}
+          />
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[1.5px] text-slate-500">
             Momentum
           </div>
           <div
@@ -143,11 +165,9 @@ export function SummarySection({
           >
             {momentum != null ? momentum.toFixed(1) : "N/A"}
           </div>
-          {momentum != null && (
-            <div className="mt-0.5 text-[11px] text-gray-500">
-              {momentumLabel(momentum)}
-            </div>
-          )}
+          <div className="mt-0.5 text-[11px] text-slate-500">
+            {momentum != null ? momentumLabel(momentum) : "no data"}
+          </div>
         </div>
       </div>
 
@@ -155,22 +175,37 @@ export function SummarySection({
       {dimensionScores && (
         <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
           {/* Sentiment Radar Card */}
-          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
-            <h3 className="mb-3 text-base font-bold text-gray-900">
-              Sentiment Radar
-            </h3>
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] p-5">
+            <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-friction-blue/60 via-friction-blue to-friction-blue/60" />
+            <div className="mb-3 flex items-baseline justify-between">
+              <h3 className="text-base font-bold text-slate-900">
+                Sentiment Radar
+              </h3>
+              <span className="font-mono text-[10px] uppercase tracking-[1.5px] text-slate-500">
+                0 – 10 scale
+              </span>
+            </div>
             <RadarMini dims={dimensionScores} />
           </div>
 
           {/* Friction Heatmap Card */}
-          <div className="rounded-2xl border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-5">
-            <h3 className="mb-3 text-base font-bold text-gray-900">
-              Friction Heatmap
-            </h3>
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_8px_24px_rgba(15,23,42,0.04)] p-5">
+            <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#C47070]/60 via-[#C47070] to-[#C47070]/60" />
+            <div className="mb-1 flex items-baseline justify-between">
+              <h3 className="text-base font-bold text-slate-900">
+                Friction Heatmap
+              </h3>
+              <span className="font-mono text-[10px] uppercase tracking-[1.5px] text-slate-500">
+                Higher = worse
+              </span>
+            </div>
+            <p className="mb-3 text-[11px] text-slate-500">
+              0 = no friction · 10 = critical pain point
+            </p>
             {frictionScores && frictionScores.length > 0 ? (
               <FrictionMiniChart items={frictionScores} />
             ) : (
-              <p className="py-8 text-center text-sm text-gray-500">
+              <p className="py-8 text-center text-sm text-slate-500">
                 No friction data yet
               </p>
             )}
@@ -194,7 +229,7 @@ export function SummarySection({
               {topFriction}, the highest friction point driving user churn
             </div>
           </div>
-          <span className="shrink-0 rounded-full bg-[#C47070] px-3 py-1 font-mono text-xs font-bold text-gray-900">
+          <span className="shrink-0 rounded-full bg-[#C47070] px-3 py-1 font-mono text-xs font-bold text-white shadow-sm">
             P0
           </span>
         </div>
@@ -209,7 +244,7 @@ export function SummarySection({
 function RadarMini({ dims }: { dims: { love: number; frustration: number; loyalty: number; momentum: number; wom: number } }) {
   const labels = ["Love", "Calm", "Loyalty", "Momentum", "WoM"];
   const vals = [dims.love, 10 - dims.frustration, dims.loyalty, dims.momentum, dims.wom];
-  const cx = 130, cy = 124, r = 80;
+  const cx = 130, cy = 124, r = 78;
 
   const toXY = (v: number, i: number): [number, number] => {
     const a = -Math.PI / 2 + i * ((2 * Math.PI) / 5);
@@ -220,29 +255,80 @@ function RadarMini({ dims }: { dims: { love: number; frustration: number; loyalt
 
   return (
     <svg viewBox="0 0 260 248" className="mx-auto w-full max-w-[260px]">
+      {/* Pentagon grid — slate stroke so it actually shows on a light card */}
       {[2.5, 5, 7.5, 10].map((level) => {
         const gp = Array.from({ length: 5 }, (_, i) => toXY(level, i));
-        return <polygon key={level} points={gp.map((p) => p.join(",")).join(" ")} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.7" />;
+        return (
+          <polygon
+            key={level}
+            points={gp.map((p) => p.join(",")).join(" ")}
+            fill="none"
+            stroke="rgba(15,23,42,0.12)"
+            strokeWidth="0.8"
+          />
+        );
       })}
+      {/* Spoke axis lines */}
       {Array.from({ length: 5 }, (_, i) => {
         const [ex, ey] = toXY(10, i);
-        return <line key={i} x1={cx} y1={cy} x2={ex} y2={ey} stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />;
+        return (
+          <line
+            key={i}
+            x1={cx}
+            y1={cy}
+            x2={ex}
+            y2={ey}
+            stroke="rgba(15,23,42,0.10)"
+            strokeWidth="0.6"
+          />
+        );
       })}
       <defs>
         <linearGradient id="radar-mini-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#6B9FD4" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#6B9FD4" stopOpacity="0.03" />
+          <stop offset="0%" stopColor="#4A90D9" stopOpacity="0.30" />
+          <stop offset="100%" stopColor="#4A90D9" stopOpacity="0.08" />
         </linearGradient>
       </defs>
-      <polygon points={pts.map((p) => p.join(",")).join(" ")} fill="url(#radar-mini-fill)" stroke="#6B9FD4" strokeWidth="1.5" />
+      {/* Data polygon */}
+      <polygon
+        points={pts.map((p) => p.join(",")).join(" ")}
+        fill="url(#radar-mini-fill)"
+        stroke="#4A90D9"
+        strokeWidth="1.8"
+      />
+      {/* Vertex dots */}
       {pts.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="3.5" fill="#6B9FD4" stroke="rgba(0,0,0,0.4)" strokeWidth="1.5" />
+        <circle key={i} cx={x} cy={y} r="3.5" fill="#4A90D9" stroke="white" strokeWidth="1.5" />
       ))}
+      {/* Axis labels — slate-600 instead of slate-400 so they are actually legible */}
       {labels.map((label, i) => {
-        const [lx, ly] = toXY(12.2, i);
+        const [lx, ly] = toXY(12.4, i);
         return (
-          <text key={label} x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 9.5, fill: "#94A3B8", fontWeight: 500 }}>
+          <text
+            key={label}
+            x={lx}
+            y={ly}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            style={{ fontSize: 10.5, fill: "#475569", fontWeight: 600 }}
+          >
             {label}
+          </text>
+        );
+      })}
+      {/* Score values inside the polygon, pulled toward the centre */}
+      {vals.map((v, i) => {
+        const [px, py] = toXY(v > 5 ? v - 1.6 : v + 2, i);
+        return (
+          <text
+            key={`v${i}`}
+            x={px}
+            y={py}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            style={{ fontSize: 10, fill: "#1e3a5f", fontWeight: 700, fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
+          >
+            {v.toFixed(1)}
           </text>
         );
       })}
@@ -261,26 +347,45 @@ function FrictionMiniChart({ items }: { items: Array<{ name: string; score: numb
   }
 
   return (
-    <div className="space-y-2.5 py-1">
-      {items.map((item) => (
-        <div key={item.name} className="flex items-center gap-3">
-          <span className="w-[120px] shrink-0 truncate text-[13px] font-medium text-gray-600">
-            {item.name}
-          </span>
-          <div className="h-[10px] flex-1 rounded bg-gray-100">
-            <div
-              className="h-full rounded transition-[width] duration-500 ease-out"
-              style={{
-                width: `${item.score * 10}%`,
-                background: barColor(item.score),
-              }}
-            />
+    <div
+      role="list"
+      aria-label="Friction features ranked by severity"
+      className="space-y-3 py-1"
+    >
+      {items.map((item) => {
+        const color = barColor(item.score);
+        return (
+          <div
+            key={item.name}
+            role="listitem"
+            aria-label={`${item.name}: ${item.score.toFixed(1)} of 10`}
+            className="flex items-center gap-3"
+          >
+            <span
+              className="w-[120px] shrink-0 truncate text-[13px] font-medium text-slate-700"
+              title={item.name}
+            >
+              {item.name}
+            </span>
+            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+              <div
+                className="h-full rounded-full transition-[width] duration-500 ease-out"
+                style={{
+                  width: `${item.score * 10}%`,
+                  background: `linear-gradient(90deg, ${color}b3, ${color})`,
+                  boxShadow: `0 0 8px ${color}66`,
+                }}
+              />
+            </div>
+            <span
+              className="w-[36px] text-right font-mono text-sm font-bold"
+              style={{ color }}
+            >
+              {item.score.toFixed(1)}
+            </span>
           </div>
-          <span className="w-[36px] text-right font-mono text-sm font-bold" style={{ color: barColor(item.score) }}>
-            {item.score.toFixed(1)}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

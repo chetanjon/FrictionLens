@@ -11,27 +11,30 @@ import { GlassCard } from "@/components/report/glass-card";
  * ----------------------------------------------------------------------- */
 
 function sectionFallback(label: string) {
-  return () => (
-    <div className="mx-auto max-w-[920px] px-7 py-13">
-      <div className="animate-pulse space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="h-2 w-16 rounded bg-gray-100" />
-          <div className="h-2 w-2 rounded-full bg-gray-100" />
-          <div className="h-3 w-32 rounded bg-gray-100" />
-        </div>
-        <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
-          <div className="space-y-3">
-            <div className="h-3 w-3/4 rounded bg-gray-100" />
-            <div className="h-3 w-1/2 rounded bg-gray-100" />
-            <div className="h-3 w-2/3 rounded bg-gray-100" />
+  function SectionFallback() {
+    return (
+      <div className="mx-auto max-w-[920px] px-4 py-13 sm:px-6 lg:px-7">
+        <div className="animate-pulse space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-16 rounded bg-gray-100" />
+            <div className="h-2 w-2 rounded-full bg-gray-100" />
+            <div className="h-3 w-32 rounded bg-gray-100" />
+          </div>
+          <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
+            <div className="space-y-3">
+              <div className="h-3 w-3/4 rounded bg-gray-100" />
+              <div className="h-3 w-1/2 rounded bg-gray-100" />
+              <div className="h-3 w-2/3 rounded bg-gray-100" />
+            </div>
           </div>
         </div>
+        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
+          Loading {label}
+        </p>
       </div>
-      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
-        Loading {label}
-      </p>
-    </div>
-  );
+    );
+  }
+  return SectionFallback;
 }
 
 function sectionPlaceholder(label: string) {
@@ -152,7 +155,6 @@ type ReviewRow = {
   id: string;
   content: string;
   rating: number | null;
-  author: string | null;
   review_date: string | null;
   love_score: number | null;
   frustration_score: number | null;
@@ -190,7 +192,7 @@ export async function generateMetadata({
 
   const { data } = await supabase
     .from("analyses")
-    .select("app_name, vibe_score")
+    .select("app_name, vibe_score, results")
     .eq("slug", slug)
     .eq("is_public", true)
     .single();
@@ -200,21 +202,35 @@ export async function generateMetadata({
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://frictionlens.com";
+  const score = Math.round(data.vibe_score ?? 0);
+  const aiSummary =
+    typeof (data.results as AnalysisResult | null)?.summary === "string"
+      ? ((data.results as AnalysisResult).summary ?? "").trim()
+      : "";
+
+  // Twitter caps descriptions around 200 chars; Open Graph is more generous
+  // but keep the share preview readable.
+  const fallbackDescription = `Vibe Score ${score}/100 — friction scores, churn drivers, and actionable insights for ${data.app_name}.`;
+  const description = aiSummary
+    ? aiSummary.length > 200
+      ? `${aiSummary.slice(0, 197)}...`
+      : aiSummary
+    : fallbackDescription;
 
   return {
     title: `${data.app_name} Vibe Report`,
-    description: `Vibe Score: ${data.vibe_score ?? "N/A"}/100. See the full sentiment analysis, friction scores, and churn drivers.`,
+    description,
     openGraph: {
-      title: `${data.app_name} Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
-      description: `AI-powered review intelligence for ${data.app_name}. Friction scores, churn drivers, and actionable insights.`,
+      title: `${data.app_name} Vibe Score: ${score}/100`,
+      description,
       url: `${appUrl}/vibe/${slug}`,
       siteName: "FrictionLens",
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${data.app_name} Vibe Score: ${Math.round(data.vibe_score ?? 0)}/100`,
-      description: `AI-powered review intelligence by FrictionLens`,
+      title: `${data.app_name} Vibe Score: ${score}/100`,
+      description,
     },
   };
 }
@@ -264,15 +280,15 @@ export default async function PublicVibePage({
   }
 
   /* -- Fetch reviews ----------------------------------------------------- */
-  const { data: reviews } = await supabase
-    .from("reviews")
-    .select(
-      "id, content, rating, author, review_date, love_score, frustration_score, loyalty_score, momentum_score, wom_score, churn_risk, summary"
-    )
-    .eq("analysis_id", a.id)
-    .order("frustration_score", { ascending: false });
+  // Reviews are no longer readable via direct anon SELECT — they go through
+  // a SECURITY DEFINER RPC that returns only the columns the public report
+  // actually renders (no author, no version, no platform).
+  const { data: reviews } = await supabase.rpc(
+    "get_public_analysis_reviews",
+    { p_slug: slug }
+  );
 
-  const typedReviews = (reviews as ReviewRow[]) ?? [];
+  const typedReviews = (reviews as ReviewRow[] | null) ?? [];
 
   /* -- Derive report data ------------------------------------------------ */
   const results = a.results;
@@ -315,26 +331,26 @@ export default async function PublicVibePage({
   }));
 
   return (
-    <div className="min-h-screen bg-black relative">
-      {/* Ambient background */}
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 relative">
+      {/* Ambient background — soft pastel blobs for depth on the light canvas */}
       <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-[#6B9FD4]/[0.05] blur-3xl" />
-        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-gray-50 blur-3xl" />
+        <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-[#6B9FD4]/[0.10] blur-3xl" />
+        <div className="absolute bottom-[-5%] left-[5%] h-[400px] w-[400px] rounded-full bg-[#C9B06A]/[0.08] blur-3xl" />
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+              "linear-gradient(rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.08) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
           }}
         />
       </div>
 
       {/* Branding header */}
-      <header className="relative z-10 border-b border-gray-200 bg-black/80">
-        <div className="mx-auto flex max-w-[920px] items-center justify-between px-7 py-4">
+      <header className="relative z-10 border-b border-slate-200 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[920px] items-center justify-between px-4 py-4 sm:px-6 lg:px-7">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08] border border-gray-200 text-gray-900">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-friction-blue/10 border border-friction-blue/20 text-friction-blue">
               <svg
                 width="12"
                 height="12"
@@ -360,14 +376,32 @@ export default async function PublicVibePage({
         </div>
       </header>
 
-      {/* Report nav (read-only, no share button) */}
+      {/* Report nav (read-only, no share button) — only lists sections that
+          are actually rendered below so clicking a tab never lands on an
+          empty placeholder. */}
       <div className="relative z-10">
+      {(() => {
+        const hasCompetitors = (a.competitors?.length ?? 0) > 0;
+        const hasRelease = !!releaseImpact;
+        const sectionIds = [
+          "summary",
+          ...(dimensionScores ? ["dimensions" as const] : []),
+          "friction",
+          "churn",
+          ...(hasRelease ? ["release" as const] : []),
+          ...(hasCompetitors ? ["compare" as const] : []),
+          "actions",
+          "data",
+        ];
+        return (
+          <>
       <ReportNav
         analysisId={a.id}
         appName={a.app_name}
         isPublic={true}
         slug={a.slug ?? null}
         readOnly
+        availableSectionIds={sectionIds}
       />
 
       {/* ------- 1. Summary ------- */}
@@ -398,16 +432,18 @@ export default async function PublicVibePage({
         churnRiskPercent={churnRiskPct}
       />
 
-      {/* ------- 5. Release ------- */}
-      <ReleaseSection releaseImpact={releaseImpact} />
+      {/* ------- 5. Release (only when version-tagged data exists) ------- */}
+      {hasRelease && <ReleaseSection releaseImpact={releaseImpact} />}
 
-      {/* ------- 6. Compare ------- */}
-      <CompareSection
-        appName={a.app_name}
-        vibeScore={Math.round(vibeScore)}
-        dimensionScores={dimensionScores ?? undefined}
-        competitors={a.competitors ?? undefined}
-      />
+      {/* ------- 6. Compare (only when competitors were analyzed) ------- */}
+      {hasCompetitors && (
+        <CompareSection
+          appName={a.app_name}
+          vibeScore={Math.round(vibeScore)}
+          dimensionScores={dimensionScores ?? undefined}
+          competitors={a.competitors ?? undefined}
+        />
+      )}
 
       {/* ------- 7. Actions ------- */}
       <ActionsSection actionItems={actionItems} />
@@ -416,8 +452,8 @@ export default async function PublicVibePage({
       <ExplorerSection reviews={explorerReviews} />
 
       {/* Footer with CTA */}
-      <footer className="border-t border-gray-200 print:hidden">
-        <div className="mx-auto max-w-[920px] px-7 py-14">
+      <footer className="border-t border-slate-200 print:hidden">
+        <div className="mx-auto max-w-[920px] px-4 py-14 sm:px-6 lg:px-7">
           <div className="relative overflow-hidden rounded-2xl bg-slate-900 px-8 py-12 text-center md:px-14">
             {/* Ambient glow */}
             <div className="pointer-events-none absolute inset-0">
@@ -425,10 +461,10 @@ export default async function PublicVibePage({
               <div className="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-friction-amber/15 blur-3xl" />
             </div>
             <div className="relative">
-              <h3 className="text-xl md:text-2xl font-bold tracking-tight text-gray-900">
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white">
                 Get your own Vibe Report
               </h3>
-              <p className="mx-auto mt-3 max-w-sm text-sm text-gray-500">
+              <p className="mx-auto mt-3 max-w-sm text-sm text-slate-300">
                 Turn hundreds of app store reviews into actionable intelligence. Free to start.
               </p>
               <Link
@@ -442,20 +478,23 @@ export default async function PublicVibePage({
 
           <div className="mt-8 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-gray-900">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-friction-blue text-white">
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold text-gray-500">FrictionLens</span>
+              <span className="text-xs font-semibold text-slate-700">FrictionLens</span>
             </div>
-            <p className="text-[11px] text-gray-500 font-mono">
+            <p className="text-[11px] text-slate-500 font-mono">
               Powered by AI review intelligence
             </p>
           </div>
         </div>
       </footer>
+          </>
+        );
+      })()}
       </div>
     </div>
   );

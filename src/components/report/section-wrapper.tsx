@@ -21,7 +21,7 @@ export function SectionWrapper({
       id={id}
       className={cn("py-13 relative", alt && "bg-gray-50")}
     >
-      <div className="mx-auto max-w-[920px] px-7">
+      <div className="mx-auto max-w-[920px] px-4 sm:px-6 lg:px-7">
         {title && (
           <div className="mb-8">
             {label && (

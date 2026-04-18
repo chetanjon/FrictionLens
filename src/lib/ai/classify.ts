@@ -118,7 +118,8 @@ function buildTrivialAnalysis(
   sentimentOverride?: "positive" | "negative"
 ): ReviewAnalysis {
   const scores = ratingToScores(review.rating);
-  let { love, frustration, loyalty, momentum, wom } = scores;
+  let { love, frustration, wom } = scores;
+  const { loyalty, momentum } = scores;
 
   // Adjust if we detected sentiment from text that conflicts with rating
   if (sentimentOverride === "positive" && love < 6) {

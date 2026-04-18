@@ -51,25 +51,41 @@ export async function generateSlug(analysisId: string, appName: string) {
     return { success: true, slug: existing.slug };
   }
 
-  // Generate slug: sanitized-app-name + short unique suffix
+  // Generate slug: sanitized-app-name + unique suffix.
+  // 12-char nanoid (~3.5e21 combinations) so the public URL space isn't
+  // brute-forceable by enumeration.
   const sanitized = appName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 30);
 
-  const suffix = nanoid(6);
-  const slug = `${sanitized}-${suffix}`;
+  const SLUG_NANOID_LEN = 12;
+  const MAX_ATTEMPTS = 5;
 
-  const { error } = await supabase
-    .from("analyses")
-    .update({ slug: slug })
-    .eq("id", analysisId)
-    .eq("user_id", user.id);
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const suffix = nanoid(SLUG_NANOID_LEN);
+    const slug = `${sanitized}-${suffix}`;
+    const { error } = await supabase
+      .from("analyses")
+      .update({ slug })
+      .eq("id", analysisId)
+      .eq("user_id", user.id);
 
-  if (error) {
-    return { success: false, error: error.message, slug: null };
+    if (!error) {
+      return { success: true, slug };
+    }
+    // Postgres unique-violation code is 23505. Retry with a fresh suffix;
+    // any other error short-circuits.
+    const code = (error as { code?: string }).code;
+    if (code !== "23505") {
+      return { success: false, error: error.message, slug: null };
+    }
   }
 
-  return { success: true, slug };
+  return {
+    success: false,
+    error: "Could not allocate a unique share slug. Try again.",
+    slug: null,
+  };
 }

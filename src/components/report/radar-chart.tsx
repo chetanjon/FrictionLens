@@ -39,9 +39,22 @@ export function RadarChart({ dims }: RadarChartProps) {
   const pts = vals.map((v, i) => toXY(v, i));
   const gridLevels = [2.5, 5, 7.5, 10];
 
+  // Plain-text alternative for screen readers — every datapoint, in the same
+  // order as the visual axes, with their numeric scores.
+  const ariaSummary = labels
+    .map((l, i) => `${l} ${vals[i].toFixed(1)} of 10`)
+    .join(", ");
+
   return (
-    <svg viewBox="0 0 260 260" className="w-full max-w-[290px]">
-      {/* Pentagon grid lines */}
+    <svg
+      viewBox="0 0 260 260"
+      className="w-full max-w-[290px]"
+      role="img"
+      aria-label={`Sentiment radar chart: ${ariaSummary}`}
+    >
+      <title>Sentiment dimensions radar</title>
+      <desc>{ariaSummary}</desc>
+      {/* Pentagon grid lines — slate so they're visible on the light card */}
       {gridLevels.map((level) => {
         const gridPts = Array.from({ length: 5 }, (_, i) => toXY(level, i));
         return (
@@ -49,8 +62,8 @@ export function RadarChart({ dims }: RadarChartProps) {
             key={level}
             points={gridPts.map((p) => p.join(",")).join(" ")}
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="0.7"
+            stroke="rgba(15,23,42,0.12)"
+            strokeWidth="0.8"
           />
         );
       })}
@@ -65,17 +78,17 @@ export function RadarChart({ dims }: RadarChartProps) {
             y1={cy}
             x2={ex}
             y2={ey}
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="0.5"
+            stroke="rgba(15,23,42,0.10)"
+            strokeWidth="0.6"
           />
         );
       })}
 
-      {/* Gradient fill definition */}
+      {/* Gradient fill definition — denser fill so the polygon reads at a glance */}
       <defs>
         <linearGradient id="radar-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#6B9FD4" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#6B9FD4" stopOpacity="0.03" />
+          <stop offset="0%" stopColor="#4A90D9" stopOpacity="0.30" />
+          <stop offset="100%" stopColor="#4A90D9" stopOpacity="0.08" />
         </linearGradient>
       </defs>
 
@@ -83,8 +96,8 @@ export function RadarChart({ dims }: RadarChartProps) {
       <polygon
         points={pts.map((p) => p.join(",")).join(" ")}
         fill="url(#radar-fill)"
-        stroke="#6B9FD4"
-        strokeWidth="1.5"
+        stroke="#4A90D9"
+        strokeWidth="2"
       />
 
       {/* Vertex dots */}
@@ -93,14 +106,14 @@ export function RadarChart({ dims }: RadarChartProps) {
           key={i}
           cx={x}
           cy={y}
-          r="4"
-          fill="#6B9FD4"
-          stroke="rgba(0,0,0,0.4)"
+          r="4.5"
+          fill="#4A90D9"
+          stroke="white"
           strokeWidth="2"
         />
       ))}
 
-      {/* Axis labels */}
+      {/* Axis labels — slate-600/700 for proper contrast on white */}
       {labels.map((label, i) => {
         const [lx, ly] = toXY(12.5, i);
         return (
@@ -112,9 +125,9 @@ export function RadarChart({ dims }: RadarChartProps) {
             dominantBaseline="middle"
             className="font-sans"
             style={{
-              fontSize: 10,
-              fill: "#94A3B8",
-              fontWeight: 500,
+              fontSize: 11,
+              fill: "#334155",
+              fontWeight: 600,
             }}
           >
             {label}
@@ -135,8 +148,8 @@ export function RadarChart({ dims }: RadarChartProps) {
             className="font-mono"
             style={{
               fontSize: 11,
-              fill: "#6B9FD4",
-              fontWeight: 600,
+              fill: "#1e3a5f",
+              fontWeight: 700,
             }}
           >
             {v.toFixed(1)}

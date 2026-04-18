@@ -1,15 +1,15 @@
 export default function AnalysisLoading() {
   return (
     <div className="animate-pulse">
-      {/* Report nav skeleton */}
-      <div className="sticky top-0 z-40 border-b border-gray-200 bg-black/80">
+      {/* Report nav skeleton — matches the real ReportNav (solid white) */}
+      <div className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-[0_1px_4px_rgba(15,23,42,0.04)]">
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-3 sm:px-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-8 w-20 rounded-lg bg-gray-100" />
+            <div key={i} className="h-8 w-20 rounded-lg bg-slate-100" />
           ))}
           <div className="ml-auto flex gap-2">
-            <div className="h-8 w-20 rounded-lg bg-gray-100" />
-            <div className="h-8 w-8 rounded-lg bg-gray-100" />
+            <div className="h-8 w-20 rounded-lg bg-slate-100" />
+            <div className="h-8 w-8 rounded-lg bg-slate-100" />
           </div>
         </div>
       </div>

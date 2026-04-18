@@ -8,6 +8,10 @@ import { reportRequestSchema } from "@/lib/analysis/pipeline-schemas";
 import { vibeReportSchema } from "@/lib/ai/schemas";
 import { REPORT_SYSTEM_PROMPT, buildReportPrompt } from "@/lib/ai/prompts";
 import { DEFAULT_MODEL } from "@/lib/ai/gemini";
+import {
+  checkApiRateLimit,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
 import type { VibeReport } from "@/lib/types/review";
 
 export async function POST(request: NextRequest) {
@@ -31,8 +35,18 @@ export async function POST(request: NextRequest) {
       reviewCount,
     } = parsed.data;
 
-    const { apiKey, model, supabase } =
+    const { userId, apiKey, model, supabase } =
       await authenticateAndDecryptKey(analysisId);
+
+    const limit = await checkApiRateLimit("analyze-report", userId, 10);
+    if (!limit.ok) {
+      return new NextResponse(
+        JSON.stringify({
+          error: `Too many report requests \u2014 wait ${limit.retryAfterSeconds}s.`,
+        }),
+        rateLimitResponseInit(limit)
+      );
+    }
     const resolvedModel = model ?? DEFAULT_MODEL;
 
     // Generate Vibe Report via Gemini
@@ -44,7 +58,14 @@ export async function POST(request: NextRequest) {
       prompt: buildReportPrompt(appName, reviewSummaries, dimensionAverages),
     });
 
-    const output = result.output!;
+    const parsedOutput = vibeReportSchema.safeParse(result.output);
+    if (!parsedOutput.success) {
+      return NextResponse.json(
+        { error: "Vibe report generation returned malformed output." },
+        { status: 502 }
+      );
+    }
+    const output = parsedOutput.data;
 
     const vibeReport: VibeReport = {
       app_name: appName,
@@ -85,15 +106,18 @@ export async function POST(request: NextRequest) {
       updatePayload.release_impact = vibeReport.release_impact;
     }
 
-    let { error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from("analyses")
       .update(updatePayload)
       .eq("id", analysisId);
 
-    // Fall back to minimal payload if columns missing
+    // Fall back to minimal payload if optional columns are missing.
     if (updateError) {
-      console.warn("Full report update failed, trying minimal:", updateError.message);
-      await supabase
+      console.warn("Full report update failed, trying minimal:", {
+        analysisId,
+        message: updateError.message,
+      });
+      const { error: minError } = await supabase
         .from("analyses")
         .update({
           friction_scores: vibeReport.friction_scores,
@@ -101,6 +125,12 @@ export async function POST(request: NextRequest) {
           action_items: vibeReport.action_items,
         })
         .eq("id", analysisId);
+      if (minError) {
+        console.error("Minimal report update also failed:", {
+          analysisId,
+          error: minError,
+        });
+      }
     }
 
     return NextResponse.json({

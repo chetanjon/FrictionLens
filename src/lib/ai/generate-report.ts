@@ -88,7 +88,18 @@ export async function generateVibeReport(
     prompt: buildReportPrompt(appName, reviewSummaries, dimensionAverages),
   });
 
-  const output = result.output!;
+  // Validate against the schema before consuming — protects downstream code
+  // from a malformed Gemini response that the SDK accepted but is incomplete.
+  const parsed = vibeReportSchema.safeParse(result.output);
+  if (!parsed.success) {
+    throw new Error(
+      `Vibe report generation returned malformed output: ${parsed.error.issues
+        .slice(0, 3)
+        .map((i) => i.message)
+        .join("; ")}`
+    );
+  }
+  const output = parsed.data;
 
   // Assemble the full VibeReport
   const vibeReport: VibeReport = {

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import Papa from "papaparse";
+import { useState, useRef, useCallback, useTransition } from "react";
 import { Upload, FileText, X, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,76 +15,17 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import type { ParsedReview } from "@/lib/types/review";
+import type { ColumnMapping } from "@/lib/csv/parse-reviews";
+import { parseReviewsAction } from "@/app/dashboard/parse-reviews-action";
 
-const CONTENT_COLUMNS = ["review", "text", "body", "content", "comment"];
-const RATING_COLUMNS = ["rating", "score", "stars"];
-const DATE_COLUMNS = ["date", "review_date", "created", "timestamp"];
-const AUTHOR_COLUMNS = ["author", "user", "username", "name"];
-const VERSION_COLUMNS = ["version", "app_version"];
-const PLATFORM_COLUMNS = ["platform"];
-
-type ColumnMapping = {
-  content: string | null;
-  rating: string | null;
-  date: string | null;
-  author: string | null;
-  version: string | null;
-  platform: string | null;
-};
-
-function detectColumnMapping(headers: string[]): ColumnMapping {
-  const lower = headers.map((h) => h.toLowerCase().trim());
-
-  function findMatch(candidates: string[]): string | null {
-    for (const candidate of candidates) {
-      const idx = lower.indexOf(candidate);
-      if (idx !== -1) return headers[idx];
-    }
-    return null;
-  }
-
-  return {
-    content: findMatch(CONTENT_COLUMNS),
-    rating: findMatch(RATING_COLUMNS),
-    date: findMatch(DATE_COLUMNS),
-    author: findMatch(AUTHOR_COLUMNS),
-    version: findMatch(VERSION_COLUMNS),
-    platform: findMatch(PLATFORM_COLUMNS),
-  };
-}
-
-function mapRowToReview(
-  row: Record<string, string>,
-  mapping: ColumnMapping
-): ParsedReview | null {
-  const content = mapping.content ? row[mapping.content]?.trim() : null;
-  if (!content) return null;
-
-  const rating = mapping.rating
-    ? parseFloat(row[mapping.rating])
-    : undefined;
-
-  return {
-    content,
-    rating: rating && !isNaN(rating) ? rating : undefined,
-    date: mapping.date ? row[mapping.date]?.trim() || undefined : undefined,
-    author: mapping.author
-      ? row[mapping.author]?.trim() || undefined
-      : undefined,
-    version: mapping.version
-      ? row[mapping.version]?.trim() || undefined
-      : undefined,
-    platform: mapping.platform
-      ? row[mapping.platform]?.trim() || undefined
-      : undefined,
-  };
-}
+const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
 type CsvUploadProps = {
   onReviewsParsed: (reviews: ParsedReview[]) => void;
+  disabled?: boolean;
 };
 
-export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
+export function CsvUpload({ onReviewsParsed, disabled = false }: CsvUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -93,6 +33,7 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
   const [previewRows, setPreviewRows] = useState<ParsedReview[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [allReviews, setAllReviews] = useState<ParsedReview[]>([]);
+  const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const reset = useCallback(() => {
@@ -122,52 +63,30 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
         return;
       }
 
+      if (file.size > MAX_FILE_BYTES) {
+        setError("File too large. Limit is 5MB.");
+        return;
+      }
+
       setFileName(file.name);
 
-      Papa.parse<Record<string, string>>(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          if (results.errors.length > 0 && results.data.length === 0) {
-            setError(
-              `Failed to parse CSV: ${results.errors[0].message}`
-            );
+      startTransition(async () => {
+        try {
+          const text = await file.text();
+          const result = await parseReviewsAction(text);
+          if (!result.ok) {
+            setError(result.error);
             return;
           }
-
-          const headers = results.meta.fields;
-          if (!headers || headers.length === 0) {
-            setError("No columns detected in the file.");
-            return;
-          }
-
-          const detectedMapping = detectColumnMapping(headers);
-
-          if (!detectedMapping.content) {
-            setError(
-              `Could not detect a review content column. Found columns: ${headers.join(", ")}. Expected one of: ${CONTENT_COLUMNS.join(", ")}`
-            );
-            return;
-          }
-
-          setMapping(detectedMapping);
-
-          const reviews = results.data
-            .map((row) => mapRowToReview(row, detectedMapping))
-            .filter((r): r is ParsedReview => r !== null);
-
-          if (reviews.length === 0) {
-            setError("No valid reviews found in the file.");
-            return;
-          }
-
-          setAllReviews(reviews);
-          setPreviewRows(reviews.slice(0, 5));
-          setTotalCount(reviews.length);
-        },
-        error: (err) => {
-          setError(`Failed to read file: ${err.message}`);
-        },
+          setMapping(result.mapping);
+          setAllReviews(result.reviews);
+          setPreviewRows(result.reviews.slice(0, 5));
+          setTotalCount(result.totalCount);
+        } catch (err) {
+          setError(
+            err instanceof Error ? err.message : "Failed to read file."
+          );
+        }
       });
     },
     [reset]
@@ -216,12 +135,19 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
       <CardContent className="space-y-4">
         {/* Drop zone */}
         <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onClick={() => fileInputRef.current?.click()}
+          onDrop={disabled ? undefined : handleDrop}
+          onDragOver={disabled ? undefined : handleDragOver}
+          onDragLeave={disabled ? undefined : handleDragLeave}
+          onClick={() => {
+            if (disabled) return;
+            fileInputRef.current?.click();
+          }}
+          aria-disabled={disabled || undefined}
           className={cn(
-            "relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-all",
+            "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-all",
+            disabled
+              ? "cursor-not-allowed opacity-60"
+              : "cursor-pointer",
             isDragOver
               ? "border-[#4A90D9] bg-[#4A90D9]/5"
               : "border-gray-200 hover:border-[#4A90D9]/50 hover:bg-gray-50",
@@ -233,6 +159,7 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
             type="file"
             accept=".csv,.txt"
             onChange={handleFileChange}
+            disabled={disabled}
             className="hidden"
           />
 
@@ -242,7 +169,9 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
               <div className="text-center">
                 <p className="font-medium text-foreground">{fileName}</p>
                 <p className="text-sm text-muted-foreground">
-                  {totalCount} reviews detected
+                  {isPending
+                    ? "Parsing..."
+                    : `${totalCount} reviews detected`}
                 </p>
               </div>
               <Button
@@ -270,12 +199,43 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
                   Drop your CSV here or click to browse
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Supports .csv and .txt files
+                  Supports .csv and .txt files (5MB max)
                 </p>
               </div>
             </>
           )}
         </div>
+
+        {/* Format hint — shown only when no file is loaded so first-time
+            users know what columns FrictionLens looks for. */}
+        {!fileName && !error && (
+          <div className="rounded-lg border border-slate-200/60 bg-slate-50/50 px-3 py-2.5 text-xs text-slate-500">
+            <span className="font-medium text-slate-600">Expected columns:</span>{" "}
+            <code className="font-mono text-[11px] text-slate-700">
+              review
+            </code>
+            ,{" "}
+            <code className="font-mono text-[11px] text-slate-700">
+              rating
+            </code>
+            ,{" "}
+            <code className="font-mono text-[11px] text-slate-700">date</code>{" "}
+            <span className="text-slate-400">(only </span>
+            <code className="font-mono text-[11px] text-slate-700">review</code>
+            <span className="text-slate-400">
+              {" "}
+              is required; we accept aliases like{" "}
+            </span>
+            <code className="font-mono text-[11px] text-slate-700">text</code>
+            <span className="text-slate-400">, </span>
+            <code className="font-mono text-[11px] text-slate-700">body</code>
+            <span className="text-slate-400">, </span>
+            <code className="font-mono text-[11px] text-slate-700">
+              comment
+            </code>
+            <span className="text-slate-400">)</span>
+          </div>
+        )}
 
         {/* Error */}
         {error && (
@@ -363,7 +323,11 @@ export function CsvUpload({ onReviewsParsed }: CsvUploadProps) {
 
         {/* Confirm button */}
         {allReviews.length > 0 && (
-          <Button onClick={handleConfirm} className="w-full">
+          <Button
+            onClick={handleConfirm}
+            className="w-full"
+            disabled={isPending || disabled}
+          >
             Use {totalCount} reviews
           </Button>
         )}

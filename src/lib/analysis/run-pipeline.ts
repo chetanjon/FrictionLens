@@ -9,6 +9,7 @@ import { analyzeReviewBatch } from "@/lib/ai/gemini";
 import { generateVibeReport } from "@/lib/ai/generate-report";
 import { analyzeCompetitor } from "@/lib/ai/analyze-competitor";
 import { notifySlackAnalysisComplete } from "@/lib/slack";
+import { log } from "@/lib/log";
 import type { CompetitorInput, CompetitorResult } from "@/lib/ai/analyze-competitor";
 import type {
   ParsedReview,
@@ -281,35 +282,47 @@ export async function runAnalysisPipeline(
     console.error("Vibe Report generation failed:", reportErr);
   }
 
-  // 6. Analyze competitors (if any)
+  // 6. Analyze competitors (if any) — run in parallel; the per-model Gemini
+  // rate limiter still serializes the AI calls, so this only overlaps the
+  // network-bound review pulls. Failures are isolated per competitor.
   const competitorResults: CompetitorResult[] = [];
   if (competitorInputs && competitorInputs.length > 0) {
     const total = competitorInputs.length;
-    for (let ci = 0; ci < total; ci++) {
-      const comp = competitorInputs[ci];
-      await onProgress(
-        `Analyzing competitor ${ci + 1}/${total}: ${comp.name}...`,
-        88 + Math.round(((ci + 1) / total) * 6)
-      );
+    let completed = 0;
+    await onProgress(
+      `Analyzing ${total} competitor${total > 1 ? "s" : ""}...`,
+      88
+    );
 
-      try {
-        const compResult = await analyzeCompetitor(
+    const settled = await Promise.allSettled(
+      competitorInputs.map(async (comp) => {
+        const result = await analyzeCompetitor(
           comp,
           apiKey,
           model,
-          (msg) =>
-            onProgress(
-              msg,
-              88 + Math.round(((ci + 0.5) / total) * 6)
-            )
+          undefined
         );
-        competitorResults.push(compResult);
-      } catch (compErr) {
-        console.error(
-          `Competitor analysis failed for ${comp.name}:`,
-          compErr
+        completed += 1;
+        await onProgress(
+          `Competitor ${completed}/${total} done: ${comp.name}`,
+          88 + Math.round((completed / total) * 6)
         );
-        // Skip failed competitors, don't block the main analysis
+        return result;
+      })
+    );
+
+    for (let i = 0; i < settled.length; i++) {
+      const outcome = settled[i];
+      if (outcome.status === "fulfilled") {
+        competitorResults.push(outcome.value);
+      } else {
+        log.error("competitor_analysis_failed", {
+          analysisId,
+          competitor: competitorInputs[i].name,
+          appId: competitorInputs[i].appId,
+          platform: competitorInputs[i].platform,
+          error: outcome.reason,
+        });
       }
     }
   }
@@ -389,11 +402,31 @@ export async function runAnalysisPipeline(
       .update(minimalPayload)
       .eq("id", analysisId);
     if (minError) {
-      console.error("Minimal update also failed:", minError);
+      log.error("analysis_minimal_update_failed", {
+        analysisId,
+        error: minError,
+      });
+      // Last-ditch: at least mark the row as failed so the polling endpoint
+      // and dashboard don't show it stuck in 'processing' forever.
+      const { error: failErr } = await supabase
+        .from("analyses")
+        .update({
+          status: "failed",
+          error_message: `Failed to persist analysis results: ${minError.message}`,
+        })
+        .eq("id", analysisId);
+      if (failErr) {
+        // Final attempt without optional columns.
+        await supabase
+          .from("analyses")
+          .update({ status: "failed" })
+          .eq("id", analysisId);
+      }
     }
   }
 
-  // 8. Send Slack notification (fire-and-forget)
+  // 8. Send Slack notification (fire-and-forget but log failures so a broken
+  // webhook URL or rate-limit doesn't disappear silently).
   notifySlackAnalysisComplete({
     appName,
     vibeScore: roundedVibeScore,
@@ -401,8 +434,8 @@ export async function runAnalysisPipeline(
     competitorCount: competitorResults.length,
     analysisId,
     userEmail,
-  }).catch(() => {
-    /* swallow */
+  }).catch((err) => {
+    log.error("slack_notify_failed", { analysisId, error: err });
   });
 
   return {

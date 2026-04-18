@@ -15,6 +15,47 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import type { ParsedReview } from "@/lib/types/review";
 
+// When the scraper can't find Reddit OAuth keys it throws with this exact
+// substring (see src/lib/scrapers/reddit.ts). We detect it and swap in a
+// configuration help panel instead of leaking the raw error to users.
+const MISSING_CREDS_MARKER = "Reddit API credentials not configured";
+
+function MissingCredsPanel() {
+  return (
+    <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/60 p-6 text-center">
+      <MessageSquare
+        className="mx-auto mb-2 h-6 w-6 text-slate-400"
+        aria-hidden="true"
+      />
+      <p className="text-sm font-semibold text-slate-700">
+        Reddit pull is not configured
+      </p>
+      <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-slate-500">
+        Create a script app at{" "}
+        <a
+          href="https://www.reddit.com/prefs/apps"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-friction-blue underline hover:no-underline"
+        >
+          reddit.com/prefs/apps
+        </a>
+        , add{" "}
+        <code className="font-mono text-[11px] text-slate-700">
+          REDDIT_CLIENT_ID
+        </code>{" "}
+        and{" "}
+        <code className="font-mono text-[11px] text-slate-700">
+          REDDIT_CLIENT_SECRET
+        </code>{" "}
+        to your{" "}
+        <code className="font-mono text-[11px] text-slate-700">.env.local</code>
+        , then restart the dev server.
+      </p>
+    </div>
+  );
+}
+
 type RedditPost = {
   postId: string;
   title: string;
@@ -39,6 +80,7 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [isPulling, setIsPulling] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [credsMissing, setCredsMissing] = useState(false);
   const [pulled, setPulled] = useState(false);
   const [pullProgress, setPullProgress] = useState("");
 
@@ -61,7 +103,12 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Search failed.");
+        const msg = String(data.error ?? "Search failed.");
+        if (msg.includes(MISSING_CREDS_MARKER)) {
+          setCredsMissing(true);
+        } else {
+          setError(msg);
+        }
         return;
       }
 
@@ -95,7 +142,12 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to pull comments.");
+        const msg = String(data.error ?? "Failed to pull comments.");
+        if (msg.includes(MISSING_CREDS_MARKER)) {
+          setCredsMissing(true);
+        } else {
+          setError(msg);
+        }
         return;
       }
 
@@ -115,6 +167,13 @@ export function RedditSearch({ onReviewsPulled, disabled }: RedditSearchProps) {
       setIsPulling(false);
     }
   }, [appName, subreddit, disabled, results, onReviewsPulled]);
+
+  // If we've already learned the server is missing Reddit creds, replace the
+  // whole panel with a configuration help card. Don't render the search inputs
+  // — letting the user submit again would only surface the same error.
+  if (credsMissing) {
+    return <MissingCredsPanel />;
+  }
 
   return (
     <div className="space-y-4">

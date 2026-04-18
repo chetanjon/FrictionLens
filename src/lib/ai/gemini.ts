@@ -7,7 +7,10 @@ import { generateText, Output } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 import type { ReviewAnalysis, ParsedReview } from "@/lib/types/review";
-import { reviewAnalysisSchema, batchReviewAnalysisSchema } from "./schemas";
+import {
+  reviewAnalysisSchema,
+  batchReviewAnalysisSchema,
+} from "./schemas";
 import { SYSTEM_PROMPT, buildReviewPrompt, buildBatchPrompt } from "./prompts";
 import {
   checkAndRecordRequest,
@@ -176,7 +179,17 @@ export async function analyzeReview(
       prompt: buildReviewPrompt(review),
     });
 
-    return result.output as ReviewAnalysis;
+    const parsed = reviewAnalysisSchema.safeParse(result.output);
+    if (!parsed.success) {
+      throw new GeminiAnalysisError(
+        `Review analysis returned malformed output: ${parsed.error.issues
+          .slice(0, 3)
+          .map((i) => i.message)
+          .join("; ")}`,
+        "MODEL_ERROR"
+      );
+    }
+    return parsed.data as ReviewAnalysis;
   });
 }
 
@@ -208,7 +221,17 @@ export async function analyzeReviewBatch(
       prompt: buildBatchPrompt(reviews),
     });
 
-    const analyses = result.output!.analyses as ReviewAnalysis[];
+    const parsed = batchReviewAnalysisSchema.safeParse(result.output);
+    if (!parsed.success) {
+      throw new GeminiAnalysisError(
+        `Batch analysis returned malformed output: ${parsed.error.issues
+          .slice(0, 3)
+          .map((i) => i.message)
+          .join("; ")}`,
+        "MODEL_ERROR"
+      );
+    }
+    const analyses = parsed.data.analyses as ReviewAnalysis[];
 
     if (analyses.length !== reviews.length) {
       console.warn(

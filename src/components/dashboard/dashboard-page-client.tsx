@@ -38,20 +38,30 @@ type DashboardPageClientProps = {
   trendAppNames: string[];
   recentAnalyses: AnalysisCardProps[];
   activityEvents: ActivityEvent[];
+  /** REDDIT_CLIENT_ID + SECRET present on the server. */
+  redditEnabled: boolean;
 };
 
 export function DashboardPageClient(props: DashboardPageClientProps) {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Auto-open dialog when sidebar "New Analysis" button navigates here with ?new=1
+  // Derive the initial dialog state from the URL during the first render
+  // instead of inside an effect — avoids the cascading-render that
+  // setState-in-effect would cause and satisfies react-hooks/set-state-in-effect.
+  const shouldAutoOpen = searchParams.get("new") === "1";
+  const [dialogOpen, setDialogOpen] = useState(shouldAutoOpen);
+
+  // After we've consumed `?new=1`, scrub it from the URL so a refresh doesn't
+  // reopen the dialog. Plain side-effect, no setState.
   useEffect(() => {
-    if (searchParams.get("new") === "1") {
-      setDialogOpen(true);
+    if (shouldAutoOpen) {
       router.replace("/dashboard", { scroll: false });
     }
-  }, [searchParams, router]);
+    // shouldAutoOpen is captured from first-render searchParams; intentionally
+    // not in deps because we only want to scrub the URL once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   if (props.analysisCount === 0 && props.recentAnalyses.length === 0) {
     return (
@@ -66,6 +76,7 @@ export function DashboardPageClient(props: DashboardPageClientProps) {
           onOpenChange={setDialogOpen}
           hasApiKey={props.hasApiKey}
           freeTrialRemaining={props.freeTrialRemaining}
+          redditEnabled={props.redditEnabled}
         />
       </>
     );

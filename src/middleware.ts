@@ -1,20 +1,48 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const publicRoutes = ["/", "/login", "/signup", "/callback"];
+import {
+  checkApiRateLimit,
+  clientIpFromHeaders,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
+
+const publicRoutes = ["/", "/login", "/signup", "/callback", "/demo"];
 
 function isPublicRoute(pathname: string): boolean {
   if (publicRoutes.includes(pathname)) return true;
   if (pathname.startsWith("/vibe/")) return true;
   if (pathname.startsWith("/callback")) return true;
-  if (pathname.startsWith("/api/")) return true;
+  if (pathname.startsWith("/demo")) return true;
   return false;
+}
+
+// API routes never redirect — they must respond with their own JSON
+// (401/403/etc.) rather than a 302 to /login. Auth is enforced inside each
+// handler. Inngest's webhook handler verifies its own signature.
+function isApiRoute(pathname: string): boolean {
+  return pathname.startsWith("/api/");
 }
 
 export async function middleware(request: NextRequest) {
   // Skip middleware if Supabase isn't configured (prevents edge runtime crash)
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
     return NextResponse.next();
+  }
+
+  const { pathname } = request.nextUrl;
+
+  // Per-IP rate limit on the public report routes — keeps the slug space
+  // from being brute-forced and protects the anon Supabase queries.
+  if (pathname.startsWith("/vibe/")) {
+    const ip = clientIpFromHeaders(request.headers);
+    const limit = await checkApiRateLimit("vibe-page", ip, 60);
+    if (!limit.ok) {
+      return new NextResponse("Too Many Requests", rateLimitResponseInit(limit));
+    }
   }
 
   let supabaseResponse = NextResponse.next({
@@ -49,10 +77,10 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
-
-  // Redirect unauthenticated users away from protected routes
-  if (!user && !isPublicRoute(pathname)) {
+  // Redirect unauthenticated users away from protected pages. API routes are
+  // explicitly excluded — they enforce auth inside their handlers and must
+  // return JSON, not a redirect.
+  if (!user && !isPublicRoute(pathname) && !isApiRoute(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

@@ -41,6 +41,7 @@ type DashboardCommandCenterProps = {
   trendAppNames: string[];
   recentAnalyses: AnalysisCardProps[];
   activityEvents: ActivityEvent[];
+  redditEnabled: boolean;
 };
 
 export function DashboardCommandCenter({
@@ -58,6 +59,7 @@ export function DashboardCommandCenter({
   trendAppNames,
   recentAnalyses,
   activityEvents,
+  redditEnabled,
 }: DashboardCommandCenterProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -131,6 +133,7 @@ export function DashboardCommandCenter({
         onOpenChange={setDialogOpen}
         hasApiKey={hasApiKey}
         freeTrialRemaining={freeTrialRemaining}
+        redditEnabled={redditEnabled}
       />
     </div>
   );

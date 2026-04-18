@@ -1,6 +1,6 @@
 "use client";
 
-import { Key, FileUp, BarChart3, Sparkles } from "lucide-react";
+import { Key, FileUp, BarChart3, Sparkles, Eye } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,6 +36,15 @@ export function EmptyStateGuide({
             ? ` You have ${freeTrialRemaining} free ${freeTrialRemaining === 1 ? "analysis" : "analyses"}, no API key needed.`
             : " Get started in three simple steps."}
         </p>
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:border-friction-blue/40 hover:bg-friction-blue/5 hover:text-friction-blue"
+          >
+            <Eye className="h-3.5 w-3.5 text-friction-blue" />
+            See a sample report
+          </Link>
+        </div>
       </div>
 
       {/* Free trial: simplified 2-step flow */}

@@ -4,8 +4,16 @@ import { decrypt } from "@/lib/crypto";
 import { consumeFreeTrial, FREE_TRIAL_MODEL, FREE_TRIAL_MAX_REVIEWS } from "@/lib/free-trial";
 import { isInngestEnabled } from "@/lib/inngest/is-enabled";
 import { inngest } from "@/lib/inngest/client";
-import { getAnalysisProgress } from "@/lib/inngest/progress";
+import {
+  getAnalysisProgress,
+  setAnalysisProgress,
+} from "@/lib/inngest/progress";
 import { runAnalysisPipeline } from "@/lib/analysis/run-pipeline";
+import {
+  checkApiRateLimit,
+  clientIpFromHeaders,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
 import type { CompetitorInput } from "@/lib/ai/analyze-competitor";
 import type { ParsedReview } from "@/lib/types/review";
 
@@ -41,6 +49,27 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ error: "No reviews provided." }),
       { status: 400, headers: { "Content-Type": "application/json" } }
     );
+  }
+
+  // Per-user rate limit before opening the SSE stream — full analyses are
+  // expensive (Gemini calls, scraper hits, DB writes); cap to a few per
+  // minute. Falls back to per-IP keying when the request isn't authenticated
+  // (the in-stream auth check below will then reject).
+  {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const identifier = user?.id ?? clientIpFromHeaders(request.headers);
+    const limit = await checkApiRateLimit("analyze-stream", identifier, 5);
+    if (!limit.ok) {
+      return new Response(
+        JSON.stringify({
+          error: `Too many analysis requests \u2014 wait ${limit.retryAfterSeconds}s.`,
+        }),
+        rateLimitResponseInit(limit)
+      );
+    }
   }
 
   const encoder = new TextEncoder();
@@ -341,7 +370,18 @@ async function runDirectly(params: DirectModeParams): Promise<void> {
       analysisId,
       onProgress: (step: string, progress: number) => {
         send("progress", { step, progress });
+        // Mirror the SSE event into Redis so /api/analyze/status can resume
+        // the polling UI if the client reconnects after a network blip.
+        // Best-effort — never fail the pipeline because Redis hiccupped.
+        void setAnalysisProgress(analysisId, step, progress, "processing").catch(
+          (err) =>
+            console.error("setAnalysisProgress failed:", { analysisId, error: err })
+        );
       },
+    });
+
+    void setAnalysisProgress(analysisId, "Done", 100, "completed").catch(() => {
+      /* status row is the source of truth; cache miss is fine */
     });
 
     send("complete", {
@@ -352,7 +392,7 @@ async function runDirectly(params: DirectModeParams): Promise<void> {
       progress: 100,
     });
   } catch (err) {
-    console.error("Analysis pipeline error:", err);
+    console.error("Analysis pipeline error:", { analysisId, error: err });
 
     // Mark analysis as failed in database
     const { error: failErr } = await supabase
@@ -365,6 +405,10 @@ async function runDirectly(params: DirectModeParams): Promise<void> {
         .update({ status: "failed" })
         .eq("id", analysisId);
     }
+
+    void setAnalysisProgress(analysisId, "Failed", 0, "failed").catch(() => {
+      /* swallowed: DB row is authoritative */
+    });
 
     const message =
       err instanceof Error ? err.message : "An unexpected error occurred.";

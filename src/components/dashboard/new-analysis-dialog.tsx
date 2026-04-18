@@ -23,6 +23,10 @@ import {
 import { AppStoreSearch } from "@/components/analysis/app-store-search";
 import { CompetitorSelect } from "@/components/analysis/competitor-select";
 import type { CompetitorApp } from "@/components/analysis/competitor-select";
+import { CsvUpload } from "@/components/analysis/csv-upload";
+import { PasteInput } from "@/components/analysis/paste-input";
+import { RedditSearch } from "@/components/analysis/reddit-search";
+import { ReviewPreview } from "@/components/analysis/review-preview";
 import type { ParsedReview } from "@/lib/types/review";
 import { runChunkedAnalysis } from "@/lib/analysis/client-orchestrator";
 import {
@@ -36,6 +40,12 @@ type NewAnalysisDialogProps = {
   onOpenChange: (open: boolean) => void;
   hasApiKey: boolean;
   freeTrialRemaining?: number;
+  /**
+   * Whether REDDIT_CLIENT_ID + REDDIT_CLIENT_SECRET are configured server-side.
+   * When false, the Reddit tab is disabled with a config hint instead of
+   * letting the user click into a flow that will always fail.
+   */
+  redditEnabled?: boolean;
 };
 
 export function NewAnalysisDialog({
@@ -43,6 +53,7 @@ export function NewAnalysisDialog({
   onOpenChange,
   hasApiKey,
   freeTrialRemaining = 0,
+  redditEnabled = false,
 }: NewAnalysisDialogProps) {
   const canAnalyze = hasApiKey || freeTrialRemaining > 0;
   const router = useRouter();
@@ -166,9 +177,26 @@ export function NewAnalysisDialog({
                 <Store className="mr-1.5 h-3.5 w-3.5" />
                 App Store
               </TabsTrigger>
-              <TabsTrigger value="reddit">
+              <TabsTrigger
+                value="reddit"
+                disabled={!redditEnabled}
+                title={
+                  redditEnabled
+                    ? undefined
+                    : "Reddit pull is disabled \u2014 set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET in .env.local"
+                }
+                className={!redditEnabled ? "opacity-60" : undefined}
+              >
                 <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
                 Reddit
+                {!redditEnabled && (
+                  <span
+                    aria-hidden="true"
+                    className="ml-1.5 rounded-sm border border-slate-300 bg-slate-100 px-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-slate-500"
+                  >
+                    Off
+                  </span>
+                )}
               </TabsTrigger>
               <TabsTrigger value="upload">Upload CSV</TabsTrigger>
               <TabsTrigger value="paste">Paste Reviews</TabsTrigger>
@@ -185,24 +213,60 @@ export function NewAnalysisDialog({
             </TabsContent>
 
             <TabsContent value="reddit">
-              <RedditSearchSlot
-                onReviewsPulled={(pulled, name) => {
-                  handleReviewsParsed(pulled);
-                  if (!appName.trim()) setAppName(name);
-                }}
-                disabled={isAnalyzing}
-              />
+              {redditEnabled ? (
+                <RedditSearch
+                  onReviewsPulled={(pulled, name) => {
+                    handleReviewsParsed(pulled);
+                    if (!appName.trim()) setAppName(name);
+                  }}
+                  disabled={isAnalyzing}
+                />
+              ) : (
+                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/60 p-6 text-center">
+                  <MessageCircle
+                    className="mx-auto mb-2 h-6 w-6 text-slate-400"
+                    aria-hidden="true"
+                  />
+                  <p className="text-sm font-semibold text-slate-700">
+                    Reddit pull is not configured
+                  </p>
+                  <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-slate-500">
+                    Create a script app at{" "}
+                    <a
+                      href="https://www.reddit.com/prefs/apps"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-friction-blue underline hover:no-underline"
+                    >
+                      reddit.com/prefs/apps
+                    </a>{" "}
+                    and add{" "}
+                    <code className="font-mono text-[11px] text-slate-700">
+                      REDDIT_CLIENT_ID
+                    </code>{" "}
+                    +{" "}
+                    <code className="font-mono text-[11px] text-slate-700">
+                      REDDIT_CLIENT_SECRET
+                    </code>{" "}
+                    to your{" "}
+                    <code className="font-mono text-[11px] text-slate-700">
+                      .env.local
+                    </code>
+                    , then restart the dev server.
+                  </p>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="upload">
-              <CsvUploadSlot
+              <CsvUpload
                 onReviewsParsed={handleReviewsParsed}
                 disabled={isAnalyzing}
               />
             </TabsContent>
 
             <TabsContent value="paste">
-              <PasteInputSlot
+              <PasteInput
                 onReviewsParsed={handleReviewsParsed}
                 disabled={isAnalyzing}
               />
@@ -211,7 +275,7 @@ export function NewAnalysisDialog({
 
           {/* Review preview */}
           {reviews.length > 0 && (
-            <ReviewPreviewSlot reviews={reviews} />
+            <ReviewPreview reviews={reviews} />
           )}
 
           {/* Competitor selection */}
@@ -281,80 +345,3 @@ export function NewAnalysisDialog({
   );
 }
 
-/* Slot components for lazy-loaded analysis inputs */
-
-function CsvUploadSlot({
-  onReviewsParsed,
-  disabled,
-}: {
-  onReviewsParsed: (reviews: ParsedReview[]) => void;
-  disabled: boolean;
-}) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { CsvUpload } = require("@/components/analysis/csv-upload");
-    return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center">
-        <p className="text-sm text-gray-500">CSV upload loading...</p>
-      </div>
-    );
-  }
-}
-
-function PasteInputSlot({
-  onReviewsParsed,
-  disabled,
-}: {
-  onReviewsParsed: (reviews: ParsedReview[]) => void;
-  disabled: boolean;
-}) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { PasteInput } = require("@/components/analysis/paste-input");
-    return <PasteInput onReviewsParsed={onReviewsParsed} disabled={disabled} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center">
-        <p className="text-sm text-gray-500">Paste input loading...</p>
-      </div>
-    );
-  }
-}
-
-function RedditSearchSlot({
-  onReviewsPulled,
-  disabled,
-}: {
-  onReviewsPulled: (reviews: ParsedReview[], appName: string, platform: string) => void;
-  disabled: boolean;
-}) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { RedditSearch } = require("@/components/analysis/reddit-search");
-    return <RedditSearch onReviewsPulled={onReviewsPulled} disabled={disabled} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center">
-        <p className="text-sm text-gray-500">Reddit search loading...</p>
-      </div>
-    );
-  }
-}
-
-function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { ReviewPreview } = require("@/components/analysis/review-preview");
-    return <ReviewPreview reviews={reviews} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
-        <p className="text-sm font-medium text-gray-600">
-          {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
-        </p>
-      </div>
-    );
-  }
-}

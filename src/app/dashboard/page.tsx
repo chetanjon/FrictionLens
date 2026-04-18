@@ -228,6 +228,12 @@ export default async function DashboardPage() {
     timestamp: a.completed_at ?? a.created_at,
   }));
 
+  // Reddit OAuth credentials gate the Reddit tab in the new-analysis dialog.
+  // Computed server-side so the secret stays out of the client bundle.
+  const redditEnabled = !!(
+    process.env.REDDIT_CLIENT_ID && process.env.REDDIT_CLIENT_SECRET
+  );
+
   return (
     <DashboardPageClient
       displayName={displayName}
@@ -244,6 +250,7 @@ export default async function DashboardPage() {
       trendAppNames={trendAppNames}
       recentAnalyses={recentAnalyses}
       activityEvents={activityEvents}
+      redditEnabled={redditEnabled}
     />
   );
 }

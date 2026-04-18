@@ -116,6 +116,17 @@ export default async function LandingPage() {
             </span>
           </Link>
 
+          {/* Secondary CTA — let visitors feel the product before committing */}
+          <div className="hero-fade-3 mt-4 flex max-w-xl items-center justify-start gap-2 text-sm text-gray-500">
+            <span>No signup needed?</span>
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-1 font-semibold text-friction-blue hover:underline"
+            >
+              See a sample report &rarr;
+            </Link>
+          </div>
+
           {/* Stats */}
           <div className="hero-fade-4 mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-gray-500">
             <div className="flex items-center gap-2">

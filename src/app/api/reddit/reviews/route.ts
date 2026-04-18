@@ -1,26 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { pullRedditReviews } from "@/lib/scrapers/reddit";
+import { createClient } from "@/lib/supabase/server";
+import {
+  checkApiRateLimit,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
 
+const querySchema = z.object({
+  appName: z.string().min(1).max(200),
+  subreddit: z.string().max(100).optional(),
+  count: z.coerce.number().int().min(1).max(500).optional(),
+});
 
 export async function GET(request: NextRequest) {
-  const appName = request.nextUrl.searchParams.get("appName");
-  const subreddit = request.nextUrl.searchParams.get("subreddit") || undefined;
-  const countParam = request.nextUrl.searchParams.get("count");
-
-  if (!appName || appName.trim().length === 0) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
     return NextResponse.json(
-      { error: "Missing required parameter: appName" },
+      { error: "Authentication required." },
+      { status: 401 }
+    );
+  }
+
+  const limit = await checkApiRateLimit("reddit-reviews", user.id, 10);
+  if (!limit.ok) {
+    return new NextResponse(
+      JSON.stringify({ error: "Rate limit exceeded. Try again shortly." }),
+      rateLimitResponseInit(limit)
+    );
+  }
+
+  const parsed = querySchema.safeParse({
+    appName: request.nextUrl.searchParams.get("appName"),
+    subreddit: request.nextUrl.searchParams.get("subreddit") ?? undefined,
+    count: request.nextUrl.searchParams.get("count") ?? undefined,
+  });
+
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: parsed.error.issues[0]?.message ?? "Invalid query." },
       { status: 400 }
     );
   }
 
-  const count = countParam ? Math.min(Number(countParam), 500) : 200;
+  const { appName, subreddit, count } = parsed.data;
 
   try {
     const reviews = await pullRedditReviews({
       appName: appName.trim(),
       subreddit,
-      count,
+      count: count ?? 200,
     });
 
     return NextResponse.json({

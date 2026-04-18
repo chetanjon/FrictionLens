@@ -1,7 +1,56 @@
 import type { NextConfig } from "next";
 
+// Conservative baseline security headers. Strict-Transport-Security is added
+// only when behind HTTPS (Vercel handles that); the rest are safe everywhere.
+//
+// CSP keeps 'unsafe-inline' for both scripts and styles because Next.js
+// inlines bootstrap scripts and Tailwind/chart components emit inline styles.
+// 'unsafe-eval' is dev-only — Turbopack's HMR runtime needs it; production
+// bundles do not.
+const isProd = process.env.NODE_ENV === "production";
+
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  ...(isProd ? [] : ["'unsafe-eval'"]),
+  "https://*.posthog.com",
+].join(" ");
+
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      `script-src ${scriptSrc}`,
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.upstash.io https://generativelanguage.googleapis.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
+];
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

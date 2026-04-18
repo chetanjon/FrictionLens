@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { analyzeCompetitor } from "@/lib/ai/analyze-competitor";
 import { authenticateAndDecryptKey } from "@/lib/analysis/pipeline-helpers";
 import { competitorRequestSchema } from "@/lib/analysis/pipeline-schemas";
+import {
+  checkApiRateLimit,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,8 +20,20 @@ export async function POST(request: NextRequest) {
     }
 
     const { analysisId, competitor } = parsed.data;
-    const { apiKey, model, supabase } =
+    const { userId, apiKey, model, supabase } =
       await authenticateAndDecryptKey(analysisId);
+
+    // Called multiple times per analysis but each call hits the scraper +
+    // Gemini, so cap per-user.
+    const limit = await checkApiRateLimit("analyze-competitor", userId, 15);
+    if (!limit.ok) {
+      return new NextResponse(
+        JSON.stringify({
+          error: `Too many competitor requests \u2014 wait ${limit.retryAfterSeconds}s.`,
+        }),
+        rateLimitResponseInit(limit)
+      );
+    }
 
     // Analyze the competitor
     const compResult = await analyzeCompetitor(competitor, apiKey, model);

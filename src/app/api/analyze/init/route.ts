@@ -9,6 +9,10 @@ import {
   interBatchDelay,
 } from "@/lib/analysis/pipeline-helpers";
 import { initRequestSchema } from "@/lib/analysis/pipeline-schemas";
+import {
+  checkApiRateLimit,
+  rateLimitResponseInit,
+} from "@/lib/cache/api-rate-limit";
 import type { ParsedReview, ReviewAnalysis } from "@/lib/types/review";
 
 const BATCH_SIZE = 50;
@@ -27,6 +31,16 @@ export async function POST(request: NextRequest) {
     const { appName, platform, reviews } = parsed.data;
     const { userId, apiKey, model, supabase } =
       await authenticateAndDecryptKey();
+
+    const limit = await checkApiRateLimit("analyze-init", userId, 10);
+    if (!limit.ok) {
+      return new NextResponse(
+        JSON.stringify({
+          error: `Too many analysis starts \u2014 wait ${limit.retryAfterSeconds}s.`,
+        }),
+        rateLimitResponseInit(limit)
+      );
+    }
 
     // Create analysis record
     const { data: analysis, error: createError } = await supabase

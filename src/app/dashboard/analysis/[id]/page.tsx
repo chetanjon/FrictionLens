@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { ChevronLeft } from "lucide-react";
 import type { AnalysisResult } from "@/lib/types/review";
 import { ReportNav } from "@/components/report/report-nav";
 import { GlassCard } from "@/components/report/glass-card";
@@ -10,27 +12,30 @@ import { GlassCard } from "@/components/report/glass-card";
  * ----------------------------------------------------------------------- */
 
 function sectionFallback(label: string) {
-  return () => (
-    <div className="mx-auto max-w-[920px] px-7 py-13">
-      <div className="animate-pulse space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="h-2 w-16 rounded bg-gray-100" />
-          <div className="h-2 w-2 rounded-full bg-gray-100" />
-          <div className="h-3 w-32 rounded bg-gray-100" />
-        </div>
-        <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
-          <div className="space-y-3">
-            <div className="h-3 w-3/4 rounded bg-gray-100" />
-            <div className="h-3 w-1/2 rounded bg-gray-100" />
-            <div className="h-3 w-2/3 rounded bg-gray-100" />
+  function SectionFallback() {
+    return (
+      <div className="mx-auto max-w-[920px] px-4 py-13 sm:px-6 lg:px-7">
+        <div className="animate-pulse space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-16 rounded bg-gray-100" />
+            <div className="h-2 w-2 rounded-full bg-gray-100" />
+            <div className="h-3 w-32 rounded bg-gray-100" />
+          </div>
+          <div className="rounded-2xl border border-gray-200/60 bg-white p-8">
+            <div className="space-y-3">
+              <div className="h-3 w-3/4 rounded bg-gray-100" />
+              <div className="h-3 w-1/2 rounded bg-gray-100" />
+              <div className="h-3 w-2/3 rounded bg-gray-100" />
+            </div>
           </div>
         </div>
+        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
+          Loading {label}
+        </p>
       </div>
-      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-gray-600">
-        Loading {label}
-      </p>
-    </div>
-  );
+    );
+  }
+  return SectionFallback;
 }
 
 function sectionPlaceholder(label: string) {
@@ -345,14 +350,43 @@ export default async function AnalysisPage({
     churn_risk: r.churn_risk ?? undefined,
   }));
 
+  const hasCompetitors = (a.competitors?.length ?? 0) > 0;
+  const hasRelease = !!releaseImpact;
+  const sectionIds = [
+    "summary",
+    ...(dimensionScores ? ["dimensions" as const] : []),
+    "friction",
+    "churn",
+    ...(hasRelease ? ["release" as const] : []),
+    ...(hasCompetitors ? ["compare" as const] : []),
+    "actions",
+    "data",
+  ];
+
   return (
     <div className="min-h-screen">
+      {/* Breadcrumb — gives users a way back to the Command Center without
+          relying on the sidebar (especially useful when the report nav is
+          sticky and pushes the rest of the chrome out of view). */}
+      <div className="mx-auto flex max-w-[920px] items-center gap-1 px-4 pt-6 text-xs sm:px-6 lg:px-7">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-1 rounded-md px-1.5 py-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+          Command Center
+        </Link>
+        <span className="text-slate-300" aria-hidden="true">/</span>
+        <span className="truncate text-slate-700 font-medium">{a.app_name}</span>
+      </div>
+
       {/* Sticky report navigation */}
       <ReportNav
         analysisId={a.id}
         appName={a.app_name}
         isPublic={a.is_public ?? false}
         slug={a.slug ?? null}
+        availableSectionIds={sectionIds}
       />
 
       {/* ------- 1. Summary ------- */}
@@ -383,16 +417,18 @@ export default async function AnalysisPage({
         churnRiskPercent={churnRiskPct}
       />
 
-      {/* ------- 5. Release ------- */}
-      <ReleaseSection releaseImpact={releaseImpact} />
+      {/* ------- 5. Release (only when version-tagged data exists) ------- */}
+      {hasRelease && <ReleaseSection releaseImpact={releaseImpact} />}
 
-      {/* ------- 6. Compare ------- */}
-      <CompareSection
-        appName={a.app_name}
-        vibeScore={Math.round(vibeScore)}
-        dimensionScores={dimensionScores ?? undefined}
-        competitors={a.competitors ?? undefined}
-      />
+      {/* ------- 6. Compare (only when competitors were analyzed) ------- */}
+      {hasCompetitors && (
+        <CompareSection
+          appName={a.app_name}
+          vibeScore={Math.round(vibeScore)}
+          dimensionScores={dimensionScores ?? undefined}
+          competitors={a.competitors ?? undefined}
+        />
+      )}
 
       {/* ------- 7. Actions ------- */}
       <ActionsSection actionItems={actionItems} />

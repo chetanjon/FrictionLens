@@ -21,9 +21,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { AppStoreSearch as AppStoreSearchImport } from "@/components/analysis/app-store-search";
+import { AppStoreSearch } from "@/components/analysis/app-store-search";
 import { CompetitorSelect } from "@/components/analysis/competitor-select";
 import type { CompetitorApp } from "@/components/analysis/competitor-select";
+import { CsvUpload } from "@/components/analysis/csv-upload";
+import { PasteInput } from "@/components/analysis/paste-input";
+import { ReviewPreview } from "@/components/analysis/review-preview";
 import type { ParsedReview } from "@/lib/types/review";
 import { runChunkedAnalysis } from "@/lib/analysis/client-orchestrator";
 import { trackAnalysisStarted, trackAnalysisCompleted, trackAnalysisError } from "@/lib/analytics";
@@ -174,7 +177,7 @@ export function DashboardClient({
             </TabsList>
 
             <TabsContent value="appstore">
-              <AppStoreSearchSlot
+              <AppStoreSearch
                 onReviewsPulled={(reviews, name) => {
                   handleReviewsParsed(reviews);
                   if (!appName.trim()) setAppName(name);
@@ -184,14 +187,14 @@ export function DashboardClient({
             </TabsContent>
 
             <TabsContent value="upload">
-              <CsvUploadSlot
+              <CsvUpload
                 onReviewsParsed={handleReviewsParsed}
                 disabled={isAnalyzing}
               />
             </TabsContent>
 
             <TabsContent value="paste">
-              <PasteInputSlot
+              <PasteInput
                 onReviewsParsed={handleReviewsParsed}
                 disabled={isAnalyzing}
               />
@@ -201,7 +204,7 @@ export function DashboardClient({
           {/* Review preview */}
           {reviews.length > 0 && (
             <div className="mb-5">
-              <ReviewPreviewSlot reviews={reviews} />
+              <ReviewPreview reviews={reviews} />
             </div>
           )}
 
@@ -384,136 +387,3 @@ function StatusBadge({ status }: { status: string }) {
   }
 }
 
-/**
- * Slot components for the analysis inputs.
- * These attempt to import the real components; if they're not built yet,
- * they render placeholder UIs.
- */
-
-function CsvUploadSlot({
-  onReviewsParsed,
-  disabled,
-}: {
-  onReviewsParsed: (reviews: ParsedReview[]) => void;
-  disabled: boolean;
-}) {
-  // Try to use the real component if available
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { CsvUpload } = require("@/components/analysis/csv-upload");
-    return <CsvUpload onReviewsParsed={onReviewsParsed} disabled={disabled} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center">
-        <p className="text-sm text-gray-500">
-          CSV upload component is being built...
-        </p>
-      </div>
-    );
-  }
-}
-
-function PasteInputSlot({
-  onReviewsParsed,
-  disabled,
-}: {
-  onReviewsParsed: (reviews: ParsedReview[]) => void;
-  disabled: boolean;
-}) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { PasteInput } = require("@/components/analysis/paste-input");
-    return (
-      <PasteInput onReviewsParsed={onReviewsParsed} disabled={disabled} />
-    );
-  } catch {
-    return (
-      <PasteInputFallback onReviewsParsed={onReviewsParsed} disabled={disabled} />
-    );
-  }
-}
-
-function PasteInputFallback({
-  onReviewsParsed,
-  disabled,
-}: {
-  onReviewsParsed: (reviews: ParsedReview[]) => void;
-  disabled: boolean;
-}) {
-  const [text, setText] = useState("");
-
-  function handleParse() {
-    const lines = text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0);
-
-    const parsed: ParsedReview[] = lines.map((line) => ({
-      content: line,
-    }));
-
-    if (parsed.length > 0) {
-      onReviewsParsed(parsed);
-    }
-  }
-
-  return (
-    <div className="space-y-3">
-      <textarea
-        className="min-h-[120px] w-full rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-friction-blue focus:outline-none focus:ring-1 focus:ring-friction-blue"
-        placeholder="Paste one review per line..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        disabled={disabled}
-      />
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={handleParse}
-        disabled={disabled || text.trim().length === 0}
-      >
-        Parse Reviews
-      </Button>
-    </div>
-  );
-}
-
-function AppStoreSearchSlot({
-  onReviewsPulled,
-  disabled,
-}: {
-  onReviewsPulled: (reviews: ParsedReview[], appName: string, platform: string) => void;
-  disabled: boolean;
-}) {
-  return <AppStoreSearchImport onReviewsPulled={onReviewsPulled} disabled={disabled} />;
-}
-
-function ReviewPreviewSlot({ reviews }: { reviews: ParsedReview[] }) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { ReviewPreview } = require("@/components/analysis/review-preview");
-    return <ReviewPreview reviews={reviews} />;
-  } catch {
-    return (
-      <div className="rounded-lg border border-slate-200/60 bg-white/65 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-4">
-        <p className="text-sm font-medium text-gray-600">
-          {reviews.length} {reviews.length === 1 ? "review" : "reviews"} ready
-        </p>
-        <div className="mt-2 max-h-40 space-y-1.5 overflow-y-auto">
-          {reviews.slice(0, 5).map((r, i) => (
-            <p key={i} className="truncate text-xs text-gray-500">
-              {r.rating ? `${"★".repeat(r.rating)} ` : ""}
-              {r.content}
-            </p>
-          ))}
-          {reviews.length > 5 && (
-            <p className="text-xs text-gray-500">
-              ...and {reviews.length - 5} more
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
-}

@@ -35,6 +35,12 @@ type ReportNavProps = {
   isPublic: boolean;
   slug: string | null;
   readOnly?: boolean;
+  /**
+   * Optional whitelist of section ids that are actually rendered on the page.
+   * When provided, nav items for missing sections are hidden so clicking a
+   * tab never scrolls to nothing.
+   */
+  availableSectionIds?: readonly string[];
 };
 
 export function ReportNav({
@@ -43,7 +49,11 @@ export function ReportNav({
   isPublic,
   slug,
   readOnly = false,
+  availableSectionIds,
 }: ReportNavProps) {
+  const visibleItems = availableSectionIds
+    ? NAV_ITEMS.filter((item) => availableSectionIds.includes(item.id))
+    : NAV_ITEMS;
   const [shareOpen, setShareOpen] = useState(false);
 
   const handleExportPdf = () => {
@@ -61,20 +71,20 @@ export function ReportNav({
 
   return (
     <>
-      <nav className="sticky top-0 z-40 border-b border-gray-200 bg-black/80 print:hidden" aria-label="Report sections">
-        <div className="mx-auto flex max-w-[920px] items-center justify-between px-7 py-2">
+      <nav className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-[0_1px_4px_rgba(15,23,42,0.04)] print:hidden" aria-label="Report sections">
+        <div className="mx-auto flex max-w-[920px] items-center justify-between px-4 py-2 sm:px-6 lg:px-7">
           <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="Report sections">
-            {NAV_ITEMS.map((item) => (
+            {visibleItems.map((item) => (
               <button
                 key={item.id}
                 role="tab"
                 onClick={() => scrollToSection(item.id)}
                 aria-label={`Scroll to ${item.label} section`}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
+                  "flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-friction-blue/10 hover:text-friction-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-friction-blue"
                 )}
               >
-                <item.icon className="h-3.5 w-3.5" aria-hidden="true" />
+                <item.icon className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
                 <span className="hidden sm:inline">{item.label}</span>
               </button>
             ))}

@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 type DashboardHeaderProps = {
   displayName: string;
-  onNewAnalysis: () => void;
+  // Kept in the prop signature for backwards-compat; the canonical
+  // "New Analysis" entry point is now the sidebar button.
+  onNewAnalysis?: () => void;
 };
 
 function getGreeting(hour: number): string {
@@ -24,10 +24,7 @@ function formatTodayDate(date: Date): string {
   });
 }
 
-export function DashboardHeader({
-  displayName,
-  onNewAnalysis,
-}: DashboardHeaderProps) {
+export function DashboardHeader({ displayName }: DashboardHeaderProps) {
   const firstName = displayName.split(" ")[0] ?? displayName;
 
   const { greeting, formattedDate } = useMemo(() => {
@@ -40,26 +37,13 @@ export function DashboardHeader({
 
   return (
     <div className="relative overflow-hidden rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200/60 shadow-sm p-6 sm:p-8">
-
-      <div className="relative flex items-center justify-between gap-4">
-        <div className="min-w-0">
-          <h1 className="font-serif text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-            {greeting}, {firstName}
-          </h1>
-          <p className="mt-0.5 font-mono text-[11px] text-gray-500 tracking-wide">
-            {formattedDate}
-          </p>
-        </div>
-
-        <Button
-          onClick={onNewAnalysis}
-          size="lg"
-          className="shrink-0 bg-friction-blue text-white shadow-lg shadow-friction-blue/10 hover:bg-friction-blue/90"
-          aria-label="Start a new analysis"
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          New Analysis
-        </Button>
+      <div className="relative">
+        <h1 className="font-serif text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+          {greeting}, {firstName}
+        </h1>
+        <p className="mt-0.5 font-mono text-[11px] text-gray-500 tracking-wide">
+          {formattedDate}
+        </p>
       </div>
     </div>
   );
