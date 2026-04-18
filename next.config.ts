@@ -30,7 +30,10 @@ const securityHeaders = [
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
-      "upgrade-insecure-requests",
+      // Production-only: in dev the dev server is http and this directive
+      // would rewrite <Link> prefetches to https, causing ERR_SSL_PROTOCOL_ERROR
+      // on localhost. In prod Vercel terminates TLS so upgrading is correct.
+      ...(isProd ? ["upgrade-insecure-requests"] : []),
     ].join("; "),
   },
   { key: "X-Content-Type-Options", value: "nosniff" },

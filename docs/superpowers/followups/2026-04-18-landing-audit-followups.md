@@ -5,7 +5,7 @@
 
 ---
 
-## 1. Hero typography fails WCAG AA on light background
+## 1. Hero typography fails WCAG AA on light background — RESOLVED (commit `94d411b`)
 
 **Severity:** Medium (accessibility)
 **Scope:** `src/app/page.tsx` (hero section, lines ~87–101)
@@ -28,12 +28,16 @@ The aurora gradient commit reduced these by a further 0.11 / 0.12 / 0.36 points 
 
 **Why this wasn't caught earlier:** The text-contrast fixes from 2026-03-31 (obs 828–833) addressed contrast on the dark CTA section and navigation, not on the light hero. This is a residual.
 
+**Resolved via:** `text-gray-400` → `text-gray-500` on three de-emphasized headline spans; `text-friction-blue` → `text-[#3E7BB0]` on the hero italic serif; subtitle `text-gray-500` → `text-gray-600`. Editorial three-tone hierarchy preserved.
+
 ---
 
-## 2. `ERR_SSL_PROTOCOL_ERROR` on `/login` during page load
+## 2. `ERR_SSL_PROTOCOL_ERROR` on `/login` during page load — RESOLVED
 
 **Severity:** Low (console noise, no visible impact)
-**Scope:** Unknown — needs investigation
+**Scope:** `next.config.ts` CSP header
+**Root cause:** `upgrade-insecure-requests` CSP directive was applied unconditionally. In dev, the server is http-only, but the browser upgraded `<Link prefetch>` requests to https, causing the TLS handshake to fail.
+**Fix:** Gated the directive behind `isProd`, matching the existing pattern used for `'unsafe-eval'`. Prod keeps the upgrade (Vercel terminates TLS); dev no longer rewrites http to https.
 
 Console output when loading landing page at `http://localhost:3001`:
 
@@ -64,6 +68,4 @@ Something is fetching `https://localhost:3001/login` (note **https**) during pag
 ## Decisions
 
 - Neither item blocks the aurora gradient commit (`f691a37`).
-- Both should be addressed before the next deployment if shipping to users.
-- Item 1 likely needs a brief design conversation (contrast vs. aesthetic trade-off on the editorial hero).
-- Item 2 is a simple debugging task, probably 15 minutes.
+- Both resolved 2026-04-18. Item 1 via `94d411b` (hero contrast), item 2 via CSP dev-gating in `next.config.ts`.
