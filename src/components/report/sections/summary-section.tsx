@@ -68,7 +68,7 @@ export function SummarySection({
               <span className="leading-none font-bold text-white">{initial}</span>
             </div>
             <div>
-              <h1 className="m-0 text-[28px] font-extrabold tracking-[-1px] text-gray-900">
+              <h1 className="m-0 text-[28px] font-bold tracking-[-1px] text-gray-900">
                 {appName}
               </h1>
               <div className="mt-0.5 font-mono text-xs text-gray-500">

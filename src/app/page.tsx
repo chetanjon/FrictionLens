@@ -8,9 +8,17 @@ import {
   FileText,
 } from "lucide-react";
 import { AnimateOnScroll } from "@/components/marketing/animate-on-scroll";
-import { MobileNav } from "@/components/marketing/mobile-nav";
 import { LandingNav } from "@/components/marketing/landing-nav";
 import { DemoStats, DemoVibeScore } from "@/components/marketing/demo-stats";
+import {
+  HeroSearchCTA,
+  PrimaryCTAButton,
+} from "@/components/marketing/auth-aware-cta";
+
+// Prerender at build time and serve from Vercel's edge cache. The auth-aware
+// CTA swap happens client-side after hydration via useHasAuthCookie().
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -31,25 +39,7 @@ const jsonLd = {
   },
 };
 
-export default async function LandingPage() {
-  // Check if user is logged in
-  let isLoggedIn = false;
-  if (
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    try {
-      const { createClient } = await import("@/lib/supabase/server");
-      const supabase = await createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      isLoggedIn = !!user;
-    } catch {
-      // Auth check failed silently — treat as logged out
-    }
-  }
-
-  const ctaHref = isLoggedIn ? "/dashboard" : "/signup";
-
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F2F2F7] font-sans text-gray-900 relative overflow-hidden">
       {/* JSON-LD structured data */}
@@ -71,7 +61,7 @@ export default async function LandingPage() {
       {/* ══════════════════════════════════════════════
           1. NAVIGATION
       ══════════════════════════════════════════════ */}
-      <LandingNav isLoggedIn={isLoggedIn} />
+      <LandingNav />
 
       {/* ══════════════════════════════════════════════
           2. HERO
@@ -81,7 +71,7 @@ export default async function LandingPage() {
           {/* Badge */}
           <div className="hero-fade mb-8 inline-flex items-center gap-2.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600">
             <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-friction-blue" />
-            Analyze up to 200 reviews in under 60 seconds
+            Built for indie iOS &amp; Android devs · 200 reviews → report in 60s
           </div>
 
           {/* Headline */}
@@ -95,26 +85,15 @@ export default async function LandingPage() {
 
           {/* Subtitle */}
           <p className="hero-fade-2 mt-6 max-w-xl text-lg leading-relaxed text-gray-600">
-            FrictionLens synthesizes hundreds of app store reviews into one
-            shareable <span className="font-medium text-gray-900">Vibe Report</span> with
-            sentiment scores, churn signals, and the action items your roadmap is missing.
+            Reviews keep coming. You can&apos;t read them all. FrictionLens
+            turns your 200 most recent into a{" "}
+            <span className="font-medium text-gray-900">Vibe Report</span> —
+            sentiment scores, churn drivers, and the handful of fixes that
+            actually move retention.
           </p>
 
           {/* Search input */}
-          <Link href={ctaHref} className="hero-fade-3 mt-10 flex max-w-xl items-center gap-0 rounded-2xl border border-gray-200/80 bg-white p-2 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/40 transition-shadow cursor-pointer">
-            <div className="flex items-center flex-1 min-w-0">
-              <svg className="ml-3 mr-2.5 h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <span className="min-w-0 flex-1 py-3.5 text-base text-gray-400">
-                Search any app or paste reviews...
-              </span>
-            </div>
-            <span className="shrink-0 rounded-xl bg-friction-blue px-6 py-3.5 text-sm font-semibold text-white shadow-sm">
-              {isLoggedIn ? "Dashboard \u2192" : "Analyze Free \u2192"}
-            </span>
-          </Link>
+          <HeroSearchCTA />
 
           {/* Secondary CTA — let visitors feel the product before committing */}
           <div className="hero-fade-3 mt-4 flex max-w-xl items-center justify-start gap-2 text-sm text-gray-500">
@@ -154,9 +133,9 @@ export default async function LandingPage() {
         <AnimateOnScroll>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs text-gray-500">
             <span className="font-medium uppercase tracking-widest text-gray-500 font-mono">
-              Built for teams at
+              Built for indie devs
             </span>
-            {["Product Managers", "Growth Teams", "Mobile Devs", "CX Leaders"].map((role) => (
+            {["iOS apps", "Android apps", "Solo founders", "Side projects"].map((role) => (
               <span
                 key={role}
                 className="rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-gray-600"
@@ -472,11 +451,11 @@ export default async function LandingPage() {
               Pricing
             </div>
             <h2 className="text-3xl md:text-[42px] font-bold tracking-tight text-gray-900">
-              <span className="font-light text-gray-500">Completely</span>{" "}
-              <span className="font-serif italic">free.</span>
+              <span className="font-light text-gray-500">Free for</span>{" "}
+              <span className="font-serif italic">indie devs.</span>
             </h2>
             <p className="mt-4 text-base text-gray-500 max-w-lg mx-auto">
-              FrictionLens is free to use. Bring your own Gemini API key from Google AI Studio, or try 2 analyses on us, no key needed.
+              Bring your own free Gemini key for unlimited analyses, or try 2 on us — no key needed. No credit card. No &ldquo;contact sales.&rdquo;
             </p>
           </div>
         </AnimateOnScroll>
@@ -501,12 +480,11 @@ export default async function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={ctaHref}
+              <PrimaryCTAButton
                 className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors bg-friction-blue text-white hover:bg-friction-blue/90"
-              >
-                Try Free
-              </Link>
+                loggedOutLabel="Try Free"
+                loggedInLabel="Go to Dashboard"
+              />
             </div>
           </AnimateOnScroll>
 
@@ -516,7 +494,7 @@ export default async function LandingPage() {
                 Unlimited
               </div>
               <div className="mb-5">
-                <h3 className="text-sm font-medium text-gray-500">Bring Your Key</h3>
+                <h3 className="text-sm font-medium text-gray-500">Indie unlimited</h3>
                 <div className="mt-3 flex items-baseline gap-1">
                   <span className="font-mono text-[40px] font-bold tracking-tight text-gray-900">$0</span>
                   <span className="text-sm text-gray-500">forever</span>
@@ -532,12 +510,11 @@ export default async function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={ctaHref}
+              <PrimaryCTAButton
                 className="block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#2A3040]"
-              >
-                Get Your Free API Key &rarr;
-              </Link>
+                loggedOutLabel={<>Get Your Free API Key &rarr;</>}
+                loggedInLabel={<>Go to Dashboard &rarr;</>}
+              />
               <p className="mt-3 text-center text-[11px] text-gray-500">
                 Free from <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="text-friction-blue hover:underline">Google AI Studio</a> (takes 30 seconds)
               </p>
@@ -565,12 +542,11 @@ export default async function LandingPage() {
               <p className="mx-auto mt-5 max-w-md text-base text-white/50 leading-relaxed">
                 No credit card required. Just search an app and see what your users really think.
               </p>
-              <Link
-                href={ctaHref}
+              <PrimaryCTAButton
                 className="mt-10 inline-flex h-13 items-center rounded-xl bg-friction-blue px-8 text-base font-semibold text-white hover:bg-friction-blue/90 transition-colors shadow-[0_0_30px_rgba(107,159,212,0.15)]"
-              >
-                {isLoggedIn ? "Go to Dashboard \u2192" : "Generate Your Vibe Report \u2192"}
-              </Link>
+                loggedOutLabel="Generate Your Vibe Report \u2192"
+                loggedInLabel="Go to Dashboard \u2192"
+              />
             </div>
           </div>
         </AnimateOnScroll>

@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useHasAuthCookie } from "@/components/marketing/auth-aware-cta";
 
-type MobileNavProps = {
-  isLoggedIn?: boolean;
-};
-
-export function MobileNav({ isLoggedIn = false }: MobileNavProps) {
+export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const isLoggedIn = useHasAuthCookie();
 
   return (
     <>

@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/marketing/mobile-nav";
+import { NavAuthCTAs } from "@/components/marketing/auth-aware-cta";
 
-type LandingNavProps = {
-  isLoggedIn: boolean;
-};
-
-export function LandingNav({ isLoggedIn }: LandingNavProps) {
+export function LandingNav() {
   return (
     <nav
       className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80"
@@ -45,30 +42,8 @@ export function LandingNav({ isLoggedIn }: LandingNavProps) {
         </div>
 
         <div className="flex items-center gap-4">
-          {isLoggedIn ? (
-            <Link
-              href="/dashboard"
-              className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="hidden md:inline text-sm text-gray-500 hover:text-slate-900 transition-colors"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/signup"
-                className="hidden md:inline-flex h-9 items-center rounded-lg bg-friction-blue px-4 text-sm font-medium text-white hover:bg-friction-blue/90 transition-colors"
-              >
-                Get Started
-              </Link>
-            </>
-          )}
-          <MobileNav isLoggedIn={isLoggedIn} />
+          <NavAuthCTAs />
+          <MobileNav />
         </div>
       </div>
     </nav>
