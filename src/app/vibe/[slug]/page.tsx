@@ -7,6 +7,12 @@ import { ReportNav } from "@/components/report/report-nav";
 import { GlassCard } from "@/components/report/glass-card";
 import { getSiteUrl } from "@/lib/config/site";
 
+// Public reports are immutable once completed (the few that change — e.g. an
+// owner toggling is_public — should call revalidatePath at the toggle site).
+// Hourly ISR lets Vercel's edge cache serve subsequent requests instantly,
+// which both improves load time and lets Googlebot crawl reliably.
+export const revalidate = 3600;
+
 /* ---------------------------------------------------------------------------
  * Dynamic section imports with graceful fallbacks
  * ----------------------------------------------------------------------- */
@@ -218,13 +224,22 @@ export async function generateMetadata({
       : aiSummary
     : fallbackDescription;
 
+  const canonicalUrl = `${appUrl}/vibe/${slug}`;
+
   return {
     title: `${data.app_name} Vibe Report`,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
       title: `${data.app_name} Vibe Score: ${score}/100`,
       description,
-      url: `${appUrl}/vibe/${slug}`,
+      url: canonicalUrl,
       siteName: "FrictionLens",
       type: "article",
     },
@@ -337,8 +352,53 @@ export default async function PublicVibePage({
     churn_risk: r.churn_risk ?? undefined,
   }));
 
+  /* -- JSON-LD structured data ------------------------------------------ */
+  const appUrl = getSiteUrl();
+  const canonicalUrl = `${appUrl}/vibe/${a.slug ?? slug}`;
+  const reportPublishedAt = a.completed_at ?? a.created_at;
+
+  const operatingSystem = (() => {
+    const p = (a.platform ?? "").toLowerCase();
+    if (p.includes("ios") && p.includes("android")) return "iOS, Android";
+    if (p.includes("ios")) return "iOS";
+    if (p.includes("android")) return "Android";
+    return "Web";
+  })();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${a.app_name} Vibe Report`,
+    description: summary
+      ? summary.slice(0, 280)
+      : `Vibe Score ${Math.round(vibeScore)}/100 — sentiment, friction, and churn analysis for ${a.app_name}.`,
+    url: canonicalUrl,
+    datePublished: reportPublishedAt,
+    dateModified: reportPublishedAt,
+    author: {
+      "@type": "Organization",
+      name: "FrictionLens",
+      url: appUrl,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "FrictionLens",
+      url: appUrl,
+    },
+    about: {
+      "@type": "SoftwareApplication",
+      name: a.app_name,
+      operatingSystem,
+      applicationCategory: "MobileApplication",
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Ambient background — soft pastel blobs for depth on the light canvas */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute top-[-15%] right-0 h-[600px] w-[600px] rounded-full bg-[#6B9FD4]/[0.10] blur-3xl" />
