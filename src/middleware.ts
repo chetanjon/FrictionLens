@@ -105,10 +105,16 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Positive matcher: only run middleware on routes that actually need it —
+  // auth-gated pages, the auth pages themselves (for logged-in redirect), and
+  // the rate-limited public report. Marketing routes (/, /demo), API routes,
+  // static assets, and metadata files all skip middleware entirely so they
+  // can be served from Vercel's edge cache without paying a Supabase auth
+  // round-trip per request.
   matcher: [
-    // Skip Next internals, static metadata files (manifest/robots/sitemap are
-    // served by Next's route handlers — middleware intercepting them breaks
-    // the response body), and common image types.
-    "/((?!_next/static|_next/image|favicon\\.ico|manifest\\.webmanifest|robots\\.txt|sitemap\\.xml|icon\\.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/dashboard/:path*",
+    "/login",
+    "/signup",
+    "/vibe/:path*",
   ],
 };
